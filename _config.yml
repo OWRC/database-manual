@@ -1,3 +1,5 @@
-title:  Oak Ridges Moraine Groundwater Program - Database Manual
-
+title:  Database Manual
+markdown: kramdown
+kramdown:
+    math_engine: katex
 theme: jekyll-theme-slate
