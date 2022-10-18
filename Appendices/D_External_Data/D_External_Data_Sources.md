@@ -1,7 +1,7 @@
 ---
 title:  "Appendix D"
 author: "ormgpmd"
-date:   "20220804"
+date:   "20221018"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -211,7 +211,9 @@ Approximately 33,200 geotechnical boreholes, with depths ranging from 0.1 m (soi
 
 [Summary table of datasets used as a data source (a PDF).](./DDS_SW.pdf)
 
+### Appendix D.7 - Datasets Summary Page - Pick Records
+
+[Summary table of datasets used as a data source (a PDF).](./DDS_Picks.pdf)
 
 
-
-*Last Modified: 2022-08-04*
+*Last Modified: 2022-10-18*
