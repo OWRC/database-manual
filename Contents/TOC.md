@@ -1,7 +1,7 @@
 ---
 title:  "Cover and Table of Contents"
 author: "ormgpmd"
-date:   "20220629"
+date:   "20221018"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -136,6 +136,7 @@ knit:   (
     + **D.4 Datasets Summary Page - Climate Records**
     + **D.5 Datasets Summary Page - Field Records**
     + **D.6 Datasets Summary Page - Surface Water Records**
+    + **D.7 Datasets Summary Page - Pick Records**
 
 * **[E - YPDT-CAMC/ORMGP Database Timeline](/database-manual/Appendices/E_Database_Timeline/E_Database_Timeline.html)**
 
@@ -198,4 +199,4 @@ knit:   (
 
 * **[M - ORMGP Analyses, Metadata and Other Links](/database-manual/Appendices/M_ORMGP_Links/M_ORMGP_Links.html)**
 
-*Last modified: 2022-06-29*
+*Last modified: 2022-10-18*

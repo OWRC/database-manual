@@ -213,7 +213,7 @@ Approximately 33,200 geotechnical boreholes, with depths ranging from 0.1 m (soi
 
 ### Appendix D.7 - Datasets Summary Page - Pick Records
 
-[Summary table of datasets used as a data source (a PDF).](./DDS_Picks.pdf)
+[Summary table of datasets (greater than 50000 records) used as a data source (a PDF).](./DDS_Picks.pdf)
 
 
 *Last Modified: 2022-10-18*
