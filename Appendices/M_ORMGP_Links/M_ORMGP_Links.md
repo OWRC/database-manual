@@ -18,18 +18,26 @@ knit:   (
 
 ## Appendix M - ORMGP Analyses, Metadata and Other Links
 
+#### External Data Sources 
+
+Summary: [https://owrc.github.io/interpolants/sources/sources.html](https://owrc.github.io/interpolants/sources/sources.html)
 
 #### Analysis or Procedure
 
-External Data Sources (Summary): [https://owrc.github.io/interpolants/sources/sources.html](https://owrc.github.io/interpolants/sources/sources.html)
-
 Hydrograph Explorer: [https://owrc.github.io/HydrographExplorerHelp/](https://owrc.github.io/HydrographExplorerHelp/)
 
-Snowmelt Computation: [https://owrc.github.io/snowmelt/](https://owrc.github.io/snowmelt/)
+Snowmelt Computation: [https://owrc.github.io/interpolants/modelling/waterbudget/data.html](https://owrc.github.io/interpolants/modelling/waterbudget/data.html#sub-daily-from-daily-snowmelt)
 
-Watershed Analysis of the ORMGP region: [https://owrc.github.io/subwatershed/](https://owrc.github.io/subwatershed/)
+Automatic hydrograph separation: [https://owrc.github.io/info/hydrographseparation/](/info/hydrographseparation/)
 
-Watercourse Topology of the ORMGP Region: [https://owrc.github.io/interpolants/interpolation/watercourses.html](https://owrc.github.io/interpolants/interpolation/watercourses.html)
+Hydrograph disaggregation [https://owrc.github.io/interpolants/modelling/hydroparse.html](/interpolants/modelling/hydroparse.html)
+
+Watershed characterization of the ORMGP region: [https://owrc.github.io/interpolants/interpolation/subwatershed.html](/interpolants/interpolation/subwatershed.html)
+
+Watercourse Topology of the ORMGP Region: [https://owrc.github.io/interpolants/interpolation/watercourses.html](/interpolants/interpolation/watercourses.html)
+
+Overland drainage pathways [https://owrc.github.io/interpolants/interpolation/overland.html](/interpolants/interpolation/overland.html)
+
 
 #### Fact Sheets
 
