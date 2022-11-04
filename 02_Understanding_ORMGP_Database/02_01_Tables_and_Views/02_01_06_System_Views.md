@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.6"
 author: "ormgpmd"
-date:   "20220824"
+date:   "20221104"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -447,97 +447,184 @@ Using V_SYS_CHK_DLCH_ALL_ELEV_ID as a source, includes the BH_GND_ELEV from D_BO
 
 #### V_SYS_CHK_DLSH_ELEV_UPD
 
-Returns those LOC_IDs from D_LOCATION_GEOM (as well as their associated coordinates and spatial id) whose position has been checked (or changed) and whose 
-elevation needs to be updated.  These are marked with a COORD_CHECK value matching DEF_DLSH_ELEV_UPD.
+Returns those LOC_IDs from D_LOCATION_GEOM (as well as their associated
+coordinates and spatial id) whose position has been checked (or changed) and
+whose elevation needs to be updated.  These are marked with a COORD_CHECK
+value matching DEF_DLSH_ELEV_UPD. 
 
-This can be used by an external GIS to associated a new elevation with a spatial id.
+This can be used by an external GIS to associated a new elevation with a
+spatial id.
 
 #### V_SYS_CHK_DOC_AUTHOR_AGENCY
 
-This view assembles information from D_DOCUMENT where the DOC_AUTHOR_AGENCY_CODE is NULL (or the DOC_AUTHOR_AGENCY_DESCRIPTION is NULL).
+This view assembles information from D_DOCUMENT where the
+DOC_AUTHOR_AGENCY_CODE is NULL (or the DOC_AUTHOR_AGENCY_DESCRIPTION is NULL).
 
 #### V_SYS_CHK_DOC_YN_FIELDS
 
-This view examines the D_DOCUMENT table, specifically the '*_YN' fields.  It reassigns all '0' values to NULL and all '-1' values to '1' (for consistency).  These values need to be reassigned back to the source table.
+This view examines the D_DOCUMENT table, specifically the '*_YN' fields.  It
+reassigns all '0' values to NULL and all '-1' values to '1' (for consistency).
+These values need to be reassigned back to the source table. 
 
 #### V_SYS_CHK_DUP_DGEOLLAY
 
-TO BE COMPLETED
+This view examines the D_GEOLOGY_LAYER table and looks for duplicate records
+by LOC_ID.  The fields used include: GEOL_MAT_COLOUR_CODE, GEOL_MAT1_CODE
+through GEOL_MAT4_CODE, as well as the top and bottom _OUOM values.  The
+latter is rounded to the specified number of digits (using the DEF_ROUND_CMP
+system constant).  All duplicates are returned.
 
 #### V_SYS_CHK_DUP_DGEOLLAY_DEL
 
-TO BE COMPLETED
+Using V_SYS_CHK_DUP_DGEOLLAY as a source, returns the LOC_ID and GEOL_ID
+fields indicating what records are duplicate for a particular LOC_ID and that
+can be deleted (the minimum GEOL_ID of the duplicates are kept).
 
 #### V_SYS_CHK_DUP_DINT
 
-TO BE COMPLETED
-
-#### V_SYS_CHK_DUP_DINTMON
-
-TO BE COMPLETED
-
-#### V_SYS_CHK_DUP_DINTMON_DEL
-
-TO BE COMPLETED
-
-#### V_SYS_CHK_DUP_DINTSOIL
-
-TO BE COMPLETED
-
-#### V_SYS_CHK_DUP_DINTSOIL_DEL
-
-TO BE COMPLETED
-
-#### V_SYS_CHK_DUP_DINTSOIL_DEL_MAX
-
-TO BE COMPLETED
-
-#### V_SYS_CHK_DUP_DINT_ALT1
-
-TO BE COMPLETED
-
-#### V_SYS_CHK_DUP_DINT_ALT1_DEL
-
-TO BE COMPLETED
+This view examines D_INTERVAL and looks for duplicate records by LOC_ID.
+The fields used include: INT_NAME, INT_TYPE_CODE and INT_COMMENT.  All
+duplicates are returned.  In addition, the number of screens and soil
+intervals as well as the counts of lab and field data are returned for 
+each INT_ID associated with the particular LOC_ID.
 
 #### V_SYS_CHK_DUP_DINT_DEL
 
-TO BE COMPLETED
+Using V_SYS_CHK_DUP_DINT as a source, returns the LOC_ID and INT_ID fields
+indicating those records that can be deleted.  Note that the presence of any
+lab or field data for a particular interval disqualifies it from being deleted
+(these should be manually examined).  Note that the minimum INT_ID of the
+duplicates are kept.
+
+In some cases, the maximum INT_ID should be chosen to be kept instead of the 
+minimum INT_ID (this is determined manually).  Refer to V_SYS_CHK_DUP_DINT_DEL_MAX.
 
 #### V_SYS_CHK_DUP_DINT_DEL_MAX
 
-TO BE COMPLETED
+Using V_SYS_CHK_DUP_DINT as a source, returns the LOC_ID and INT_ID fields
+indicating those records that can be deleted.  Note that the presence of any
+lab or field data for a particular interval disqualifies it from being deleted
+(these should be manually examined). Note that the maximum INT_ID of the
+duplicates are kept. 
+
+In some cases, the maximum INT_ID should be chosen to be kept instead of the
+minimum INT_ID.  This must be manually determined.
+
+#### V_SYS_CHK_DUP_DINTMON
+
+This view examines D_INTERVAL_MONITOR and looks for duplicate records by
+LOC_ID. The fields used include: MON_SCREEN_MATERIAL, MON_SCREEN_SLOT,
+MON_COMMENT, MON_DIAMETER_OUOM and MON_DIAMETER_UNIT_OUOM as well as the
+MON_TOP_OUOM and MON_BOT_OUOM values rounded to the specified number of digits
+(as found in the system constant DEF_ROUND_CMP).  In addition, the number of
+field and lab samples are included.
+
+#### V_SYS_CHK_DUP_DINTMON_DEL
+
+Using V_SYS_CHK_DUP_DINTMON as a source, returns the LOC_ID, INT_ID and MON_ID
+fields indicating those records that can be deleted.  Note that the presence
+of any lab or field data for a particular interval disqualifies it from being
+deleted (these records should be manually examined).  Note that the minimum
+MON_ID is kept.
+
+#### V_SYS_CHK_DUP_DINTSOIL
+
+This view examines D_INTERVAL_SOIL and looks for duplicate records by LOC_ID.
+The fields used include: SOIL_UNIT_OUOM, SOIL_COMMENT, SOIL_BLOW_COUNT,
+SOIL_RECOVERY (a rounded value), SOIL_MOISTURE (a rounded value) and both
+SOIL_TOP_OUOM and SOIL_BOT_OUOM (also rounded).  The indicated fields are
+rounded to the specified number of digits based upon the system constant
+DEF_ROUND_CMP. In addition, the number of lab and field samples are included.
+All duplicates are returned.
+
+#### V_SYS_CHK_DUP_DINTSOIL_DEL
+
+Using V_SYS_CHK_DUP_DINTSOIL as a source, returns the LOC_ID, INT_ID and
+SYS_RECORD_ID indicating those records that can be deleted.  Note that the
+presence of any lab or field data for a particular interval desqualifies it
+from being deleted (these records should be manually examined).  Note that the
+minimum SYS_RECORD_ID is kept.
+
+In some cases, the maximum SYS_RECORD_ID should be kept - refer to
+V_SYS_CHK_DUP_DINTSOIL_DEL_MAX.  This should be manually determined.
+
+#### V_SYS_CHK_DUP_DINTSOIL_DEL_MAX
+
+Using V_SYS_CHK_DUP_DINTSOIL as a source, returns the LOC_ID, INT_ID and
+SYS_RECORD_ID indicating those records that can be deleted.  Note that the
+presence of any lab or field data for a particular interval desqualifies it
+from being deleted (these records should be manually examined).  Note that the
+maximum SYS_RECORD_ID is kept.
+
+In some cases, the maximum SYS_RECORD_ID should be chosen to remain instead of
+the minium SYS_RECORD_ID.  This should be manually determined.
+
+#### V_SYS_CHK_DUP_DINT_ALT1
+
+This view examines D_INTERVAL and looks for duplicate records by LOC_ID.
+The fields used include: INT_NAME_ALT1, INT_TYPE_CODE and INT_COMMENT.  All
+duplicates are returned.  In addition, the number of screens and soil
+intervals as well as the counts of lab and field data are returned for 
+each INT_ID associated with the particular LOC_ID.
+
+#### V_SYS_CHK_DUP_DINT_ALT1_DEL
+
+Using V_SYS_CHK_DUP_DINT_ALT1 as a source, returns the LOC_ID and INT_ID fields
+indicating those records that can be deleted.  Note that the presence of any
+lab or field data for a particular interval disqualifies it from being deleted
+(these should be manually examined).  Note that the minimum INT_ID of the
+duplicates are kept.
 
 #### V_SYS_CHK_DUP_DIRE
 
-TO BE COMPLETED
+This view examines D_INTERVAL_REF_ELEV and looks for duplicate records by
+LOC_ID.  The fields used include: REF_ELEV_UNIT_OUOM, REF_COMMENT and each of
+REF_ELEV_OUOM and REF_STICK_UP (the latter two are rounded to the specified
+digits by the DEF_ROUND_CMP system constant). In addition, the number of lab
+and field samples are included.  All duplicates are returned.
 
 #### V_SYS_CHK_DUP_DIRE_DEL
 
-TO BE COMPLETED
+Using V_SYS_CHK_DUP_DIRE as a source, returns the LOC_ID, INT_ID and
+SYS_RECORD_ID indicating those records that can be deleted.  Note that the
+presence of any lab or field data for a particular interval desqualifies it
+from being deleted (these records should be manually examined).  Note that the
+minimum SYS_RECORD_ID is kept.
 
 #### V_SYS_CHK_DUP_DIT1AB
 
-TO BE COMPLETED
+This view examines D_INTERVAL_TEMPORAL_1A and D_INTERVAL_TEMPORAL_1B and looks
+for duplicate records by LOC_ID.  The fields used include: RD_NAME_CODE,
+SAM_SAMPLE_DATE, RD_VALUE, UNIT_CODE and RD_NAME_OUOM.
 
 #### V_SYS_CHK_DUP_DIT1B_DEL
 
-TO BE COMPLETED
+Using V_SYS_CHK_DUP_DIT1AB as a source, returns the LOC_ID, INT_ID, SAM_ID and
+SYS_RECORD_ID indicating those records that can be deleted.  Note that the
+minimum SYS_RECORD_ID is kept.
 
 #### V_SYS_CHK_ELEV_DBORE
 
-Returns those records from D_BOREHOLE where BH_GND_ELEV does not match ASSIGNED_ELEV in D_LOCATION_ELEV (within a specified uncertainty).  The latter is 
-also returned along with the associated record in D_LOCATION_ELEV_HIST and coordinate information from D_LOCATION.  The coordinates must be valid.
+Returns those records from D_BOREHOLE where BH_GND_ELEV does not match
+ASSIGNED_ELEV in D_LOCATION_ELEV (within a specified uncertainty).  The latter
+is also returned along with the associated record in D_LOCATION_ELEV_HIST and
+coordinate information from D_LOCATION.  The coordinates must be valid.
 
 #### V_SYS_CHK_ELEV_DBORE_UPD
 
-This view returns those records from D_BOREHOLE and D_LOCATION_ELEV where the BH_GND_ELEV varies from the ASSIGNED_ELEV beyond a specified minimum 
-range (as determined by the SYS_ELEV_RANGE constant in S_CONSTANT).  Pertinent information is included from D_LOCATION, D_LOCATION_QA and 
-D_LOCATION_ELEV_HIST in order to determine the reason for the change in elevation.  New elevations should be added to D_LOCATION_ELEV_HIST following 
-by an update of D_LOCATION_ELEV. Various information is assembled in fields to allow easy update of the requisite tables.
+This view returns those records from D_BOREHOLE and D_LOCATION_ELEV where the
+BH_GND_ELEV varies from the ASSIGNED_ELEV beyond a specified minimum range (as
+determined by the SYS_ELEV_RANGE constant in S_CONSTANT).  Pertinent
+information is included from D_LOCATION, D_LOCATION_QA and
+D_LOCATION_ELEV_HIST in order to determine the reason for the change in
+elevation.  New elevations should be added to D_LOCATION_ELEV_HIST following
+by an update of D_LOCATION_ELEV. Various information is assembled in fields to
+allow easy update of the requisite tables.
 
-Note that only locations with valid QA_COORD_CONFIDENCE_CODEs (i.e. not [117] or [118]) will be examined.  In addition, BH_GND_ELEV cannot be null 
-and the LOC_ELEV_CODE (from D_LOCATION_ELEV_HIST) must be [null] or have a value of [3] (i.e. DEM - MNR 10m v2).
+Note that only locations with valid QA_COORD_CONFIDENCE_CODEs (i.e. not [117]
+or [118]) will be examined.  In addition, BH_GND_ELEV cannot be null and the
+LOC_ELEV_CODE (from D_LOCATION_ELEV_HIST) must be [null] or have a value of
+[3] (i.e. DEM - MNR 10m v2).
 
 #### V_SYS_CHK_ELEV_DPICK
 
@@ -678,7 +765,12 @@ This view returns a list of SAM_ID's from D_INTERVAL_TEMPORAL_1B that have no re
 
 #### V_SYS_CHK_INT_TMP1_DUPLICATES
 
-This view returns duplicate records from D_INTERVAL_TEMPORAL_1B/1A using comparisons between INT_ID, RD_NAME_CODE, SAM_SAMPLE_DATE, RD_VALUE and UNIT_CODE.  The number of records and the minimum SYS_RECORD_ID (from D_INTERVAL_TEMPORAL_1B) is also returned - the latter is chosen, by default, to remain in the database.  Refer to V_SYS_CHK_INT_TMP1_DUPLICATES_DEL_SRI, below.  Information from D_DATA_SOURCE (tagged by DATA_ID) is included.
+This view returns duplicate records from D_INTERVAL_TEMPORAL_1B/1A using
+comparisons between INT_ID, RD_NAME_CODE, SAM_SAMPLE_DATE, RD_VALUE and
+UNIT_CODE.  The number of records and the minimum SYS_RECORD_ID (from
+D_INTERVAL_TEMPORAL_1B) is also returned - the latter is chosen, by default,
+to remain in the database.  Refer to V_SYS_CHK_INT_TMP1_DUPLICATES_DEL_SRI,
+below.  Information from D_DATA_SOURCE (tagged by DATA_ID) is included.
 
 #### V_SYS_CHK_INT_TMP1_DUPLICATES2
 
@@ -691,23 +783,36 @@ REC_STATUS_CODE should be applied carefully).
 
 #### V_SYS_CHK_INT_TMP1_DUPLICATES_DEL_SRI
 
-This view returns the duplicate row SYS_RECORD_ID values - these can be used to remove the records from D_INTERVAL_TEMPORAL_1B.
+This view returns the duplicate row SYS_RECORD_ID values - these can be used
+to remove the records from D_INTERVAL_TEMPORAL_1B.
 
 #### V_SYS_CHK_INT_TMP1_DUPLICATES_NUM
 
-This view, using V_SYS_CHK_INT_TMP1_DUPLICATES as a source, returns the number of duplicate records in D_INTERVAL_TEMPORAL_1B.  This includes all rows.
+This view, using V_SYS_CHK_INT_TMP1_DUPLICATES as a source, returns the number
+of duplicate records in D_INTERVAL_TEMPORAL_1B.  This includes all rows.
 
 #### V_SYS_CHK_INT_TMP1_DUPLICATES_NUM_DEL
 
-This view, using V_SYS_CHK_INT_TMP1_DUPLICATES as a source, returns the number of records to be deleted from D_INTERVAL_TEMPORAL_1B.  This value should be less than that returned from V_SYS_CHK_INT_TMP1_DUPLICATES_NUM.
+This view, using V_SYS_CHK_INT_TMP1_DUPLICATES as a source, returns the number
+of records to be deleted from D_INTERVAL_TEMPORAL_1B.  This value should be
+less than that returned from V_SYS_CHK_INT_TMP1_DUPLICATES_NUM.
 
 #### V_SYS_CHK_INT_TMP1_UNITS
 
-This view returns those records from D_INTERVAL_TEMPORAL_1A and D_INTERVAL_TEMPORAL_1B where units in the latter table are inappropriate for lab-based analysis (e.g.'masl' and 'mbgs'; any rows tagged with these units should likely be in D_INTERVAL_TEMPORAL_2).
+This view returns those records from D_INTERVAL_TEMPORAL_1A and
+D_INTERVAL_TEMPORAL_1B where units in the latter table are inappropriate for
+lab-based analysis (e.g.'masl' and 'mbgs'; any rows tagged with these units
+should likely be in D_INTERVAL_TEMPORAL_2).
 
 #### V_SYS_CHK_INT_TMP2_DUPLICATES
 
-This view returns duplicate records from D_INTERVAL_TEMPORAL_2 using comparisons between INT_ID, RD_NAME_CODE, RD_DATE, RD_VALUE and UNIT_CODE.  The number of records and the minimum as well as the maximum SYS_RECORD_ID (from D_INTERVAL_TEMPORAL_2) is also returned - the minimum is usually chosen, by default, to remain in the database.  Refer to V_SYS_CHK_INT_TMP2_DUPLICATES_DEL_SRI, below.  Information from D_DATA_SOURCE (tagged by DATA_ID) is included.
+This view returns duplicate records from D_INTERVAL_TEMPORAL_2 using
+comparisons between INT_ID, RD_NAME_CODE, RD_DATE, RD_VALUE and UNIT_CODE.
+The number of records and the minimum as well as the maximum SYS_RECORD_ID
+(from D_INTERVAL_TEMPORAL_2) is also returned - the minimum is usually chosen,
+by default, to remain in the database.  Refer to
+V_SYS_CHK_INT_TMP2_DUPLICATES_DEL_SRI, below.  Information from D_DATA_SOURCE
+(tagged by DATA_ID) is included.
 
 #### V_SYS_CHK_INT_TMP2_DUPLICATES2
 
@@ -726,15 +831,20 @@ should subsequently be used to delete records.
 
 #### V_SYS_CHK_INT_TMP2_DUPLICATES_DEL_SRI
 
-This view returns the duplicate row SYS_RECORD_ID values - these can be used to remove the records from D_INTERVAL_TEMPORAL_2.  The minimum SYS_RECORD_ID (i.e. MIN_SYS_RECORD_ID) is used in this case.
+This view returns the duplicate row SYS_RECORD_ID values - these can be used
+to remove the records from D_INTERVAL_TEMPORAL_2.  The minimum SYS_RECORD_ID
+(i.e. MIN_SYS_RECORD_ID) is used in this case.
 
 #### V_SYS_CHK_INT_TMP2_DUPLICATES_NUM
 
-This view, using V_SYS_CHK_INT_TMP2_DUPLICATES as a source, returns the number of duplicate records in D_INTERVAL_TEMPORAL_2.  This includes all rows.
+This view, using V_SYS_CHK_INT_TMP2_DUPLICATES as a source, returns the number
+of duplicate records in D_INTERVAL_TEMPORAL_2.  This includes all rows.
 
 #### V_SYS_CHK_INT_TMP2_DUPLICATES_NUM_DEL
 
-This view, using V_SYS_CHK_INT_TMP2_DUPLICATES as a source, returns the number of records to be deleted from D_INTERVAL_TEMPORAL_2.  This value should be less than that returned from V_SYS_CHK_INT_TMP2_DUPLICATES_NUM.
+This view, using V_SYS_CHK_INT_TMP2_DUPLICATES as a source, returns the number
+of records to be deleted from D_INTERVAL_TEMPORAL_2.  This value should be
+less than that returned from V_SYS_CHK_INT_TMP2_DUPLICATES_NUM.
 
 #### V_SYS_CHK_INT_TMP2_SOIL
 
@@ -1081,16 +1191,16 @@ Note that the default LOC_ID is arbitrary.
 
 #### V_SYS_CHK_SEARCH_XYR
 
-This is a pre-defined routine that allow the user to search within a specified distance (as determined by [SYS_SEARCH_RADIUS]) 
-from specified coordinates (as set by [SYS_SEARCH_XY]).  Note that both of
-these constants are found in S_CONSTANT; 
+This is a pre-defined routine that allow the user to search within a specified 
+distance (as determined by [SYS_SEARCH_RADIUS]) from specified coordinates (as 
+set by [SYS_SEARCH_XY]).  Note that both of these constants are found in S_CONSTANT; 
 the latter makes use of both VALF (for the x-coordinate) and VALF2 (for the
 y-coordinate).  These would need to be set by the 
 user in advance of using this view.
 
-Note that this was originally created as a means by which to check on locations based upon a given coordinate in order to fix 
-errors in the calculation of the average water level.  The default coordinates
-are arbitrary.
+Note that this was originally created as a means by which to check on locations 
+based upon a given coordinate in order to fix errors in the calculation of the 
+average water level.  The default coordinates are arbitrary.
 
 #### V_SYS_CHK_SPEC_CAP_CALC
 
@@ -1192,6 +1302,15 @@ These have been removed from the database and should be removed from S_DESC_VIEW
 #### V_SYS_DGF_TOP_FEATURE
 
 Returns the top-most (shallowest) geologic feature for a particular location (sourced from D_GEOLOGY_FEATURE)
+
+#### V_SYS_DGL_GL
+
+Similar in function to V_SYS_DIFA_GL, this view assembles the top and bottom
+depths for each record found in D_GEOLOGY_LAYER along with the (X,Y)
+coordinates for the particular location.  The top and bottom elevations cannot
+be null and the former must have a larger value than the latter.  This is the
+base view used to determine the geologic unit in which this geologic layer
+lies.
 
 #### V_SYS_DGL_TOTAL_GEOL_MAT1
 
@@ -1478,6 +1597,9 @@ Returns those locations than have a non-zero average spotflow value recorded
 (from D_INTERVAL_SUMMARY).  The [Z] value is the elevation of the location
 which is assumed to be equivalent to the water level (at surface).
 
+Note that this is used as a test for incorporation of spotflow values as part 
+of the shallow water table surface creation process.
+
 #### V_SYS_GENERAL
 
 This view extracts locations from D_LOCATION with valid coordinates (i.e. not having a QA_COORD_CONFIDENCE_CODE of '117').  Note that documents (LOC_TYPE_CODE '25') and the 'Viewlog Well Header' location (i.e. LOC_ID '-2147483443') are not included.  This is used as a base for many V_GEN_* views.
@@ -1735,6 +1857,49 @@ Each of these views returns the location (as LOC_ID) whose spatial geometry (fro
 
 These views use the built-in function 'STIntersects'.
 
+#### V_SYS_LOC_UPD_CHANGES
+
+Returns a list of LOC_IDs that have had some change implemented in any of the
+main data tables (e.g. D_BOREHOLE_CONSTRUCTION, D_GEOLOGY_LAYER, etc...).
+These changes must have occurred after the system constant DEF_CHANGE_DATE.
+The location must have existed before this date (i.e. it is not a [new]
+location).
+
+#### V_SYS_LOC_UPD_CHANGES_XY
+
+This view, using V_SYS_LOC_UPD_CHANGES as a source, returns the coordinates  
+(and geometry) of those locatinos that have had any changes in the various 
+checked tables.
+
+#### V_SYS_LOC_UPD_COORDS_XY
+
+This view returns the current coordinates (and geometry) of locations whose 
+LOC_COORD_DATE is newer than the DEF_CHANGE_DATE system constant.  Only those 
+locations with a null LOC_COORD_DATA_ID are included.
+
+#### V_SYS_LOC_UPD_DIT
+
+Returns a list of LOC_IDs that have had temporal data loaded into the
+database after the specified datatime found in DEF_CHANGE_DATE (a system
+constant).  These are for locations that are older than the same data (i.e.
+they are not [new] locations).  The number of new records are indicated.
+
+#### V_SYS_LOC_UPD_DIT_XY
+
+This view, using V_SYS_LOC_UPD_DIT as a source, returns the coordinates (and 
+geometry) of those locations that have updated temporal data.
+
+#### V_SYS_LOC_UPD_NEW
+
+This view returns a list of LOC_IDs that are newer (with regard to SYS_TIME_STAMP 
+in D_LOCATION) than the datetime specified in the DEF_CHANGE_DATE system
+constant.
+
+#### V_SYS_LOC_UPD_NEW_XY
+
+This view, using V_SYS_LOC_UPD_NEW as a source, returns the coordinates (and 
+geometry) of these [new] locations.
+
 #### V_SYS_MARK_ACTIVE_BAROLOG
 
 For locations with a barologger interval (those with an INT_TYPE_CODE value of
@@ -1811,10 +1976,6 @@ Using V_SYS_MOE_WELL as a source, the LOC_ORIGINAL_NAME from D_LOCATION is used 
 #### V_SYS_MOE_WELL_ID_DLA
 
 This view returns all locations from D_LOCATION_ALIAS where LOC_ALIAS_TYPE_CODE is '4' (i.e. 'MOE well_id field').  Note that LOC_NAME_ALIAS must be converted to a numeric (integer) form.  If it cannot convert correctly, a '-9999' value is returned instead.
-
-#### V_SYS_MOE_WELL_ID_DLA_DUP
-
-This view returns all locations from D_LOCATION_ALIAS where LOC_ALIAS_TYPE_CODE is '5' ('MOE WELL_ID field - Duplicate').  Note that LOC_NAME_ALIAS must be converted to a numeric (integer) form.  If it cannot convert correctly, a '-9999' value is returned instead.
 
 #### V_SYS_NAME
 
@@ -2190,6 +2351,45 @@ This view, using D_VERSION_CURRENT and V_SUM_LOC_TYPE_COUNTS as sources, formats
 
 This view, using D_VERSION_CURRENT and V_SUM_READING_GROUP_COUNTS as sources, formats reading group count data into a format for insertion into D_VERSION_STATUS.  Note that CURRENT_VERSION corresponds to the current 'yyyymmdd' format.
 
+#### V_SYS_SUMMARY_DDS_CHEMISTRY
+
+Returns all DATA_ID values and associated information for incorporation of
+chemistry records from major datasets (where the number of records exceed the
+DEF_SUM_DDS_CHEM system constant).  Note that DDS refers to the D_DATA_SOURCE
+table.
+
+#### V_SYS_SUMMARY_DDS_CLIMATE
+
+Returns all DATA_ID values and associated information for incorporation of
+climate records from major datasets.  Note that DDS refers to the
+D_DATA_SOURCE table.
+
+#### V_SYS_SUMMARY_DDS_FIELD
+
+Returns all DATA_ID values and associated information for incorporation of
+field records from major datasets (where the number of records exceed the
+DEF_SUM_DDS_FIELD system constant).  Note that DDS refers to the D_DATA_SOURCE
+table.
+
+#### V_SYS_SUMMARY_DDS_LOCATIONS
+
+Returns all DATA_ID values and associated information for incorporation of
+locations from major datasets (where the number of locations exceeds the
+DEF_SUM_DDS_LOCNS system constant).  Note that DDS refers to the D_DATA_SOURCE
+table.
+
+#### V_SYS_SUMMARY_DDS_PICKS
+
+Returns all DATA_ID values and associated information for incorporation of
+geologic pick records from major datasets.  Note that DDS refers to the
+D_DATA_SOURCE table.
+
+#### V_SYS_SUMMARY_DDS_SW
+
+Returns all DATA_ID values and associated information for incorporation of
+surface water records from major datasets.  Note that DDS refers to the
+D_DATA_SOURCE table.
+
 #### V_SYS_SUMMARY_DEEPEST_SCREEN_TOP
 
 This view returns the top elevation of the deepest screened interval (from D_INTERVAL_MONITOR) and its associated assigned geologic unit code (from V_SYS_DIFA_ASSIGNED_FINAL).  
@@ -2440,4 +2640,4 @@ This view was originally a source for V_VL_HEADER_SCREEN.  Refer to V_SYS_YPDT_V
 This view returns the information in D_LOCATION related to the 'YPDT Viewlog Header Well'.
 
 
-*Last Modified: 2022-08-24*
+*Last Modified: 2022-11-04*

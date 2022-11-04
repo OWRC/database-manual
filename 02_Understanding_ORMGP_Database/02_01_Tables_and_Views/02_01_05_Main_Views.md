@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.5"
 author: "ormgpmd"
-date:   "20220615"
+date:   "20221104"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -171,6 +171,11 @@ This view returns a subset of V_GEN_LAB extracting only those parameters having 
 
 This view returns a subset of V_GEN_LAB extracting only those parameters having a READING GROUP_CODE of '5' (i.e. 'Water - Extractables').
 
+#### V_GEN_LAB_GASES
+
+This view returns a subset of V_GEN_LAB extracting only those parameters
+having a READING_GROUP_CODE of '38' (i.e. 'Water - Dissolved Gases').
+
 #### V_GEN_LAB_GENERAL
 
 This view returns a subset of V_GEN_LAB extracting only those parameters having a READING GROUP_CODE of '26' (i.e. 'Chemistry - General).
@@ -194,6 +199,18 @@ This view returns a subset of V_GEN_LAB extracting only those parameters having 
 #### V_GEN_LAB_ORGANICS
 
 This view returns a subset of V_GEN_LAB extracting only those parameters having a READING GROUP_CODE of '28' (i.e. 'Water - Miscellaneous Organics').
+
+#### V_GEN_LAB_PAHS
+
+This view returns a subset of V_GEN_LAB extracting only those parameters
+having a READING_GROUP_CODE of '20' (i.e. 'Chemistry - PAHs (Water or
+Soil/Rock)').
+
+#### V_GEN_LAB_PHCS
+
+This view returns a subset of V_GEN_LAB extracting only those parameters
+having a READING_GROUP_CODE of '33' (i.e. 'Chemistry - PHCs (Water or
+Soil/Rock)').
 
 #### V_GEN_LAB_SOIL
 
@@ -460,4 +477,4 @@ This view returns the information necessary for Viewlog to plot and interact wit
 
 This view returns the information necessary for Viewlog to plot and interact with boreholes when working with cross-sections.  In particular, top and bottom elevations for screens are returned for applicable locations; the TEXT field (name) must be populated with 'SCREEN'.
 
-*Last Modified: 2022-06-15*
+*Last Modified: 2022-11-04*
