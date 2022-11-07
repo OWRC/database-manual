@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.1"
 author: "ormgpmd"
-date:   "20220825"
+date:   "20221107"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -116,11 +116,39 @@ Allows locations (based upon their LOC_ID) to be associated together based upon 
 
 #### D_INTERVAL
 
-This is a key table that houses the main information related to intervals, where an interval is the base entity (representing real-word objects like, for example, a well screen) for linking temporal data within the database.  All temporal data (i.e. measured values relative to a particular date; whether it be a water level, pumping record, surface water flow measurement, precipitation data at a climate station, etc...) must tie to a particular interval which, in turn (in this table), is tied to a particular location (using the identifier fields LOC_ID and INT_ID).  Any particular location can have multiple intervals.  So, for example, one borehole could have many screens.  
+This is a key table that houses the main information related to intervals,
+where an interval is the base entity (representing real-word objects like, for
+example, a well screen) for linking temporal data within the database.  All
+temporal data (i.e. measured values relative to a particular date; whether it
+be a water level, pumping record, surface water flow measurement,
+precipitation data at a climate station, etc...) must tie to a particular
+interval which, in turn (in this table), is tied to a particular location
+(using the identifier fields LOC_ID and INT_ID).  Any particular location can
+have multiple intervals.  So, for example, one borehole could have many
+screens.  
 
-This table does not contain much information other than the interval name (INT_NAME, INT_NAME_ALT1) which is, in general, equivalent to that of the LOC_NAME.  Also present is the INT_NAME_MAP field (similar to the LOC_NAME_MAP field in D_LOCATION) which is to be used for storing 'short' names that can be used when plotting.  The INT_TYPE_CODE, an important field, allows intervals to be specified as a particular type (e.g. whether the particular interval is a climate gauge, soil sample, surface water gauge, a reported screen, an open hole in bedrock, etc...); a full list of available types is found in R_INT_TYPE_CODE.
+This table does not contain much information other than the interval name
+(INT_NAME, INT_NAME_ALT1) which is, in general, equivalent to that of the
+LOC_NAME.  Also present is the INT_NAME_MAP field (similar to the LOC_NAME_MAP
+field in D_LOCATION) which is to be used for storing 'short' names that can be
+used when plotting.  The INT_TYPE_CODE, an important field, allows intervals
+to be specified as a particular type (e.g. whether the particular interval is
+a climate gauge, soil sample, surface water gauge, a reported screen, an open
+hole in bedrock, etc...); a full list of available types is found in
+R_INT_TYPE_CODE. 
 
-Some locations (many located in Durham) have multiple intervals tied to specific single screen.  In this case, the interval is recording information based upon either of the 'raw' water samples that are being collected or the 'treated' water samples that are being analyzed.  This difference should be captured by the INT_SAMPLE_TYPE_DESC field (a free form text field) with the former being specified as 'raw' and the latter being specified as 'treated'.
+A re-examination was undertaken of the use of the INT_TYPE_CODE with specific
+reference to surface water stations.  As a result, these have been simplified
+to two distinct types (i.e. 'Surface Water Flow Gauge' and 'Surface Water -
+All').  Further distinctions have been made at the primary and secondary use
+codes as found in D_LOCATION_PURPOSE.
+
+Some locations (many located in Durham) have multiple intervals tied to
+specific single screen.  In this case, the interval is recording information
+based upon either of the 'raw' water samples that are being collected or the
+'treated' water samples that are being analyzed.  This difference should be
+captured by the INT_SAMPLE_TYPE_DESC field (a free form text field) with the
+former being specified as 'raw' and the latter being specified as 'treated'.
 
 #### D_INTERVAL_ALIAS
 
@@ -452,4 +480,4 @@ the update of modification of the database.
 
 This table captures the 'status' of the database at various stages, tied to the 'Dated Version' (both primary and secondary).  This includes the number of records for each available location type, each available interval type and each available reading group code type.
 
-*Last Modified: 2022-08-25*
+*Last Modified: 2022-11-07*
