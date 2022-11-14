@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.2"
 author: "ormgpmd"
-date:   "20220714"
+date:   "20221114"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -24,7 +24,14 @@ used by the ORMGP are included.
 
 #### R_ACTVITY_CODE
 
-The table is required by SiteFX and links to the D_LOCATION_ACTIVITY table.  It is presently not effectively used within the database.
+The table is required by SiteFX and links to the D_LOCATION_ACTIVITY table.
+It is presently not effectively used within the database.
+
+#### R_ATTR_CODE
+
+This table lists the various attributes that can be associated with a
+particular LOC_ID through the D_LOCATION_ATTR table.  Examples include:
+surface water drainage areas; surface water stream segment identifiers; etc...
 
 #### R_BH_DRILL_METHOD_CODE
 
@@ -32,11 +39,23 @@ This table lists various drilling methods.  This is related through BH_DRILL_MET
 
 #### R_BH_DRILLER_CODE
 
-Identifies the driller (or drilling company) of a particular borehole.  This is related through BH_DRILLER_CODE in the D_BOREHOLE table.  The codes are directly from the MOE database and, as much as possible, the BH_DRILLER_DESCRIPTION_LONG has been populated so that the MOE codes are related to a particular drilling company.  The BH_DRILLER_QA_CODE is largely unpopulated but does provide an opportunity to screen well locations based on the quality of the well driller (There should be an explanation for this ???).
+Identifies the driller (or drilling company) of a particular borehole.  This
+is related through BH_DRILLER_CODE in the D_BOREHOLE table.  The codes are
+directly from the MOE database and, as much as possible, the
+BH_DRILLER_DESCRIPTION_LONG has been populated so that the MOE codes are
+related to a particular drilling company.  The BH_DRILLER_QA_CODE is largely
+unpopulated but does provide an opportunity to screen well locations based on
+the quality of the well driller (There should be an explanation for this
+???).
 
 #### R_BH_STATUS_CODE
 
-This table was adapted from the original MOE database codes and is related through BH_STATUS_CODE in the D_BOREHOLE table.  The codes are a mix of well use and status and are generally not used directly within the database.  As appropriate, the code has been translated to either the LOC_STATUS code in the D_LOCATION table or to the PURPOSE_PRIMARY_CODE and/or PURPOSE_SECONDARY_CODE in the D_LOCATION_PURPOSE table.
+This table was adapted from the original MOE database codes and is related
+through BH_STATUS_CODE in the D_BOREHOLE table.  The codes are a mix of well
+use and status and are generally not used directly within the database.  As
+appropriate, the code has been translated to either the LOC_STATUS code in the
+D_LOCATION table or to the PURPOSE_PRIMARY_CODE and/or PURPOSE_SECONDARY_CODE
+in the D_LOCATION_PURPOSE table.
 
 #### R_CHECK_CODE
 
@@ -392,4 +411,4 @@ With regard to conversion of depths to elevations, SiteFX does not use the above
 
 This is adapted from the MOE water well database and is related through WATER_CLARITY_CODE in D_PUMPTEST.
 
-*Last Modified: 2022-07-14*
+*Last Modified: 2022-11-14*
