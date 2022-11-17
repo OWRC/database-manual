@@ -700,6 +700,13 @@ Note that this does not include the any of the calculated baseflow
 RD_NAME_CODE's (i.e. codes '1002' through '1013').  If multiple UNIT_CODE's
 occur in the database, these will appear as multiple rows.
 
+#### V_SUM_SW_SUBTYPE_COUNTS
+
+Summarizes the number of surface water station subtypes.  This is determined
+by examination of the primary and secondary purpose codes available in
+D_LOCATION_PURPOSE.  This has moved away from using D_SURFACEWATER as a source
+(which is now disparaged).
+
 #### V_VL_BOREHOLES
 
 This view returns the information necessary for Viewlog to plot and interact
