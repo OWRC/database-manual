@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.1"
 author: "ormgpmd"
-date:   "20221114"
+date:   "20221125"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -278,6 +278,25 @@ This table allows additional names to be associated with intervals (through an
 INT_ID) as found in D_INTERVAL (note that three names INT_NAME, INT_NAME_ALT1
 and INT_NAME_ALT2 are already available for naming intervals in the D_INTERVAL
 table).
+
+#### D_INTERVAL_ATTRIBUTE
+
+This table allows speficiation of transitory intervals (with top- and
+bottom-depths) to which can be linked parameters (i.e. attributes; as found in
+R_RD_NAME_CODE).  For point measurements (e.g. temperature or conductivity),
+the depths specified would be equivalent.  Each record, here, can link to
+multiple records in D_INTERVAL_ATTRIBUTE_VALUE.
+
+#### D_INTERVAL_ATTRIBUTE_VALUE
+
+Parameters and their values are stored here that reference a transitory
+interval as found in D_INTERVAL_ATTRIBUTE.  An expansion of this table (as of
+Secondary Version 20221125) allows dates, instrumentation type and comments to
+be included for any particular reading.
+
+Both this and the source table (D_INTERVAL_ATTRIBUTE) were both first
+implemented for storage of temperature and conductivity gradients and multiple
+depths within a well.
 
 #### D_INTERVAL_FORM_ASSIGN
 
@@ -909,4 +928,4 @@ the 'Dated Version' (both primary and secondary).  This includes the number of
 records for each available location type, each available interval type and
 each available reading group code type.
 
-*Last Modified: 2022-11-14*
+*Last Modified: 2022-11-25*
