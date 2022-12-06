@@ -848,36 +848,101 @@ less than that returned from V_SYS_CHK_INT_TMP2_DUPLICATES_NUM.
 
 #### V_SYS_CHK_INT_TMP2_SOIL
 
-This view returns all records from D_INTERVAL_TEMPORAL_2 that are associated with soil intervals (i.e. INT_TYPE_CODE '29').
+This view returns all records from D_INTERVAL_TEMPORAL_2 that are associated
+with soil intervals (i.e. INT_TYPE_CODE '29').
 
 #### V_SYS_CHK_INT_TMP5_DUPLICATES
 
-Returns duplicate records from D_INTERVAL_TEMPORAL_5 using comparisons between: INT_ID, RD_NAME_CODE, RD_DATE, RD_VALUE and UNIT_CODE.  The number of 
-records and the minimum as well as the maximum SYS_RECORD_ID is also returned.  The minimum is usually chosen, by default, to remain in the database.  
+Returns duplicate records from D_INTERVAL_TEMPORAL_5 using comparisons
+between: INT_ID, RD_NAME_CODE, RD_DATE, RD_VALUE and UNIT_CODE.  The number of
+records and the minimum as well as the maximum SYS_RECORD_ID is also returned.
+The minimum is usually chosen, by default, to remain in the database.
 Information from D_DATA_SOURCE (tagged by DATA_ID) is included.
 
 #### V_SYS_CHK_INT_TMP5_DUPLICATES_DEL_SRI
 
-Returns the duplicate SYS_RECORD_ID values using V_SYS_CHK_INT_TMP2_DUPLICATES as a source.  These can be used to remove the records from 
-D_INTERVAL_TEMPORAL_2 (using the minimum SYS_RECORD_ID in this case).
+Returns the duplicate SYS_RECORD_ID values using V_SYS_CHK_INT_TMP2_DUPLICATES
+as a source.  These can be used to remove the records from
+D_INTERVAL_TEMPORAL_2 (using the minimum SYS_RECORD_ID in this case). 
+
+#### V_SYS_CHK_INT_TMP5_MOVE_TMP1A
+
+If chemistry data for surface water stations have been loaded into
+D_INTERVAL_TEMPORAL_5, this view can be used to create the format by which to
+populate required fields in D_INTERVAL_TEMPORAL_1A facilitating the movement
+of the data between the two temporal tables. Note that SYS_TEMP1 and SYS_TEMP2
+are populated with a date (string or integer) to allow these *new* samples to
+be referenced.  
+
+This should be used in combination with V_SYS_CHK_INT_TMP5_TMP1B to actually
+*move* the information between the tables.
+
+Additional checks are made to differentiate between chemistry-related data
+captured in the field and that produced within a lab.  Only the following
+reading groups will be allowed (which determines the RD_NAME_CODEs that
+can be moved):
+
+* Chemistry - General (Water or Soil/Rock) ([26])
+* Chemistry - Metals (Water or Soil/Rock) ([2])
+* Water - Bacteriological Related ([36])
+* Water - Major Ions ([1])
+* Water - Miscellaneous Organics ([28])
+
+Additional groups could be included in the future.
+
+In addition, the following RD_NAME_CODEs are ignored:
+
+* Dissolved Oxygen ([201])
+* Temperature (Water) - Field ([609])
+* Temperature (Water) - Logger ([70871])
+
+Additional RD_NAME_CODEs could be included in the future.
+
+#### V_SYS_CHK_INT_TMP5_MOVE_TMP1B
+
+In conjunction with V_SYS_CHK_INT_TMP5_MOVE_TMP1A, this view enables the
+copying of information between the D_INTERVAL_TEMPORAL_5 and
+D_INTERVAL_TEMPORAL_1B tables.  This should be the second view used.  The same
+limitations as the V_SyS_CHK_INT_TMP5_MOVE_TMP1A are used.
+
+Note that an RKEY value is generated which indicates a particular row number
+of the data being assembled.  This can be used to generate a new SYS_RECORD_ID
+for inclusion in D_INTERVAL_TEMPORAL_1B.  The D5_SYS_RECORD_ID field should be
+used to tag the data that should be deleted once it has been copied.
 
 #### V_SYS_CHK_LOC_ADDRESS
 
-This view is to be used as an aid for correcting location position, it returns various address fields as well as the current and original coordinates.  
-In addition, the translated township and country descriptions (based upon LOC_TOWNSHIP_CODE) are included.  If the location is an MOE borehole, the 
-MOE PDF link is returned.
+This view is to be used as an aid for correcting location position, it returns
+various address fields as well as the current and original coordinates.  In
+addition, the translated township and country descriptions (based upon
+LOC_TOWNSHIP_CODE) are included.  If the location is an MOE borehole, the MOE
+PDF link is returned.
 
 #### V_SYS_CHK_LOC_COORDS
 
-This view returns the coordinate and coordinate-quality information (from D_LOCATION and D_LOCATION_QA) where LOC_COORD_EASTING or LOC_COORD_NORTHING is NULL.  Only QA_COORD_CONFIDENCE_CODE's that do not have a value of '117' (i.e. 'YPDT - Invalid ?') are considered.
+This view returns the coordinate and coordinate-quality information (from
+D_LOCATION and D_LOCATION_QA) where LOC_COORD_EASTING or LOC_COORD_NORTHING is
+NULL.  Only QA_COORD_CONFIDENCE_CODE's that do not have a value of '117' (i.e.
+'YPDT - Invalid ?') are considered.
 
 #### V_SYS_CHK_LOC_COORDS_CHECK
 
-This view returns those locations whose spatial coordinates in D_LOCATION_GEOM (i.e. in GEOM) do not match the (x,y) coordinates in D_LOCATION (i.e. LOC_COORD_EASTING and LOC_COORD_NORTHING).  This is signified by COORD_CHECK (in D_LOCATION_GEOM) having a non-null value (this column is increment using a weekly check process).  The CURRENT_COORD coordinates from D_LOCATION_COORD_HIST, if available, are also returned.  This should be used to monitor and correct invalid changes in coordinates.
+This view returns those locations whose spatial coordinates in D_LOCATION_GEOM
+(i.e. in GEOM) do not match the (x,y) coordinates in D_LOCATION (i.e.
+LOC_COORD_EASTING and LOC_COORD_NORTHING).  This is signified by COORD_CHECK
+(in D_LOCATION_GEOM) having a non-null value (this column is increment using a
+weekly check process).  The CURRENT_COORD coordinates from
+D_LOCATION_COORD_HIST, if available, are also returned.  This should be used
+to monitor and correct invalid changes in coordinates.
 
 #### V_SYS_CHK_LOC_COORDS_CHECK_UPDATE
 
-This view returns the calculated GEOM and GEOM_WKB for a location where COORD_CHECK (from D_LOCATION_GEOM) is not null; the latter signifies that a change has been made in the coordinates that do match the spatial geometry (i.e. GEOM).  Note that the current coordinates in D_LOCATION_COORD_HIST must match the coordinate values in D_LOCATION.  The two spatial geometry fields, here, should be used to update the fields in D_LOCATION_GEOM.
+This view returns the calculated GEOM and GEOM_WKB for a location where
+COORD_CHECK (from D_LOCATION_GEOM) is not null; the latter signifies that a
+change has been made in the coordinates that do match the spatial geometry
+(i.e. GEOM).  Note that the current coordinates in D_LOCATION_COORD_HIST must
+match the coordinate values in D_LOCATION.  The two spatial geometry fields,
+here, should be used to update the fields in D_LOCATION_GEOM.
 
 #### V_SYS_CHK_LOC_COORDS_CURR
 
