@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.6"
 author: "ormgpmd"
-date:   "20221117"
+date:   "20221206"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -2646,4 +2646,4 @@ This view was originally a source for V_VL_HEADER_SCREEN.  Refer to V_SYS_YPDT_V
 This view returns the information in D_LOCATION related to the 'YPDT Viewlog Header Well'.
 
 
-*Last Modified: 2022-11-17*
+*Last Modified: 2022-12-06*
