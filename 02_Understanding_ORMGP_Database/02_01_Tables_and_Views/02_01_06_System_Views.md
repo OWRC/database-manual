@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.6"
 author: "ormgpmd"
-date:   "20221214"
+date:   "20230111"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -2667,12 +2667,16 @@ V_SYS_GW_MON_INTERVAL (above) for details.
 These series of views extract records from V_GEN_PICK based upon the text
 description of each geologic unit.
 
-#### V_SYS_PICK_BEDROCK_ALL
+#### V_SYS_PICK_\*_ALL
 
 Extracts records from V_GEN_PICK and D_PICK_EXTERNAL which match a
-GEOL_UNIT_CODE of [7] (i.e. [Bedrock - Undifferentiated (YPDT)]).  The
-locations from V_GEN_PICK are limited to the locations delimited by
-V_SYS_AGENCY_ORMGP_LARGE.  For D_PICK_EXTERNAL, null Z values are ignored. 
+specified GEOL_UNIT_CODE (e.g. [Bedrock - Undifferentiated (YPDT)] would have
+a GEOL_UNIT_CODE of [7]).  Locations from V_GEN_PICK are limited to the extents
+available through V_SYS_AGENCY_ORMGP_LARGE.  For D_PICK_EXTERNAL records, null
+Z values are ignored and all records must have a valid status code (generally
+less than a value of [100]).  Note that very limited information is returned
+by this view - its general use is as a source when interpolating geologic
+layers.
 
 #### V_SYS_PTTW_EXPIRY_DATE_MAX
 
@@ -3549,4 +3553,4 @@ This view returns the information in D_LOCATION related to the 'YPDT Viewlog
 Header Well'.
 
 
-*Last Modified: 2022-12-14*
+*Last Modified: 2023-01-11*
