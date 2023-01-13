@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.6"
 author: "ormgpmd"
-date:   "20230111"
+date:   "20230113"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -3382,6 +3382,21 @@ This includes the bibliographic information for each document (using
 V_GEN_DOCUMENT_BIBLIOGRAPHY) and their coordinates along with their sptail
 geometry (if available).
 
+#### V_SYS_W_GENERAL_GEOL_FEAT
+
+This view assembles the features present in D_GEOLOGY_FEATURE into a coded
+string for access, avoiding the addition of multiple columns to the W_GENERAL
+table for indication of the presence of any type (where multiple feature types
+are recorded) at a particular location.  Each position in the string denotes
+the presence a particular feature type (indicated by a value of 1) as follows:
+
+* Position 1: Water Found - Fresh
+* Position 2: Water Found - Salty
+* Position 3: Water Found - Sulphur
+* Position 4: Water Found - Mineral
+* Position 5: Water Found - Gas
+* Position 6: Water Found - Iron
+
 #### V_SYS_W_GENERAL_GW_LEVEL_LOG
 
 This view is used to populate the W_GENERAL_GW_LEVEL table (generally weekly)
@@ -3553,4 +3568,4 @@ This view returns the information in D_LOCATION related to the 'YPDT Viewlog
 Header Well'.
 
 
-*Last Modified: 2023-01-11*
+*Last Modified: 2023-01-13*
