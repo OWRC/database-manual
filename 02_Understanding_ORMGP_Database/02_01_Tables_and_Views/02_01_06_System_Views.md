@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.6"
 author: "ormgpmd"
-date:   "20230113"
+date:   "20230127"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -2037,6 +2037,23 @@ from RD_NAME_CODEs '628' (i.e. 'Water Level - Manual - Static') and '629'
 calculations.  Only those records with UNIT_CODE '6' (i.e. 'masl') are
 included.
 
+#### V_SYS_FILTER_LOC_COORDS
+
+Selects a subset of LOC_IDs from D_LOCATION based upon a number of checks.
+This includes: having a QA_COORD_CODE (from V_SYS_LOC_COORDS) less than the
+value specified by DEF_QACC_MAX_DISPLAY (as found in S_CONSTANT); being
+located within the ORMGP study area (as specified through
+V_SYS_AGENCY_ORGMP_LARGE); not being an 'Archive' LOC_TYPE_CODE; excluding
+the Viewlog header well location (as specifed by V_SYS_YPDT_VL_HEADER_WELL).
+
+This can be used to update the ORMGP_AREA tag in D_LOCATION_SUMMARY (instead
+of accessing the view directly).
+
+#### V_SYS_FILTER_LOC_COORDS_DOCS
+
+Similar to V_SYS_FILTER_LOC_COORDS but including all document locations
+(whether they have valid coordinates or not).
+
 #### V_SYS_GEN_WL_AVERAGE
 
 This view, using V_SYS_CHK_INT_ELEVS_DEPTHS as a source, returns those records
@@ -3567,5 +3584,4 @@ V_SYS_YPDT_VL_GEOLOGY (above) for additional details.
 This view returns the information in D_LOCATION related to the 'YPDT Viewlog
 Header Well'.
 
-
-*Last Modified: 2023-01-13*
+*Last Modified: 2023-01-27*
