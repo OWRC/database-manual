@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.2"
 author: "ormgpmd"
-date:   "20221214"
+date:   "20230313"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -601,6 +601,16 @@ instead of 'Sodium').  The table R_READING_NAME_ALIAS (described below) is
 used to associate the various possible names with the single name, stored
 here.
 
+The field READING_GROUP_CODE indicates the primary group to which the
+particular parameter is associated.  Further groupings can be made through the
+use of R_RD_NAME_GROUPS.
+
+##### R_RD_NAME_GROUPS
+
+Here, particular RD_NAME_CODEs can be linked to multiple groups as found in
+R_READING_GROUP_CODE.  Note that the default grouping is specified in
+R_RD_NAME_CODE.
+
 #### R_RD_TYPE_CODE
 
 Allows additional information to be included for any particular reading in the
@@ -621,8 +631,9 @@ in the database.
 This table associates related RD_NAME_CODE's (as found in R_RD_NAME_CODE)
 allowing them to be grouped as necessary.  For example, a READING_GROUP_CODE
 of '23' is used to indicate all RD_NAME_CODE's that are associated with water
-level measurements.  This is related through READING_GROUP_CODE in the
-R_RD_NAME_CODE table.
+level measurements.  The default group is specified through READING_GROUP_CODE 
+in the R_RD_NAME_CODE table.  Additional groupings, as required, can be
+specified in R_RD_NAME_GROUPS.
 
 #### R_READING_NAME_ALIAS
 
@@ -738,4 +749,4 @@ interval.
 This is adapted from the MOE water well database and is related through
 WATER_CLARITY_CODE in D_PUMPTEST.
 
-*Last Modified: 2022-12-14*
+*Last Modified: 2023-03-13*
