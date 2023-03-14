@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.2"
 author: "ormgpmd"
-date:   "20230313"
+date:   "20230314"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -211,20 +211,19 @@ The information contained here were adapted from the original MOE database
 codes describing the type of 'Water Found' (e.g. fresh, mineralized, iron,
 etc.).  This is related through FEATURE_CODE in D_GEOLOGY_FEATURE.
 
-#### R_FORM_ASSIGN_CODE
-
-The codes here relate to data found in the D_INTERVAL_FORMATION_ASSIGNMENT
-(DIFA) table detailing, namely, the attributes that each interval can have
-with regard to a particular geologic model (see R_FORM_MODEL_CODE). 
-
 #### R_FORM_MODEL_CODE
 
-The codes here relate to data found in the D_INTERVAL_FORM_ASSIGN (DIFA)
-table.  Any number of geologic or hydrogeologic models can be specified.  Note
-that the specialty model, 'YPDT-CAMC Final' is no longer used (it was used to
-indicate the interpreted geologic unit that should be assigned to a particular
-interval; this was part of a previously defined methodology for populating
-DIFA).  Refer to R_GEOL_UNIT_CODE and DIFA for details.
+Details regarding geologic and hydrogeologic models that are used (or have 
+been archived) by the ORMGP) are recorded here.  These are referenced
+internally in the database in the formation assignment tables (i.e.
+D_INTERVAL_FORM_ASSIGN and D_INTERVAL_FORM_ASSIGN_FINAL) as well as the
+geologic unit code table (R_GEOL_UNIT_CODE).  Additional information is stored
+that is related to the ORMGP archival methodology that is external to the
+database.
+
+Refer to R_GEOL_UNIT_CODE, D_INTERVAL_FORM_ASSIGN and
+D_INTERVAL_FORM_ASSIGN_FINAL for details regarding the application of the
+model code(s) in these tables.
 
 #### R_GEOL_CLASS_CODE
 
@@ -749,4 +748,4 @@ interval.
 This is adapted from the MOE water well database and is related through
 WATER_CLARITY_CODE in D_PUMPTEST.
 
-*Last Modified: 2023-03-13*
+*Last Modified: 2023-03-14*
