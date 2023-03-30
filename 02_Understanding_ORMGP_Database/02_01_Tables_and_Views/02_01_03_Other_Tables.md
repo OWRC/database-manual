@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.3"
 author: "ormgpmd"
-date:   "20220131"
+date:   "20230330"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -56,6 +56,14 @@ This table contains 'general' location information, mainly focused on boreholes.
 
 Note that all 'W_*' tables are automatically re-populated weekly and rely upon information present in the D_LOCATION_SUMMARY and D_INTERVAL_SUMMARY tables (though not exclusively).
 
+##### Field - GEOL_FEAT
+
+This field is used to assemble the 'Water Found' information as commonly
+defined on the MOE water-well master sheets.  As more than one water type can
+be specified, these have been converted to a text-string of 0/1 values such
+as '001001'.  For additional details, refer to the description of
+V_SYS_W_GENERAL_GEOL_FEAT (which assembles the data for this field).
+
 #### W_GENERAL_DOCUMENT
 
 This table contains information from the D_LOCATION and D_DOCUMENT tables and includes a formatted bibliographic reference field (BIBLIO).  This is related to D_LOCATION using LOC_ID.  Refer to W_GENERAL, above, for information concerning the 'W_' tables.
@@ -72,3 +80,4 @@ This table contains summary information for non-borehole locations as specified 
 
 This table contains summary information for screened intervals (i.e. screened well intervals) as described in R_INT_TYPE_CODE (above).  It is related to D_LOCATION using LOC_ID and D_INTERVAL using INT_ID.  This table is used as a locational reference for information in W_GENERAL_GW_LEVEL.  Refer to W_GENERAL, above, for information concerning the 'W_' tables.
 
+Last Modified: 2023-03-30
