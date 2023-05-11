@@ -8,6 +8,7 @@
 -- v20200721 possibly 43 rows match this criteria, not added at this time
 -- v20210119 43 rows, not added at this time
 -- v20220328 43 rows, not added at this time
+-- v20230324 not examined as only z17/18 locations were examined
 
 select
 b.well_id

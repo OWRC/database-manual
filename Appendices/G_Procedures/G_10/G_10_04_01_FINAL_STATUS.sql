@@ -22,8 +22,8 @@ select
      when wwr.FINAL_STA='B'     then 4  -- Replacement Well to Unknown
      when wwr.FINAL_STA='C'     then 4  -- Alteration to Unknown
      when wwr.FINAL_STA='D'     then 4  -- Other Status to Unknown
-	 when wwr.FINAL_STA='E'		then 17 -- Monitoring and Test Hole to MOE Monitoring and Test Hole
-	 when wwr.FINAL_STA='F'		then 18 -- Abandoned Monitoring and Test Hole to MOE Abandoned Monitoring and Test Hole
+	 when wwr.FINAL_STA='E'	  then 17 -- Monitoring and Test Hole to MOE Monitoring and Test Hole
+	 when wwr.FINAL_STA='F'	  then 18 -- Abandoned Monitoring and Test Hole to MOE Abandoned Monitoring and Test Hole
      else -9999
  end
  as [LOC_STATUS_CODE]
@@ -43,13 +43,13 @@ select
      when wwr.FINAL_STA='B'     then 11    -- Replacement Well to Unknown
      when wwr.FINAL_STA='C'     then 12    -- Alteration to Unknown
      when wwr.FINAL_STA='D'     then 13    -- Other Status to Unknown
-	 when wwr.FINAL_STA='E'		then 14	   -- Abandoned Monitoring and Test Hole to MOE Abandoned Monitoring and Test Hole
-	 when wwr.FINAL_STA='F'		then 15	   -- Abandoned Monitoring and Test Hole to MOE Abandoned Monitoring and Test Hole
+	 when wwr.FINAL_STA='E'	  then 14	   -- Abandoned Monitoring and Test Hole to MOE Abandoned Monitoring and Test Hole
+	 when wwr.FINAL_STA='F'	  then 15	   -- Abandoned Monitoring and Test Hole to MOE Abandoned Monitoring and Test Hole
      else -9999
  end 
  as [BH_STATUS_CODE]
 from 
-MOE_20220328.dbo.TblWWR as wwr
+MOE_20230324.dbo.TblWWR as wwr
 group by
 FINAL_STA
 order by 
@@ -74,8 +74,8 @@ select
      when wwr.FINAL_STA='B'     then 4  -- Replacement Well to Unknown
      when wwr.FINAL_STA='C'     then 4  -- Alteration to Unknown
      when wwr.FINAL_STA='D'     then 4  -- Other Status to Unknown
-	 when wwr.FINAL_STA='E'		then 17 -- Monitoring and Test Hole to MOE Monitoring and Test Hole
-	 when wwr.FINAL_STA='F'		then 18 -- Abandoned Monitoring and Test Hole to MOE Abandoned Monitoring and Test Hole
+	 when wwr.FINAL_STA='E'	  then 17 -- Monitoring and Test Hole to MOE Monitoring and Test Hole
+	 when wwr.FINAL_STA='F'	  then 18 -- Abandoned Monitoring and Test Hole to MOE Abandoned Monitoring and Test Hole
      else -9999
  end
  as [LOC_STATUS_CODE]
@@ -95,15 +95,15 @@ select
      when wwr.FINAL_STA='B'     then 11    -- Replacement Well to Unknown
      when wwr.FINAL_STA='C'     then 12    -- Alteration to Unknown
      when wwr.FINAL_STA='D'     then 13    -- Other Status to Unknown
-	 when wwr.FINAL_STA='E'		then 14	   -- Abandoned Monitoring and Test Hole to MOE Abandoned Monitoring and Test Hole
-	 when wwr.FINAL_STA='F'		then 15	   -- Abandoned Monitoring and Test Hole to MOE Abandoned Monitoring and Test Hole
+	 when wwr.FINAL_STA='E'	  then 14	   -- Abandoned Monitoring and Test Hole to MOE Abandoned Monitoring and Test Hole
+	 when wwr.FINAL_STA='F'	  then 15	   -- Abandoned Monitoring and Test Hole to MOE Abandoned Monitoring and Test Hole
      else -9999
  end 
  as [BH_STATUS_CODE]
 into
-MOE_20220328.dbo.YC_20220328_FINAL_STATUS
+MOE_20230324.dbo.YC_20230324_FINAL_STATUS
 from 
-MOE_20220328.dbo.TblWWR as wwr
+MOE_20230324.dbo.TblWWR as wwr
 group by
 FINAL_STA
 order by 
@@ -116,8 +116,9 @@ FINAL_STA
 -- v20200721 23357 rows
 -- v20210119 27088 rows
 -- v20220328 41872 rows
+-- v20230324 62706 rows
 
-update MOE_20220328.dbo.[TblWWR]
+update MOE_20230324.dbo.[TblWWR]
 set
 FINAL_STA=0
 where

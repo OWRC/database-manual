@@ -12,6 +12,7 @@
 -- v20200721 522 
 -- v20210119 523
 -- v20220328 524
+-- v20230324 525
 
 --***** v20210119 Update to include D_LOCATION_SPATIAL_HIST
 
@@ -32,10 +33,10 @@ dint.[INT_ID]
 ,cast('masl' as varchar(50)) as REF_ELEV_UNIT_OUOM
 ,cast('ASSIGNED_ELEV + 0.75m' as varchar(255)) as REF_COMMENT
 ,row_number() over (order by dint.INT_ID) as SYS_RECORD_ID
-,convert(int,524) as [DATA_ID]
+,convert(int,525) as [DATA_ID]
 FROM 
-MOE_20220328.[dbo].[M_D_INTERVAL] as dint
-inner join MOE_20220328.dbo.M_D_BOREHOLE as delev
+MOE_20230324.[dbo].[M_D_INTERVAL] as dint
+inner join MOE_20230324.dbo.M_D_BOREHOLE as delev
 on dint.loc_id=delev.loc_id
 where
 delev.bh_gnd_elev is not null
@@ -55,11 +56,11 @@ dint.[INT_ID]
 ,cast('masl' as varchar(50)) as REF_ELEV_UNIT_OUOM
 ,cast('ASSIGNED_ELEV + 0.75m' as varchar(255)) as REF_COMMENT
 ,row_number() over (order by dint.INT_ID) as SYS_RECORD_ID
-,convert(int,523) as [DATA_ID]
-into MOE_20220328.dbo.M_D_INTERVAL_REF_ELEV
+,convert(int,525) as [DATA_ID]
+into MOE_20230324.dbo.M_D_INTERVAL_REF_ELEV
 FROM 
-MOE_20220328.[dbo].[M_D_INTERVAL] as dint
-inner join MOE_20220328.dbo.M_D_BOREHOLE as delev
+MOE_20230324.[dbo].[M_D_INTERVAL] as dint
+inner join MOE_20230324.dbo.M_D_BOREHOLE as delev
 on dint.loc_id=delev.loc_id
 where
 delev.bh_gnd_elev is not null
@@ -70,11 +71,12 @@ delev.bh_gnd_elev is not null
 -- v20190509 11851 rows 
 -- v20200721 11760 rows
 -- v20220328 15235 rows
+-- v20230324 18826 rows
 
 select
 count(*)
 from 
-MOE_20220328.[dbo].m_d_interval_ref_elev
+MOE_20230324.[dbo].m_d_interval_ref_elev
 
 
 

@@ -10,13 +10,14 @@
 -- v20200721 5 rows (inches)
 -- v20210126 0 rows
 -- v20220328 0 rows
+-- v20230324 0 rows
 
 select 
 ycb.LOC_ID
 ,moef.*
 from 
-MOE_20220328.dbo.YC_20220328_BH_ID as ycb
-inner join MOE_20220328.dbo.TblFormation as moef
+MOE_20230324.dbo.YC_20230324_BH_ID as ycb
+inner join MOE_20230324.dbo.TblFormation as moef
 on ycb.BORE_HOLE_ID=moef.BORE_HOLE_ID
 where 
 not(moef.FORMATION_END_DEPTH_UOM in ('ft','m'))
@@ -28,23 +29,23 @@ ycb.LOC_ID,moef.FORMATION_TOP_DEPTH
 select 
  moef.*
 from 
-MOE_20220328.dbo.YC_20220328_BH_ID as ycb
+MOE_20230324.dbo.YC_20230324_BH_ID as ycb
 inner join 
-MOE_20220328.dbo.TblFormation as moef
+MOE_20230324.dbo.TblFormation as moef
 on
 ycb.BORE_HOLE_ID=moef.BORE_HOLE_ID
 where 
 moef.FORMATION_END_DEPTH_UOM='inch'
 
-update MOE_20220328.dbo.TblFormation
+update MOE_20230324.dbo.TblFormation
 set
  FORMATION_TOP_DEPTH=FORMATION_END_DEPTH/12
 ,FORMATION_END_DEPTH=FORMATION_END_DEPTH/12
 ,FORMATION_END_DEPTH_UOM='ft'
 from 
-MOE_20220328.dbo.YC_20220328_BH_ID as ycb
+MOE_20230324.dbo.YC_20230324_BH_ID as ycb
 inner join 
-MOE_20220328.dbo.TblFormation as moef
+MOE_20230324.dbo.TblFormation as moef
 on
 ycb.BORE_HOLE_ID=moef.BORE_HOLE_ID
 where 
@@ -55,20 +56,20 @@ moef.FORMATION_END_DEPTH_UOM='inch'
 select 
  moef.*
 from 
-[MOE_20220328].dbo.YC_20220328_BH_ID as ycb
-inner join [MOE_20220328].dbo.TblFormation as moef
+[MOE_20230324].dbo.YC_20230324_BH_ID as ycb
+inner join [MOE_20230324].dbo.TblFormation as moef
 on ycb.BORE_HOLE_ID=moef.BORE_HOLE_ID
 where 
 moef.FORMATION_END_DEPTH_UOM='cm'
 
-update [MOE_20220328].dbo.TblFormation
+update [MOE_20230324].dbo.TblFormation
 set
  FORMATION_TOP_DEPTH=FORMATION_END_DEPTH/100
 ,FORMATION_END_DEPTH=FORMATION_END_DEPTH/100
 ,FORMATION_END_DEPTH_UOM='m'
 from 
-[MOE_20220328].dbo.YC_20220328_BH_ID as ycb
-inner join [MOE_20220328].dbo.TblFormation as moef
+[MOE_20230324].dbo.YC_20230324_BH_ID as ycb
+inner join [MOE_20230324].dbo.TblFormation as moef
 on ycb.BORE_HOLE_ID=moef.BORE_HOLE_ID
 where 
 moef.FORMATION_END_DEPTH_UOM='cm'
@@ -78,33 +79,33 @@ moef.FORMATION_END_DEPTH_UOM='cm'
 select 
  moef.*
 from 
-MOE_20220328.dbo.YC_20220328_BH_ID as ycb
-inner join MOE_20220328.dbo.TblFormation as moef
+MOE_20230324.dbo.YC_20230324_BH_ID as ycb
+inner join MOE_20230324.dbo.TblFormation as moef
 on ycb.BORE_HOLE_ID=moef.BORE_HOLE_ID
 where 
 moef.FORMATION_END_DEPTH_UOM='mm'
 
-update MOE_20220328.dbo.TblFormation
+update MOE_20230324.dbo.TblFormation
 set
  FORMATION_TOP_DEPTH=FORMATION_END_DEPTH/1000
 ,FORMATION_END_DEPTH=FORMATION_END_DEPTH/1000
 ,FORMATION_END_DEPTH_UOM='m'
 from 
-MOE_20220328.dbo.YC_20220328_BH_ID as ycb
-inner join MOE_20220328.dbo.TblFormation as moef
+MOE_20230324.dbo.YC_20230324_BH_ID as ycb
+inner join MOE_20230324.dbo.TblFormation as moef
 on ycb.BORE_HOLE_ID=moef.BORE_HOLE_ID
 where 
 moef.FORMATION_END_DEPTH_UOM='mm'
 
 --***** miscellaneous corrections
 
-update MOE_20220328.dbo.TblFormation
+update MOE_20230324.dbo.TblFormation
 set
 formation_end_depth=5
 where 
 formation_id= 1006414320
 
-update MOE_20220328.dbo.TblFormation
+update MOE_20230324.dbo.TblFormation
 set
 formation_top_depth=5
 ,formation_end_depth=150

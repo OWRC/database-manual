@@ -12,6 +12,7 @@
 -- v20200721 6623 rows
 -- v20210119 13911 rows
 -- v20220328 4738 rows
+-- v20230324 5395 rows
 
 select
 COUNT(*) as [Distinct_LOC_ID]
@@ -21,14 +22,14 @@ select
 ycdim.TMP_LOC_ID
 ,COUNT(*) as rcount
 from 
-MOE_20220328.dbo.YC_20220328_DINTMON ycdim
+MOE_20230324.dbo.YC_20230324_DINTMON ycdim
 group by
 ycdim.TMP_LOC_ID
 ) as test
 
 -- note that we're checking for distinct LOC_IDs as a particular location
 -- could have one or more screens assigned; note also that the source 
--- table we're using, i.e. YC_20220328_BH_ID, should not (and does not)
+-- table we're using, i.e. YC_20230324_BH_ID, should not (and does not)
 -- contain any duplicate LOC_IDs
 
 -- this actually checks for duplicate LOC_IDs; not otherwise shown;
@@ -39,6 +40,7 @@ ycdim.TMP_LOC_ID
 -- v20200721 0 rows
 -- v20210119 0 rows
 -- v20220328 0 rows
+-- v20230324 0 rows
 
 select
 BORE_HOLE_ID
@@ -48,7 +50,7 @@ from
 SELECT 
 ycb.BORE_HOLE_ID
 ,COUNT(*) as rcount
-FROM MOE_20220328.[dbo].YC_20220328_BH_ID as ycb
+FROM MOE_20230324.[dbo].YC_20230324_BH_ID as ycb
 group by ycb.BORE_HOLE_ID
 ) as test
 where test.rcount>1
@@ -62,16 +64,17 @@ where test.rcount>1
 -- v20200721 5137 rows
 -- v20210119 10708 rows
 -- v20220328 10497 rows
+-- v20230324 13431 rows
 
 select
 COUNT(*) as [To_Assign_tmp_LOC_IDs]
 from 
-MOE_20220328.dbo.YC_20220328_BH_ID as ybc
+MOE_20230324.dbo.YC_20230324_BH_ID as ybc
 where 
 ybc.BORE_HOLE_ID 
 not in
 (
-select distinct(tmp_LOC_ID) from MOE_20220328.dbo.YC_20220328_DINTMON
+select distinct(tmp_LOC_ID) from MOE_20230324.dbo.YC_20230324_DINTMON
 )
 
 
