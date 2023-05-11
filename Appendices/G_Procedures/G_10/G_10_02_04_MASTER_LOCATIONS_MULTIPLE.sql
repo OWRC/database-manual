@@ -19,19 +19,20 @@
 -- v20190509 0 rows?
 -- v20210119 149 rows
 -- v20220328 0 rows
+-- v20230324 0 rows
 
 select
 t.BORE_HOLE_ID
 ,y.*
 from 
-MOE_20220328.dbo.YC_20220328_BH_ID as y
+MOE_20230324.dbo.YC_20230324_BH_ID as y
 inner join
 (
 select
 y.WELL_ID
 ,min(BORE_HOLE_ID) as BORE_HOLE_ID
 from 
-MOE_20220328.dbo.YC_20220328_BH_ID as y
+MOE_20230324.dbo.YC_20230324_BH_ID as y
 where 
 y.LOC_MASTER_LOC_ID is null 
 group by
@@ -40,19 +41,19 @@ y.WELL_ID
 on y.WELL_ID=t.WELL_ID
 
 
-update MOE_20220328.dbo.YC_20220328_BH_ID
+update MOE_20230324.dbo.YC_20230324_BH_ID
 set
 LOC_MASTER_LOC_ID=t.BORE_HOLE_ID
 ,NOFORMATION=1
 from 
-MOE_20220328.dbo.YC_20220328_BH_ID as y
+MOE_20230324.dbo.YC_20230324_BH_ID as y
 inner join
 (
 select
 y.WELL_ID
 ,min(BORE_HOLE_ID) as BORE_HOLE_ID
 from 
-MOE_20220328.dbo.YC_20220328_BH_ID as y
+MOE_20230324.dbo.YC_20230324_BH_ID as y
 where 
 y.LOC_MASTER_LOC_ID is null 
 group by
@@ -65,7 +66,7 @@ on y.WELL_ID=t.WELL_ID
 select
 *
 from 
-MOE_20220328.dbo.YC_20220328_BH_ID as y
+MOE_20230324.dbo.YC_20230324_BH_ID as y
 where 
 loc_master_loc_id is null
 

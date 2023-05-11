@@ -3,6 +3,9 @@
 
 --***** check each table's identifiers before import
 
+--***** 20230324 
+--***** the following queries are no longer run as we're generating IDs just before import
+
 SELECT 
 mdloc.[LOC_ID]
 FROM 

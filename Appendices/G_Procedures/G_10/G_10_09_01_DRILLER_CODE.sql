@@ -6,7 +6,7 @@
 select
 m.CONTRACTOR
 from 
-MOE_20220328.dbo.TblWWR as m
+MOE_20230324.dbo.TblWWR as m
 where
 m.CONTRACTOR collate database_default 
 not in 
@@ -23,3 +23,4 @@ from OAK_20160831_MASTER.dbo.R_BH_DRILLER_CODE
 -- none are returned v20200721
 -- none are returned v20210119
 -- none are returned v20220328
+-- none are returned v20230324

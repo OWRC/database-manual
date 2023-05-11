@@ -39,10 +39,10 @@ LOC_ID
 ,QA_ELEV_CODE
 ,LOC_ELEV_DATA_ID
 ,cast(LOC_ELEV_COMMENT as varchar(255)) as LOC_ELEV_COMMENT
-,'20220328a' as SYS_TEMP1
-,20220328 as SYS_TEMP2
+,'20230324a' as SYS_TEMP1
+,20230324 as SYS_TEMP2
 from 
-MOE_20220328.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
+MOE_20230324.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
 
 insert into oak_20160831_master.dbo.d_location_spatial_hist
 (
@@ -92,10 +92,10 @@ LOC_ID
 ,QA_ELEV_CODE
 ,LOC_ELEV_DATA_ID
 ,cast(LOC_ELEV_COMMENT as varchar(255)) as LOC_ELEV_COMMENT
-,'20220328a' as SYS_TEMP1
-,20220328 as SYS_TEMP2
+,'20230324a' as SYS_TEMP1
+,20230324 as SYS_TEMP2
 from 
-MOE_20220328.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
+MOE_20230324.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
 
 
 -- D_LOCATION_SPATIAL
@@ -110,7 +110,7 @@ MOE_20220328.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
 --,'20220328a' as SYS_TEMP1
 --,20220328 as SYS_TEMP2
 --from 
---moe_20220328.dbo.m_d_location_spatial_hist as delev
+--moe_20230324.dbo.m_d_location_spatial_hist as delev
 --inner join oak_20160831_master.dbo.d_location_spatial_hist as dlsh
 --on delev.loc_elev_id=dlsh.sys_temp2
 --where 
@@ -119,12 +119,14 @@ MOE_20220328.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
 -- note that very few loc_elev_codes of '5' should be present (normally these result
 -- from and 'edge' issue)
 
+--***** 20230324 Removed SRTM population
+
 select 
 dlsh.LOC_ID
 ,dlsh.SPAT_ID
-,524 as DATA_ID
-,'20220328a' as SYS_TEMP1
-,20220328 as SYS_TEMP2
+,525 as DATA_ID
+,'20230324a' as SYS_TEMP1
+,20230324 as SYS_TEMP2
 from
 (
 select
@@ -134,17 +136,17 @@ from
 oak_20160831_master.dbo.D_LOCATION_SPATIAL_HIST as d1
 where
 d1.LOC_ELEV_CODE=3
-and d1.loc_coord_data_id= 524
--- Only load the SRTM elev if no MNR elev
-union
-select
-d2.LOC_ID
-,d2.SPAT_ID
-from 
-oak_20160831_master.dbo.D_LOCATION_SPATIAL_HIST as d2
-where
-d2.LOC_ELEV_CODE=5
-and d2.loc_coord_data_id=524
+and d1.loc_coord_data_id= 525
+---- Only load the SRTM elev if no MNR elev
+--union
+--select
+--d2.LOC_ID
+--,d2.SPAT_ID
+--from 
+--oak_20160831_master.dbo.D_LOCATION_SPATIAL_HIST as d2
+--where
+--d2.LOC_ELEV_CODE=5
+--and d2.loc_coord_data_id=525
 ) as dlsh
 
 insert into OAK_20160831_MASTER.dbo.D_LOCATION_SPATIAL
@@ -158,9 +160,9 @@ LOC_ID
 select 
 dlsh.LOC_ID
 ,dlsh.SPAT_ID
-,524 as DATA_ID
-,'20220328a' as SYS_TEMP1
-,20220328 as SYS_TEMP2
+,525 as DATA_ID
+,'20230324a' as SYS_TEMP1
+,20230324 as SYS_TEMP2
 from
 (
 select
@@ -170,17 +172,17 @@ from
 oak_20160831_master.dbo.D_LOCATION_SPATIAL_HIST as d1
 where
 d1.LOC_ELEV_CODE=3
-and d1.loc_coord_data_id= 524
--- Only load the SRTM elev if no MNR elev
-union
-select
-d2.LOC_ID
-,d2.SPAT_ID
-from 
-oak_20160831_master.dbo.D_LOCATION_SPATIAL_HIST as d2
-where
-d2.LOC_ELEV_CODE=5
-and d2.loc_coord_data_id=524
+and d1.loc_coord_data_id= 525
+---- Only load the SRTM elev if no MNR elev
+--union
+--select
+--d2.LOC_ID
+--,d2.SPAT_ID
+--from 
+--oak_20160831_master.dbo.D_LOCATION_SPATIAL_HIST as d2
+--where
+--d2.LOC_ELEV_CODE=5
+--and d2.loc_coord_data_id=524
 ) as dlsh
 
 

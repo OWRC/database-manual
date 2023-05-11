@@ -13,6 +13,7 @@
 -- v20200721 0 rows
 -- v20210119 0 rows
 -- v20220328 0 rows
+-- v20230324 0 rows
 
 select
 moeh.Bore_Hole_ID
@@ -20,8 +21,8 @@ moeh.Bore_Hole_ID
 ,moeh.HOLE_DEPTH_UOM as MOE_MAX_DEPTH_UNITS
 ,COUNT(*) as rcount
 from 
-MOE_20220328.dbo.TblHole as moeh
-inner join MOE_20220328.dbo.YC_20220328_BH_ID as ycb
+MOE_20230324.dbo.TblHole as moeh
+inner join MOE_20230324.dbo.YC_20230324_BH_ID as ycb
 on moeh.Bore_Hole_ID=ycb.BORE_HOLE_ID
 where 
 moeh.Depth_to is not null
@@ -55,8 +56,8 @@ moeh.Bore_Hole_ID
 ,max(moeh.Depth_to) as MOE_MAX_DEPTH
 ,moeh.HOLE_DEPTH_UOM as MOE_MAX_DEPTH_UNITS
 from 
-MOE_20220328.dbo.TblHole as moeh
-inner join MOE_20220328.dbo.YC_20220328_BH_ID as ycb
+MOE_20230324.dbo.TblHole as moeh
+inner join MOE_20230324.dbo.YC_20230324_BH_ID as ycb
 on moeh.Bore_Hole_ID=ycb.BORE_HOLE_ID
 where 
 moeh.Depth_to is not null
@@ -77,12 +78,12 @@ where urc.rcount>1
 -- v20210119 16390 rows
 -- v20220328 4789 rows
 
-update MOE_20220328.dbo.YC_20220328_BH_ID
+update MOE_20230324.dbo.YC_20230324_BH_ID
 set
 MOE_MAX_DEPTH=moe_depth.MOE_MAX_DEPTH
 ,MOE_MAX_DEPTH_UNITS=moe_depth.MOE_MAX_DEPTH_UNITS
 from 
-MOE_20220328.dbo.YC_20220328_BH_ID as ycbh
+MOE_20230324.dbo.YC_20230324_BH_ID as ycbh
 inner join 
 (
 select
@@ -90,8 +91,8 @@ select
 ,max(moeh.Depth_to) as MOE_MAX_DEPTH
 ,moeh.HOLE_DEPTH_UOM as MOE_MAX_DEPTH_UNITS
 from 
-MOE_20220328.dbo.TblHole as moeh
-inner join MOE_20220328.dbo.YC_20220328_BH_ID as ycb
+MOE_20230324.dbo.TblHole as moeh
+inner join MOE_20230324.dbo.YC_20230324_BH_ID as ycb
 on moeh.Bore_Hole_ID=ycb.BORE_HOLE_ID
 where 
 moeh.Depth_to is not null

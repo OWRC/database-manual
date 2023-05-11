@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.5"
 author: "ormgpmd"
-date:   "20221117"
+date:   "20230417"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -344,7 +344,14 @@ dates and a count for each reading group.
 
 #### V_GEN_LAB_SUMMARY_SAMPLE_COUNT_YEARLY
 
-This view returns a count of samples by year for each interval in D_INTERVAL_TEMPORAL_1A.
+This view returns a count of samples by year for each interval in
+D_INTERVAL_TEMPORAL_1A.  This is based upon the SAM_SAMPLE_DATE.
+
+#### V_GEN_LAB_SUMMARY_SAMPLE_COUNT_YEARLY_DDS
+
+Equivalent to V_GEN_LAB_SUMMARY_SAMPLE_COUNT_YEARLY with the exception that
+the year is extracted from SYS_TIME_STAMP in D_DATA_SOURCE (i.e. records when
+the records were loaded as opposed to sampled).
 
 #### V_GEN_LAB_SUMMARY_SAMPLE_COUNT_YEARLY_SOIL
 
@@ -746,4 +753,4 @@ with boreholes when working with cross-sections.  In particular, top and
 bottom elevations for screens are returned for applicable locations; the TEXT
 field (name) must be populated with 'SCREEN'.
 
-*Last Modified: 2022-11-17*
+*Last Modified: 2023-04-17*

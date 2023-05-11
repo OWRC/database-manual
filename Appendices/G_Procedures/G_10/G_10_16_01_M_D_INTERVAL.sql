@@ -19,7 +19,7 @@
 --insert into d_data_source
 --( data_id, data_type, data_description, data_comment )
 --values 
---( 523, 'Well or Borehole', 'MOE WWR Database - 20210119', 'Refer to Appendix G.10 in the database manual for import methodology' )
+--( 525, 'Well or Borehole', 'MOE WWR Database - 20230324', 'Refer to Appendix G.10 in the database manual for import methodology' )
 
 -- 519 2017.09.05
 -- 520 2018.05.30
@@ -27,6 +27,7 @@
 -- 522 v20200721 
 -- 523 v20210119
 -- 524 v20220328
+-- 525 v20230324
 
 select 
 dim.INT_ID
@@ -40,7 +41,7 @@ else cast('1867-07-01' as datetime)
 end as INT_START_DATE
 ,cast(1 as int) as INT_CONFIDENTIALITY_CODE
 ,cast(1 as int) as INT_ACTIVE
-,cast(524 as int) as [DATA_ID]
+,cast(525 as int) as [DATA_ID]
 from 
 (
 select
@@ -48,13 +49,13 @@ dim.INT_ID
 ,dim.INT_ID as LOC_ID
 ,dim.tmp_INT_TYPE_CODE
 from 
-MOE_20220328.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20230324.dbo.M_D_INTERVAL_MONITOR as dim
 group by
 dim.INT_ID,dim.tmp_INT_TYPE_CODE
 ) as dim
-inner join MOE_20220328.dbo.YC_20220328_BH_ID as ycb
+inner join MOE_20230324.dbo.YC_20230324_BH_ID as ycb
 on dim.LOC_ID=ycb.BORE_HOLE_ID
-inner join MOE_20220328.dbo.M_D_LOCATION as dloc
+inner join MOE_20230324.dbo.M_D_LOCATION as dloc
 on ycb.BORE_HOLE_ID=dloc.LOC_ID
 
 -- 2017.09.05 17185 rows
@@ -63,6 +64,7 @@ on ycb.BORE_HOLE_ID=dloc.LOC_ID
 -- v20200721 11760 rows
 -- v20210119 24619 rows
 -- v20220328 15235 rows
+-- v20230324 18826 rows
 
 select 
 dim.INT_ID
@@ -76,8 +78,8 @@ else cast('1867-07-01' as datetime)
 end as INT_START_DATE
 ,cast(1 as int) as INT_CONFIDENTIALITY_CODE
 ,cast(1 as int) as INT_ACTIVE
-,cast(524 as int) as [DATA_ID]
-into MOE_20220328.dbo.M_D_INTERVAL
+,cast(525 as int) as [DATA_ID]
+into MOE_20230324.dbo.M_D_INTERVAL
 from 
 (
 select
@@ -85,13 +87,13 @@ dim.INT_ID
 ,dim.INT_ID as LOC_ID
 ,dim.tmp_INT_TYPE_CODE
 from 
-MOE_20220328.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20230324.dbo.M_D_INTERVAL_MONITOR as dim
 group by
 dim.INT_ID,dim.tmp_INT_TYPE_CODE
 ) as dim
-inner join MOE_20220328.dbo.YC_20220328_BH_ID as ycb
+inner join MOE_20230324.dbo.YC_20230324_BH_ID as ycb
 on dim.LOC_ID=ycb.BORE_HOLE_ID
-inner join MOE_20220328.dbo.M_D_LOCATION as dloc
+inner join MOE_20230324.dbo.M_D_LOCATION as dloc
 on ycb.BORE_HOLE_ID=dloc.LOC_ID
 
 -- how many locations and intervals
@@ -102,11 +104,12 @@ on ycb.BORE_HOLE_ID=dloc.LOC_ID
 -- v20200721 11760
 -- v20210119 24619 rows
 -- v20220328 15235 rows
+-- v20230324 18826 rows
 
 select
 count(*) 
 from
-MOE_20220328.dbo.m_d_location
+MOE_20230324.dbo.m_d_location
 
 -- check and make sure that there aren't any duplicate int_ids
 
@@ -116,11 +119,12 @@ MOE_20220328.dbo.m_d_location
 -- v20200721 0 rows
 -- v20210119 0 rows
 -- v20220328 0 rows
+-- v20230324 0 rows
 
 select
 *
 from 
-MOE_20220328.dbo.m_d_interval as dim
+MOE_20230324.dbo.m_d_interval as dim
 where
 dim.int_id
 in
@@ -133,7 +137,7 @@ select
 dim.int_id
 ,COUNT(*) as rcount
 from 
-MOE_20220328.dbo.m_d_interval as dim
+MOE_20230324.dbo.m_d_interval as dim
 group by 
 dim.int_id
 ) as t1
@@ -149,11 +153,12 @@ t1.rcount>1
 -- v20200721 0 rows
 -- v20210119 0 rows
 -- v20220328 0 rows
+-- v20230324 0 rows
 
 select
 b.*
 from 
-MOE_20220328.dbo.YC_20220328_BH_ID as b
+MOE_20230324.dbo.YC_20230324_BH_ID as b
 where 
 BORE_HOLE_ID 
 not in
@@ -161,7 +166,7 @@ not in
 select
 INT_ID
 from 
-MOE_20220328.dbo.M_D_INTERVAL_MONITOR
+MOE_20230324.dbo.M_D_INTERVAL_MONITOR
 group by
 INT_ID
 )
