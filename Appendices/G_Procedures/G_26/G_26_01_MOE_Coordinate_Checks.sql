@@ -488,8 +488,6 @@ where
 v.sys_temp1= '20230511b'
 
 
-
-
 select
 *
 from
