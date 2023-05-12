@@ -16,8 +16,9 @@
 -- v20200721 0 rows
 -- v20210119 0 rows
 -- v20220328 0 rows
+-- v20230324 0 rows
 
-insert into moe_20220328.dbo.ormgp_20220328_upd_dintmon
+insert into moe_20230324.dbo.ormgp_20230324_upd_dintmon
 (
 loc_id, tmp_int_id, tmp_int_type_code, mon_top_ouom, mon_bot_ouom, mon_unit_ouom, mon_comment
 )
@@ -30,20 +31,20 @@ orm.LOC_ID
 ,cast( 'm' as varchar(50) ) as MON_UNIT_OUOM
 ,cast( 'open hole; bottom-of-casing to bottom-of-hole' as varchar(255) ) as MON_CMMENT
 from 
-moe_20220328.dbo.ormgp_20220328_base_dint as orm
-inner join moe_20220328.dbo.ormgp_20220328_upd_depth as od
+moe_20230324.dbo.ormgp_20230324_base_dint as orm
+inner join moe_20230324.dbo.ormgp_20230324_upd_depth as od
 on orm.moe_bore_hole_id=od.moe_bore_hole_id
-inner join moe_20220328.dbo.tblbore_hole as moebh
+inner join moe_20230324.dbo.tblbore_hole as moebh
 on orm.moe_bore_hole_id=moebh.bore_hole_id
 where
 moebh.OPEN_HOLE='Y'
 and orm.moe_bore_hole_id not in
-( select tmp_int_id from moe_20220328.dbo.ormgp_20220328_upd_dintmon )
+( select tmp_int_id from moe_20230324.dbo.ormgp_20230324_upd_dintmon )
 
 select
 count(*)
 from 
-moe_20220328.dbo.ormgp_20220328_upd_dintmon
+moe_20230324.dbo.ormgp_20230324_upd_dintmon
 where 
 tmp_int_type_code= 21
 
@@ -55,8 +56,9 @@ tmp_int_type_code= 21
 -- v20200721 511 rows
 -- v20210119 9 rows
 -- v20220328 21 rows
+-- v20230324 287
 
-insert into moe_20220328.dbo.ormgp_20220328_upd_dintmon
+insert into moe_20230324.dbo.ormgp_20230324_upd_dintmon
 (
 loc_id, int_id, tmp_INT_ID, tmp_int_type_code, mon_top_ouom, mon_bot_ouom, mon_unit_ouom, mon_comment
 )
@@ -70,8 +72,8 @@ orm.LOC_ID
 ,'m' as MON_UNIT_OUOM
 ,cast( 'bedrock, no valid casing; open hole, top-of-bedrock to bottom-of-hole' as varchar(255) ) as MON_COMMENT
 from 
-moe_20220328.dbo.ormgp_20220328_base_dint as orm
-inner join moe_20220328.dbo.ormgp_20220328_upd_depth as od
+moe_20230324.dbo.ormgp_20230324_base_dint as orm
+inner join moe_20230324.dbo.ormgp_20230324_upd_depth as od
 on orm.moe_bore_hole_id=od.moe_bore_hole_id
 inner join
 (
@@ -92,8 +94,8 @@ when mform.formation_end_depth_uom = 'ft' then mform.formation_end_depth * 0.304
 else mform.formation_end_depth
 end as geol_bot_m
 from 
-moe_20220328.dbo.ormgp_20220328_base_dint as orm
-inner join moe_20220328.dbo.tblformation as mform
+moe_20230324.dbo.ormgp_20230324_base_dint as orm
+inner join moe_20230324.dbo.tblformation as mform
 on orm.moe_bore_hole_id=mform.bore_hole_id
 inner join oak_20160831_master.dbo.r_geol_mat1_code as rgmc
 on cast( mform.mat1 as int )=rgmc.geol_mat1_code
@@ -106,12 +108,12 @@ t.moe_bore_hole_id
 on orm.moe_bore_hole_id=t2.moe_bore_hole_id
 where 
 orm.moe_bore_hole_id not in
-( select tmp_int_id from moe_20220328.dbo.ormgp_20220328_upd_dintmon )
+( select tmp_int_id from moe_20230324.dbo.ormgp_20230324_upd_dintmon )
 
 select
 count(*)
 from 
-moe_20220328.dbo.ormgp_20220328_upd_dintmon
+moe_20230324.dbo.ormgp_20230324_upd_dintmon
 where 
 tmp_int_type_code= 22
 
@@ -124,8 +126,9 @@ tmp_int_type_code= 22
 -- v20200721 581 rows
 -- v20210119 20 rows
 -- v20220328 76 rows
+-- v20230324 336 rows
 
-insert into moe_20220328.dbo.ormgp_20220328_upd_dintmon
+insert into moe_20230324.dbo.ormgp_20230324_upd_dintmon
 (
 loc_id, int_id, tmp_int_id, tmp_int_type_code, mon_top_ouom, mon_bot_ouom, mon_unit_ouom, mon_comment
 )
@@ -139,19 +142,19 @@ orm.LOC_ID
 ,cast( 'm' as varchar(50) ) as MON_UNIT_OUOM
 ,cast( 'overburden; assumed screen, 0.3m above bottom-of-hole' as varchar(255) ) as MON_COMMENT
 from 
-moe_20220328.dbo.ormgp_20220328_base_dint as orm
-inner join moe_20220328.dbo.ormgp_20220328_upd_depth as od
+moe_20230324.dbo.ormgp_20230324_base_dint as orm
+inner join moe_20230324.dbo.ormgp_20230324_upd_depth as od
 on orm.moe_bore_hole_id=od.moe_bore_hole_id
 where 
 od.max_depth_m is not null
 and orm.moe_bore_hole_id not in
-( select tmp_int_id from moe_20220328.dbo.ormgp_20220328_upd_dintmon )
+( select tmp_int_id from moe_20230324.dbo.ormgp_20230324_upd_dintmon )
 
 
 select
 count(*)
 from 
-moe_20220328.dbo.ormgp_20220328_upd_dintmon
+moe_20230324.dbo.ormgp_20230324_upd_dintmon
 where 
 tmp_int_type_code= 19
 

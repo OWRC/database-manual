@@ -7,12 +7,13 @@
 -- v20200721 1855 rows
 -- v20210119 461 rows
 -- v20220328 105 rows
+-- v20230324 1179 rows
 
 select
 t.*
 ,t2.rcount_moe
 --count(*) as rcount
-into moe_20220328.dbo.ORMGP_20220328_upd_DGL
+into moe_20230324.dbo.ORMGP_20230324_upd_DGL
 from 
 (
 select
@@ -53,7 +54,7 @@ select
 m.bore_hole_id
 ,count(*) as rcount_moe
 from 
-moe_20220328.dbo.tblformation as m
+moe_20230324.dbo.tblformation as m
 where 
 m.mat1 is not null
 and cast(m.mat1 as int)<>0
@@ -67,5 +68,5 @@ on t.moe_bore_hole_id=t2.bore_hole_id
 select
 count(*) 
 from
-moe_20220328.dbo.ORMGP_20220328_upd_DGL
+moe_20230324.dbo.ORMGP_20230324_upd_DGL
 

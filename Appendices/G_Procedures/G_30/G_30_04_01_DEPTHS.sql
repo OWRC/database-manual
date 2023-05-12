@@ -8,6 +8,7 @@
 -- v20200721 17109 rows
 -- v20210119 19269 rows
 -- v20220328 24996
+-- v20230324 20447
 
 select
 dbore.loc_id
@@ -18,7 +19,7 @@ dbore.loc_id
 ,cast(null as float) as dbc_max_depth_m
 ,cast(null as float) as moe_max_depth_m
 ,cast(null as float) as max_depth_m
-into moe_20220328.dbo.ORMGP_20220328_upd_DEPTH
+into moe_20230324.dbo.ORMGP_20230324_upd_DEPTH
 from 
 oak_20160831_master.dbo.d_borehole as dbore
 inner join oak_20160831_master.dbo.d_location as dloc
@@ -37,12 +38,12 @@ and v.moe_bore_hole_id is not null
 group by
 dbore.loc_id,v.moe_bore_hole_id
 
-drop table moe_20220328.dbo.ORMGP_20220328_upd_DEPTH
+drop table moe_20230324.dbo.ORMGP_20230324_upd_DEPTH
 
 select
 count(*)
 from 
-moe_20220328.dbo.ORMGP_20220328_upd_DEPTH
+moe_20230324.dbo.ORMGP_20230324_upd_DEPTH
 
 --select
 --dbore.loc_id
@@ -52,7 +53,7 @@ moe_20220328.dbo.ORMGP_20220328_upd_DEPTH
 --,cast(null as float) as dbc_max_depth_m
 --,cast(null as float) as moe_max_depth_m
 --,cast(null as float) as max_depth_m
---into moe_20220328.dbo.ORMGP_20220328_upd_DEPTH
+--into moe_20230324.dbo.ORMGP_20230324_upd_DEPTH
 --from 
 --oak_20160831_master.dbo.d_borehole as dbore
 --inner join oak_20160831_master.dbo.d_location as dloc
@@ -79,12 +80,13 @@ moe_20220328.dbo.ORMGP_20220328_upd_DEPTH
 -- v20200721 3252 rows
 -- v20210119 5111 rows
 -- v20220328 3226 
+-- v20230324 1646
 
-update moe_20220328.dbo.ormgp_20220328_upd_depth
+update moe_20230324.dbo.ormgp_20230324_upd_depth
 set
 fm_max_depth_m= t2.fm_max_depth_m
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm2
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm2
 inner join
 (
 select
@@ -99,8 +101,8 @@ when moe.[FORMATION_END_DEPTH_UOM]='ft' then moe.[FORMATION_END_DEPTH]*0.3048
 else moe.[FORMATION_END_DEPTH]
 end as fm_end_depth
 from 
-moe_20220328.dbo.ORMGP_20220328_upd_DEPTH as orm
-inner join moe_20220328.dbo.tblformation as moe
+moe_20230324.dbo.ORMGP_20230324_upd_DEPTH as orm
+inner join moe_20230324.dbo.tblformation as moe
 on orm.moe_bore_hole_id=moe.bore_hole_id
 ) as t
 group by 
@@ -108,11 +110,11 @@ t.moe_bore_hole_id
 ) as t2
 on orm2.moe_bore_hole_id=t2.moe_bore_hole_id
 
---update moe_20220328.dbo.ormgp_20220328_upd_depth
+--update moe_20230324.dbo.ormgp_20230324_upd_depth
 --set
 --fm_max_depth_m= t2.fm_max_depth_m
 --from 
---moe_20220328.dbo.ormgp_20220328_upd_depth as orm2
+--moe_20230324.dbo.ormgp_20230324_upd_depth as orm2
 --inner join
 --(
 --select
@@ -127,8 +129,8 @@ on orm2.moe_bore_hole_id=t2.moe_bore_hole_id
 --else moe.[FORMATION_END_DEPTH]
 --end as fm_end_depth
 --from 
---moe_20220328.dbo.ORMGP_20220328_upd_DEPTH as orm
---inner join moe_20220328.dbo.tblformation as moe
+--moe_20230324.dbo.ORMGP_20230324_upd_DEPTH as orm
+--inner join moe_20230324.dbo.tblformation as moe
 --on orm.moe_bore_hole_id=moe.bore_hole_id
 --) as t
 --group by 
@@ -141,8 +143,9 @@ on orm2.moe_bore_hole_id=t2.moe_bore_hole_id
 -- v20200721 7196 rows
 -- v20210119 7484 rows
 -- v20220328 7517 
+-- v20230324 7624 
 
-update moe_20220328.dbo.tblcasing
+update moe_20230324.dbo.tblcasing
 set
 depth_from=depth_to
 ,depth_to=depth_from
@@ -154,12 +157,13 @@ depth_from>depth_to
 -- v20200721 6299 rows
 -- v20210119 6705 rows
 -- v20220328 4883 
+-- v20230324 2014
 
-update moe_20220328.dbo.ormgp_20220328_upd_depth
+update moe_20230324.dbo.ormgp_20230324_upd_depth
 set
 dbc_max_depth_m= t2.dbc_max_depth_m
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
 inner join
 (
 select
@@ -174,11 +178,11 @@ when mcase.casing_depth_uom = 'ft' then mcase.depth_to * 0.3048
 else mcase.depth_to
 end as dbc_depth
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
-inner join moe_20220328.dbo.tblbore_hole as mbore
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+inner join moe_20230324.dbo.tblbore_hole as mbore
 on orm.moe_bore_hole_id=mbore.bore_hole_id
-inner join moe_20220328.dbo.tblcasing as mcase
-on mbore.well_id=mcase.well_id
+inner join moe_20230324.dbo.tblcasing as mcase
+on mbore.well_id collate database_default = mcase.well_id collate database_default
 union all
 select
 orm.moe_bore_hole_id
@@ -187,8 +191,8 @@ when mplug.plug_depth_uom = 'ft' then mplug.plug_to * 0.3048
 else mplug.plug_to
 end as dbc_depth
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
-inner join moe_20220328.dbo.tblplug as mplug
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+inner join moe_20230324.dbo.tblplug as mplug
 on orm.moe_bore_hole_id=mplug.bore_hole_id
 union all
 select
@@ -198,11 +202,11 @@ when mscr.scrn_depth_uom = 'ft' then mscr.scrn_end_depth * 0.3048
 else mscr.scrn_end_depth
 end as dbc_depth
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
-inner join moe_20220328.dbo.tblbore_hole as mbore
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+inner join moe_20230324.dbo.tblbore_hole as mbore
 on orm.moe_bore_hole_id=mbore.bore_hole_id
-inner join moe_20220328.dbo.tblscreen as mscr
-on mbore.well_id=mscr.well_id
+inner join moe_20230324.dbo.tblscreen as mscr
+on mbore.well_id collate database_default = mscr.well_id collate database_default
 union all
 select
 orm.moe_bore_hole_id
@@ -211,22 +215,22 @@ when mpump.levels_uom = 'ft' then mpump.recom_depth * 0.3048
 else mpump.recom_depth
 end as dbc_depth
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
-inner join moe_20220328.dbo.tblbore_hole as mbore
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+inner join moe_20230324.dbo.tblbore_hole as mbore
 on orm.moe_bore_hole_id=mbore.bore_hole_id
-inner join moe_20220328.dbo.tblpump_test as mpump
-on mbore.well_id=mpump.well_id
+inner join moe_20230324.dbo.tblpump_test as mpump
+on mbore.well_id collate database_default = mpump.well_id collate database_default
 ) as t
 group by
 t.moe_bore_hole_id
 ) as t2
 on orm.moe_bore_hole_id=t2.moe_bore_hole_id
 
---update moe_20220328.dbo.ormgp_20220328_upd_depth
+--update moe_20230324.dbo.ormgp_20230324_upd_depth
 --set
 --dbc_max_depth_m= t2.dbc_max_depth_m
 --from 
---moe_20220328.dbo.ormgp_20220328_upd_depth as orm
+--moe_20230324.dbo.ormgp_20230324_upd_depth as orm
 --inner join
 --(
 --select
@@ -241,10 +245,10 @@ on orm.moe_bore_hole_id=t2.moe_bore_hole_id
 --else mcase.depth_to
 --end as dbc_depth
 --from 
---moe_20220328.dbo.ormgp_20220328_upd_depth as orm
---inner join moe_20220328.dbo.tblbore_hole as mbore
+--moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+--inner join moe_20230324.dbo.tblbore_hole as mbore
 --on orm.moe_bore_hole_id=mbore.bore_hole_id
---inner join moe_20220328.dbo.tblcasing as mcase
+--inner join moe_20230324.dbo.tblcasing as mcase
 --on mbore.well_id=mcase.well_id
 --union all
 --select
@@ -254,8 +258,8 @@ on orm.moe_bore_hole_id=t2.moe_bore_hole_id
 --else mplug.plug_to
 --end as dbc_depth
 --from 
---moe_20220328.dbo.ormgp_20220328_upd_depth as orm
---inner join moe_20220328.dbo.tblplug as mplug
+--moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+--inner join moe_20230324.dbo.tblplug as mplug
 --on orm.moe_bore_hole_id=mplug.bore_hole_id
 --union all
 --select
@@ -265,10 +269,10 @@ on orm.moe_bore_hole_id=t2.moe_bore_hole_id
 --else mscr.scrn_end_depth
 --end as dbc_depth
 --from 
---moe_20220328.dbo.ormgp_20220328_upd_depth as orm
---inner join moe_20220328.dbo.tblbore_hole as mbore
+--moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+--inner join moe_20230324.dbo.tblbore_hole as mbore
 --on orm.moe_bore_hole_id=mbore.bore_hole_id
---inner join moe_20220328.dbo.tblscreen as mscr
+--inner join moe_20230324.dbo.tblscreen as mscr
 --on mbore.well_id=mscr.well_id
 --union all
 --select
@@ -278,10 +282,10 @@ on orm.moe_bore_hole_id=t2.moe_bore_hole_id
 --else mpump.recom_depth
 --end as dbc_depth
 --from 
---moe_20220328.dbo.ormgp_20220328_upd_depth as orm
---inner join moe_20220328.dbo.tblbore_hole as mbore
+--moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+--inner join moe_20230324.dbo.tblbore_hole as mbore
 --on orm.moe_bore_hole_id=mbore.bore_hole_id
---inner join moe_20220328.dbo.tblpump_test as mpump
+--inner join moe_20230324.dbo.tblpump_test as mpump
 --on mbore.well_id=mpump.well_id
 --) as t
 --group by
@@ -294,12 +298,13 @@ on orm.moe_bore_hole_id=t2.moe_bore_hole_id
 -- v20200721 6008 rows
 -- v20210119 6328 rows
 -- v20220328 4450 
+-- v20230324 1858
 
-update moe_20220328.dbo.ormgp_20220328_upd_depth
+update moe_20230324.dbo.ormgp_20230324_upd_depth
 set
 casing_max_depth_m= t2.casing_max_depth_m
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
 inner join
 (
 select
@@ -314,11 +319,11 @@ when mcase.casing_depth_uom = 'ft' then mcase.depth_to * 0.3048
 else mcase.depth_to
 end as dbc_depth
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
-inner join moe_20220328.dbo.tblbore_hole as mbore
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+inner join moe_20230324.dbo.tblbore_hole as mbore
 on orm.moe_bore_hole_id=mbore.bore_hole_id
-inner join moe_20220328.dbo.tblcasing as mcase
-on mbore.well_id=mcase.well_id
+inner join moe_20230324.dbo.tblcasing as mcase
+on mbore.well_id collate database_default = mcase.well_id collate database_default
 ) as t
 group by 
 t.moe_bore_hole_id
@@ -331,12 +336,13 @@ on orm.moe_bore_hole_id=t2.moe_bore_hole_id
 -- v20200721 5756 rows
 -- v20210119 5881 rows
 -- v20220328 4155 
+-- v20230324 1554 
 
-update moe_20220328.dbo.ormgp_20220328_upd_depth
+update moe_20230324.dbo.ormgp_20230324_upd_depth
 set
 dgf_max_depth_m= t2.dgf_max_depth_m
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
 inner join
 (
 select
@@ -351,22 +357,22 @@ when mwater.water_found_depth_uom = 'ft' then mwater.water_found_depth * 0.3048
 else mwater.water_found_depth
 end as dgf_depth
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
-inner join moe_20220328.dbo.tblbore_hole as mbore
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+inner join moe_20230324.dbo.tblbore_hole as mbore
 on orm.moe_bore_hole_id=mbore.bore_hole_id
-inner join moe_20220328.dbo.tblwater as mwater
-on mbore.well_id=mwater.well_id
+inner join moe_20230324.dbo.tblwater as mwater
+on mbore.well_id collate database_default = mwater.well_id collate database_default
 ) as t
 group by
 t.moe_bore_hole_id
 ) as t2
 on orm.moe_bore_hole_id=t2.moe_bore_hole_id
 
---update moe_20220328.dbo.ormgp_20220328_upd_depth
+--update moe_20230324.dbo.ormgp_20230324_upd_depth
 --set
 --dgf_max_depth_m= t2.dgf_max_depth_m
 --from 
---moe_20220328.dbo.ormgp_20220328_upd_depth as orm
+--moe_20230324.dbo.ormgp_20230324_upd_depth as orm
 --inner join
 --(
 --select
@@ -381,10 +387,10 @@ on orm.moe_bore_hole_id=t2.moe_bore_hole_id
 --else mwater.water_found_depth
 --end as dgf_depth
 --from 
---moe_20220328.dbo.ormgp_20220328_upd_depth as orm
---inner join moe_20220328.dbo.tblbore_hole as mbore
+--moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+--inner join moe_20230324.dbo.tblbore_hole as mbore
 --on orm.moe_bore_hole_id=mbore.bore_hole_id
---inner join moe_20220328.dbo.tblwater as mwater
+--inner join moe_20230324.dbo.tblwater as mwater
 --on mbore.well_id=mwater.well_id
 --) as t
 --group by
@@ -397,12 +403,13 @@ on orm.moe_bore_hole_id=t2.moe_bore_hole_id
 -- v20200721 5954 rows
 -- v20210119 6247 rows
 -- v20220328 4378 
+-- v20230324 1807 
 
-update moe_20220328.dbo.ormgp_20220328_upd_depth
+update moe_20230324.dbo.ormgp_20230324_upd_depth
 set
 moe_max_depth_m= t2.moe_max_depth_m
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
 inner join
 (
 select
@@ -417,8 +424,8 @@ when mhole.hole_depth_uom = 'ft' then mhole.depth_to * 0.3048
 else mhole.depth_to
 end as moe_depth
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
-inner join moe_20220328.dbo.tblhole as mhole
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+inner join moe_20230324.dbo.tblhole as mhole
 on orm.moe_bore_hole_id=mhole.bore_hole_id
 ) as t
 group by
@@ -427,11 +434,11 @@ t.moe_bore_hole_id
 on orm.moe_bore_hole_id=t2.moe_bore_hole_id
 
 
---update moe_20220328.dbo.ormgp_20220328_upd_depth
+--update moe_20230324.dbo.ormgp_20230324_upd_depth
 --set
 --moe_max_depth_m= t2.moe_max_depth_m
 --from 
---moe_20220328.dbo.ormgp_20220328_upd_depth as orm
+--moe_20230324.dbo.ormgp_20230324_upd_depth as orm
 --inner join
 --(
 --select
@@ -446,8 +453,8 @@ on orm.moe_bore_hole_id=t2.moe_bore_hole_id
 --else mhole.depth_to
 --end as moe_depth
 --from 
---moe_20220328.dbo.ormgp_20220328_upd_depth as orm
---inner join moe_20220328.dbo.tblhole as mhole
+--moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+--inner join moe_20230324.dbo.tblhole as mhole
 --on orm.moe_bore_hole_id=mhole.bore_hole_id
 --) as t
 --group by
@@ -460,12 +467,13 @@ on orm.moe_bore_hole_id=t2.moe_bore_hole_id
 -- v20200721 17109 rows
 -- v20210119 19269 rows
 -- v20220328 24996
+-- v20230324 20477 
 
-update moe_20220328.dbo.ormgp_20220328_upd_depth
+update moe_20230324.dbo.ormgp_20230324_upd_depth
 set
 max_depth_m= t.max_depth_m
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
 inner join
 (
 select
@@ -477,16 +485,16 @@ values (fm_max_depth_m),(dgf_max_depth_m),(dbc_max_depth_m),(moe_max_depth_m)
 ) as value(v)
 ) as max_depth_m
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
 ) as t
 on orm.moe_bore_hole_id=t.moe_bore_hole_id
 
 
---update moe_20220328.dbo.ormgp_20220328_upd_depth
+--update moe_20230324.dbo.ormgp_20230324_upd_depth
 --set
 --max_depth_m= t.max_depth_m
 --from 
---moe_20220328.dbo.ormgp_20220328_upd_depth as orm
+--moe_20230324.dbo.ormgp_20230324_upd_depth as orm
 --inner join
 --(
 --select
@@ -498,7 +506,7 @@ on orm.moe_bore_hole_id=t.moe_bore_hole_id
 --) as value(v)
 --) as max_depth_m
 --from 
---moe_20220328.dbo.ormgp_20220328_upd_depth as orm
+--moe_20230324.dbo.ormgp_20230324_upd_depth as orm
 --) as t
 --on orm.moe_bore_hole_id=t.moe_bore_hole_id
 
@@ -516,10 +524,10 @@ when mcase.casing_depth_uom = 'ft' then mcase.depth_to * 0.3048
 else mcase.depth_to
 end as dbc_depth
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
-inner join moe_20220328.dbo.tblbore_hole as mbore
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+inner join moe_20230324.dbo.tblbore_hole as mbore
 on orm.moe_bore_hole_id=mbore.bore_hole_id
-inner join moe_20220328.dbo.tblcasing as mcase
+inner join moe_20230324.dbo.tblcasing as mcase
 on mbore.well_id=mcase.well_id
 
 -- plug
@@ -531,8 +539,8 @@ when mplug.plug_depth_uom = 'ft' then mplug.plug_to * 0.3048
 else mplug.plug_to
 end as dbc_depth
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
-inner join moe_20220328.dbo.tblplug as mplug
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+inner join moe_20230324.dbo.tblplug as mplug
 on orm.moe_bore_hole_id=mplug.bore_hole_id
 
 -- screen 
@@ -544,10 +552,10 @@ when mscr.scrn_depth_uom = 'ft' then mscr.scrn_end_depth * 0.3048
 else mscr.scrn_end_depth
 end as dbc_depth
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
-inner join moe_20220328.dbo.tblbore_hole as mbore
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+inner join moe_20230324.dbo.tblbore_hole as mbore
 on orm.moe_bore_hole_id=mbore.bore_hole_id
-inner join moe_20220328.dbo.tblscreen as mscr
+inner join moe_20230324.dbo.tblscreen as mscr
 on mbore.well_id=mscr.well_id
 
 -- pumping
@@ -559,10 +567,10 @@ when mpump.levels_uom = 'ft' then mpump.recom_depth * 0.3048
 else mpump.recom_depth
 end as dbc_depth
 from 
-moe_20220328.dbo.ormgp_20220328_upd_depth as orm
-inner join moe_20220328.dbo.tblbore_hole as mbore
+moe_20230324.dbo.ormgp_20230324_upd_depth as orm
+inner join moe_20230324.dbo.tblbore_hole as mbore
 on orm.moe_bore_hole_id=mbore.bore_hole_id
-inner join moe_20220328.dbo.tblpump_test as mpump
+inner join moe_20230324.dbo.tblpump_test as mpump
 on mbore.well_id=mpump.well_id
 
 
