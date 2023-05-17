@@ -665,7 +665,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=0 then
          when dbore.BH_STATUS_CODE in (1,2,3,5,6,7,10,11,12,13) then 5 -- Industrial
          when dbore.BH_STATUS_CODE in (4,14,15) then 3 -- Engineering
          else null 
-         end
+         ende= 7
      -- MOE USE2 5 - Commercial
      when dloc.LOC_MOE_USE_2ND_CODE=5 then 
          case 
@@ -678,6 +678,13 @@ when dloc.LOC_MOE_USE_1ST_CODE=0 then
          when dbore.BH_STATUS_CODE in (1,3) then 10 -- Water Supply
          else null
          end
+     -- MOE USE2 7 - Public Supply
+     when dloc.LOC_MOE_USE_2ND_CODE=7
+         case
+         when dbore.BH_STATUS_CODE is null then 10
+         when dbore.BH_STATUS_CODE in (7) then 10
+         else null
+         end 
      -- MOE USE2 9 - Not Used
      when dloc.LOC_MOE_USE_2ND_CODE=9 then 
          case 
@@ -726,6 +733,12 @@ when dloc.LOC_MOE_USE_1ST_CODE=0 then
          when dbore.BH_STATUS_CODE in (12,13) then 11 -- Unknown
          else null
          end
+     -- MOE USE2 1 - Domestic
+     when dloc.LOC_MOE_USE_2ND_CODE=1 then
+         case
+         when dbore.BH_STATUS_CODE is null then 10 -- Water Supply
+         else null
+         end
      -- MOE USE2 4 - Industrial
      when dloc.LOC_MOE_USE_2ND_CODE=4 then 
          case 
@@ -745,6 +758,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=0 then
      -- MOE USE2 10 - Other
      when dloc.LOC_MOE_USE_2ND_CODE=10 then 
          case 
+         when dbore.BH_STATUS_CODE is null then 10 -- Water Supply
          when dbore.BH_STATUS_CODE in (10) then 10 -- Water Supply
          else null 
          end 
@@ -1320,7 +1334,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=1 then
      when dloc.LOC_MOE_USE_2ND_CODE=4 then 
          case 
          when dbore.BH_STATUS_CODE is null then 28 -- Other Industrial
-         when dbore.BH_STATUS_CODE in (1,5,6,7,10,11,12,13) then 28 -- Other Industrial
+         when dbore.BH_STATUS_CODE in (1,6,7,10,11,12,13) then 28 -- Other Industrial
          when dbore.BH_STATUS_CODE in (2,14,15) then 51 -- Monitor/Obs Well
          when dbore.BH_STATUS_CODE=3 then 47 -- Geotech Testhole
          when dbore.BH_STATUS_CODE=4 then 83 -- Recharge Well
@@ -1683,6 +1697,13 @@ when dloc.LOC_MOE_USE_1ST_CODE=1 then
          when dbore.BH_STATUS_CODE=3 then 59 -- Municipal Exploration
          else null
          end
+     -- MOE USE2 7 - Public Supply
+     when dloc.LOC_MOE_USE_2ND_CODE=9 then
+         case
+         when dbore.BH_STATUS_CODE is null then 33 -- Other Water Supply
+         when dbore.BH_STATUS_CODE in (7) then 77 -- Not Used - Possibly Abandoned
+         else null
+         end
      -- MOE USE2 9 - Not Used
      when dloc.LOC_MOE_USE_2ND_CODE=9 then 
          case 
@@ -1734,11 +1755,17 @@ when dloc.LOC_MOE_USE_1ST_CODE=1 then
          when dbore.BH_STATUS_CODE in (12,13) then 71 -- Unknown
          else null
          end
+     -- MOE USE2 1 - Domestic
+     when dloc.LOC_MOE_USE_2ND_CODE=1 then
+         case
+         when dbore.BH_STATUS_CODE is null then 33 -- Other Water Supply
+         else null
+         end
      -- MOE USE2 4 - Industrial
      when dloc.LOC_MOE_USE_2ND_CODE=4 then 
          case 
          when dbore.BH_STATUS_CODE is null then 28 -- Other Industrial
-         when dbore.BH_STATUS_CODE in (1,5,6,7,10,11,13) then 28 -- Other Industrial
+         when dbore.BH_STATUS_CODE in (1,5,6,7,10,11,12,13) then 28 -- Other Industrial
          when dbore.BH_STATUS_CODE in (2,14) then 51 -- Monitor/Obs Well
          when dbore.BH_STATUS_CODE=3 then 47 -- Geotech Testhole
          when dbore.BH_STATUS_CODE=4 then 83 -- Recharge Well
@@ -1754,6 +1781,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=1 then
      -- MOE USE2 10 - Other
      when dloc.LOC_MOE_USE_2ND_CODE=10 then 
          case 
+         when dbore.BH_STATUS_CODE is null then 33 -- Other Water Supply
          when dbore.BH_STATUS_CODE in (10) then 77 -- Not Used
          else null 
          end 
