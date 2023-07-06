@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.6"
 author: "ormgpmd"
-date:   "20230127"
+date:   "20230706"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -161,6 +161,19 @@ diameters are also shown in inches.  This is limited to a CON_TYPE_CODE of '3'
 Returns each of the: borehole diameter; construction diameter; and screen
 diameter.  The largest of these is chosen as the default diameter value.  All
 units are converted to meters.
+
+#### V_SYS_BH_DROUGHT_TEST
+
+For each location in D_LOCATION_SUMMARY, this view examines where the
+WL_MASL_AVG value (from D_INTERVAL_SUMMARY) is within DEF_DROUGHT_DIFF metres
+(from S_CONSTANT; this is initally set to three metres) of either the
+BH_BOTTTOM_ELEV (in D_BOREHOLE) or the REC_PUMP_DEPTH_METERS (from
+D_PUMPTEST).  These will be locations that are considered to be affected by
+drought conditions.
+
+Note that an indicator of [1] is returned in TEST_BOTTOM for a borehole bottom
+check while an indicator of [2] will be returned in TEST_PUMP for the pump
+depth check.
 
 #### V_SYS_CHK_ALIAS_NAME
 
@@ -3584,4 +3597,4 @@ V_SYS_YPDT_VL_GEOLOGY (above) for additional details.
 This view returns the information in D_LOCATION related to the 'YPDT Viewlog
 Header Well'.
 
-*Last Modified: 2023-01-27*
+*Last Modified: 2023-07-06*
