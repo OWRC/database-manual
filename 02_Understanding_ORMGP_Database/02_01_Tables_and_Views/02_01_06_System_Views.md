@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.6"
 author: "ormgpmd"
-date:   "20230706"
+date:   "20230801"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -112,32 +112,11 @@ follows (the AREA_ID, from D_AREA_GEOM, is enclosed in quotes).
 * YPDT
     + YPDT-CAMC SWP Area - 20km Buffer ('62')
 
-#### V_SYS_AREA_CA
-
-This view returns the LOC_ID and AREA_ID for each location (as found in
-D_LOCATION_GEOM) when compared (using intersection) against the area polygons
-in D_AREA_GEOM.  This is only for the conservation authority partner agencies.
-Note that this can be a slow process.
-
 #### V_SYS_AREA_GEOMETRY_WKB
 
 This view converts the AREA_GEOM in D_AREA_GEOM from a geometry type to a
 binary type.  The latter will be in 'Well Known Binary' (WKB) format -  this
 is supported by a number of external software packages.
-
-#### V_SYS_AREA_REGION
-
-This view returns the LOC_ID and AREA_ID for each location (as found in
-D_LOCATION_GEOM) when compared (using intersection) against the area polygons
-in D_AREA_GEOM.  This is only for the region partner agencies.  Note that this
-can be a slow process.
-
-#### V_SYS_AREA_SWP
-
-This view returns the LOC_ID and AREA_ID for each location (as found in
-D_LOCATION_GEOM) when compared (using intersection) against the area polygons
-in D_AREA_GEOM.  This is only for the 'Source Water Protection' (SWP) areas.
-Note that this can be a slow process.
 
 #### V_SYS_BH_BEDROCK_ELEV
 
@@ -174,6 +153,32 @@ drought conditions.
 Note that an indicator of [1] is returned in TEST_BOTTOM for a borehole bottom
 check while an indicator of [2] will be returned in TEST_PUMP for the pump
 depth check.
+
+#### V_SYS_CHK_AGENCY_CA
+
+This view compares the location against the various conservation authorities
+areal extents returning the updated value in CA_AREA_ID_NEW.  The current
+CA_AREA_ID is also returned for comparison. 
+
+Note that a null value is returned if the location is outside of any
+conservation area.
+
+#### V_SYS_CHK_AGENCY_REG
+
+This view compares the location against the various regions areal extents
+returning the updated value in REG_AREA_ID_NEW.  The current REG_AREA_ID is
+also returned for comparison.
+
+Note that a null value is returned if the location is outside of any region.
+
+#### V_SYS_CHK_AGENCY_SWP
+
+This view compares the location against the various source water protection
+areal extents returning the updated value in SWP_AREA_ID_NEW.  The current
+SWP_AREA_ID is also returned for comparison.
+
+Note that a null value is returned if the location is outside of any source
+water protection area.
 
 #### V_SYS_CHK_ALIAS_NAME
 
@@ -1252,6 +1257,12 @@ latter table - a CURRENT_COORD field is present set to a '1' value (indicating
 that this is the current coordinates).  Note that there must be a valid
 coordinate in either (or both) of LOC_COORD_EASTING or LOC_COORD_NORTHING.
 
+#### V_SYS_CHK_LOC_COORDS_MOE_UPD
+
+Extracts all coordinates associated with a particular LOC_ID that has had 
+coordinates added in the latest MOE update (as specified by DEF_MOE_UPD_DID
+in S_CONSTANT).
+
 #### V_SYS_CHK_LOC_ELEV
 
 This view extracts all elevations from D_LOCATION_ELEV_HIST and D_BORHOLE
@@ -1293,7 +1304,7 @@ GEOM for each location.
 #### V_SYS_CHK_LOC_ELEV_SURV_NULL
 
 This view returns all elevations associated with a particular location
-(similarly to V_SYS_CHK_LOC_ELEV_MISSING_LIST) where the
+where the
 QA_ELEV_CONFIDENCE_CODE is '1' (i.e. it has been surveyed) but no surveyed
 elevation is present in D_LOCATION_ELEV_HIST (i.e. having a LOC_ELEV_CODE of
 '1').  This should be used to determine the input surveyed elevation.
@@ -1793,6 +1804,11 @@ coordinates for the particular location.  The top and bottom elevations cannot
 be null and the former must have a larger value than the latter.  This is the
 base view used to determine the geologic unit in which this geologic layer
 lies.
+
+#### V_SYS_DGL_GL_ASSIGN
+
+This view is used to populate GEOL_ASSIGNED_UNIT in D_GEOLOGY_LAYER based 
+upon geologic units present in GEOL_TLAYER or GEOL_BLAYER.
 
 #### V_SYS_DGL_TOTAL_GEOL_MAT1
 
@@ -2434,14 +2450,18 @@ Interpretation of the Analytical Data From York, Peel, Durham and Toronto –
 Conservation Authorities Moraines Coalition (YPDT- CAMC) Study Area (December
 2017).  Unpublished Technical Report.], Figure 16 in particular.
 
-#### V_SYS_LOC_COORD_HIST_ADD
+#### V_SYS_LOC_COORDS
 
-This view assembles the pertinent information from D_LOCATION and
-D_LOCATION_QA into a format needed for inserting data into
-D_LOCATION_COORD_HIST.  Only those locations that do not already exist in the
-latter table will be returned.  These will be tagged as a CURRENT_COORD (which
-will be set to '1').  Both LOC_COORD_EASTING and LOC_COORD_NORTHING cannot be
-NULL.
+This view returns the current [x,y] and surface elevation for each location as
+defined in D_LOCATION_SPATIAL and D_LOCATION_SPATIAL_HIST.  The ASSIGNED_ELEV
+field is a duplicate of the Z field and is being kept for historical purposes
+(i.e. this field name is used by other calling views).  Note that a location
+is only returned if it has a valid QA_COORD_CODE (i.e. it does not have a 
+value of [117]) 
+
+#### V_SYS_LOC_COORDS_ALL
+
+As V_SYS_LOC_COORDS but with no QA_COORD_CODE check.
 
 #### V_SYS_LOC_DATA_SOURCE
 
@@ -2571,6 +2591,15 @@ within a specified time period, marking it active or inactive.  The default
 time period is stored in S_CONSTANT as DEF_ACTIVE_MONITOR_WELL.  Only those
 loctions that have the number of water levels greater than DEF_WL_COUNT will
 be processed.
+
+#### V_SYS_MARK_ACTIVE_PGMN
+
+For PGMN locations, this view examines its associated temporal data
+(summarized in D_INTERVAL_SUMMARY) to determine whether it has been updated
+within a specified time period, marking it active or inactive (through
+LOC_STATUS_CODE) .  The default time period is stored in S_CONSTANT as
+DEF_ACTIVE_PGMN_WELL.  Only those locations that have the number of water
+levels greater than DEF_WL_COUNT will be processed. 
 
 #### V_SYS_MARK_ACTIVE_PTTW
 
@@ -2707,6 +2736,13 @@ Z values are ignored and all records must have a valid status code (generally
 less than a value of [100]).  Note that very limited information is returned
 by this view - its general use is as a source when interpolating geologic
 layers.
+
+#### V_SYS_PICK_PUSHDOWN_ALL
+
+This view returns non-bedrock borehole (using BH_BEDROCK_ELEV in D_BOREHOLE)
+locations that have a non-null BH_BOTTOM_ELEV.  These are considered 'picks'
+for interpolation with regard to checking against interpolated bedrock 
+surfaces.
 
 #### V_SYS_PTTW_EXPIRY_DATE_MAX
 
@@ -2925,12 +2961,6 @@ This view returns yearly stream flow minimum, maximum, average and number of
 records by interval from D_INTERVAL_TEMPORAL_2 where RD_NAME_CODE is '1001'
 (i.e. 'Stream Flow - Daily Discharge (Average)') or '70870' (i.e. 'Stream Flow
 (Spot Flow)').
-
-#### V_SYS_SHYDROLOGY
-
-This view returns information specifically formatted for the ORMGP website
-(through the 'S-Hydrology' web-application) under 'Surface Water Hydrograph
-Tools'.
 
 #### V_SYS_SPEC_CAP_CALC
 
@@ -3597,4 +3627,4 @@ V_SYS_YPDT_VL_GEOLOGY (above) for additional details.
 This view returns the information in D_LOCATION related to the 'YPDT Viewlog
 Header Well'.
 
-*Last Modified: 2023-07-06*
+*Last Modified: 2023-08-01*
