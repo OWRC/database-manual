@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.6"
 author: "ormgpmd"
-date:   "20230801"
+date:   "20230911"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -498,6 +498,23 @@ In some cases, barometric data has been incorporated without correction of an
 offset value; this can be found, in general where the imported values are less
 than [300]; these values are corrected by adding the offset (of [950]) back to
 the original value; both [cmap baro] and [map bar] are corrected
+
+#### V_SYS_CHK_DECOMM_STATUS
+
+Returns the LOC_ID and LOC_STATUS_CODE for decommissioned well locations (i.e.
+those with a LOC_TYPE_CODE of [27]) where the latter has note been
+appropriately assigned.  Appropriate LOC_STATUS_CODEs include
+
+* Abandoned ([3])
+* Unknown ([4])
+* Assumed Abandoned ([5])
+* Assumed Destroyed ([6])
+* Decommissioned ([7])
+* Decommissioned Pumping Well - Municipal ([13])
+* Decommissioned Monitoring Well ([14])
+
+All others should have their LOC_STATUS_CODE updated to a value of [7] (i.e.
+Decommissioned).
 
 #### V_SYS_CHK_DGL_BEDROCK
 
@@ -3627,4 +3644,4 @@ V_SYS_YPDT_VL_GEOLOGY (above) for additional details.
 This view returns the information in D_LOCATION related to the 'YPDT Viewlog
 Header Well'.
 
-*Last Modified: 2023-08-01*
+*Last Modified: 2023-09-11*
