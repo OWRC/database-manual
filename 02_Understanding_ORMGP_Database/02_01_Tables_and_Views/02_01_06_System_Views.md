@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.6"
 author: "ormgpmd"
-date:   "20230911"
+date:   "20231011"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -978,54 +978,12 @@ are considered.  The reference ground elevation, the new reference elevation
 (using ASSIGNED_ELEV and REF_STICK_UP) and the absolute difference between
 ASSIGNED_ELEV and the reference ground elevation is calculated.
 
-#### V_SYS_CHK_INT_REF_ELEV2
-
-This view returns locations similarly to V_SYS_CHK_INT_REF_ELEV for those
-locations with multiple records (i.e. time intervals) in D_INTERVAL_REF_ELEV.
-The REF_ELEV_START_DATE and REF_ELEV_END_DATE are included; the latter is
-assigned the current date if, at present, it is NULL (i.e. it is the current
-reference elevation record).
-
-#### V_SYS_CHK_INT_REF_ELEV2_DIT2
-
-This view is equivalent to V_SYS_CHK_INT_REF_ELEV_DIT2 (below) for those
-intervals with multiple records in D_INTERVAL_REF_ELEV.  The start and end
-dates are used to determine the applicable 'new' reference elevation.
-
-#### V_SYS_CHK_INT_REF_ELEV2_DIT2_DEPTHS
-
-This view is equivalent to V_SYS_CHK_INT_REF_ELEV_DIT2_DEPTHS (below) for
-those intervals with multiple records in D_INTERVAL_REF_ELEV (using
-V_SYS_CHK_INT_REF_ELEV2_DIT2 as a source).
-
-#### V_SYS_CHK_INT_REF_ELEV2_ERR
-
-This view returns all records from D_INTERVAL_REF_ELEV where multiple
-reference elevations have been specified but their date ranges are invalid.
-This should be used to correct those date ranges.
-
 #### V_SYS_CHK_INT_REF_ELEV_CURRENT
 
 Using V_SYS_INT_REF_ELEV_CURRENT as a base, checks D_INTERVAL_REF_ELEV for
 reference elevation date ranges that overlap with the current date range
 (starting from REF_ELEV_START_DATE).  When this occurs, RCOUNT will have a
 value greater than [1] for a particular INT_ID.  These should be corrected.
-
-#### V_SYS_CHK_INT_REF_ELEV_DIT2
-
-This view returns all records from D_INTERVAL_TEMPORAL_2 for intervals present
-in V_SYS_CHK_REF_ELEV and with READING_GROUP_CODE of '23' (i.e. 'Water
-Level').  This can be used to determine those records that could be affected
-by updating (i.e. correcting) the reference elevation (the new, calculated
-reference elevation is included).
-
-#### V_SYS_CHK_INT_REF_ELEV_DIT2_DEPTHS
-
-This view returns all records from V_SYS_CHK_INT_REF_ELEV_DIT2 where the
-original units of measure are depths (e.g. 'mbgs', 'fbgs', etc?) - these are
-the only records that should be modified by a change in REF_ELEV.  Units such
-as 'masl' should remain unchanged.  The corrected RD_VALUE is present in
-RD_VALUE_NEW.  The SYS_RECORD_ID from D_INTERVAL_TEMPORAL_2 is included.
 
 #### V_SYS_CHK_INT_REF_OFFSET
 
@@ -3644,4 +3602,4 @@ V_SYS_YPDT_VL_GEOLOGY (above) for additional details.
 This view returns the information in D_LOCATION related to the 'YPDT Viewlog
 Header Well'.
 
-*Last Modified: 2023-09-11*
+*Last Modified: 2023-10-11*
