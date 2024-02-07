@@ -2266,7 +2266,10 @@ creating regional water level surfaces.
 
 #### V_SYS_GEOL_LAYER_COUNT
 
-This view is not official and should be removed.
+Returns the number of geologic layers found in D_GEOLOGY_LAYER where the
+GEOL_MAT1_CODE is not [Unknown].  This does not exclude NULL values, though.
+Refer also to V_SYS_SUMMARY_GEOL_LAYER_NUM.  Added by MJF (with subsequent
+modifications).
 
 #### V_SYS_GEOL_LAY_ELEVS
 
