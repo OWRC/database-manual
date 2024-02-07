@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.6"
 author: "ormgpmd"
-date:   "20231011"
+date:   "20240207"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -2712,12 +2712,19 @@ less than a value of [100]).  Note that very limited information is returned
 by this view - its general use is as a source when interpolating geologic
 layers.
 
+#### V_SYS_PICK_PUSHDOWN
+
+For non-bedrock wells, returns the bottom elevation of the materials (from
+D_GEOLOGY_LAYER) as well as the bottom of the borehole (from D_BOREHOLE) for
+those locations within the ORMGP study area that do not intersect bedrock.  
+This is meant to be used as a check against any generated bedrock surfaces. 
+
 #### V_SYS_PICK_PUSHDOWN_ALL
 
 This view returns non-bedrock borehole (using BH_BEDROCK_ELEV in D_BOREHOLE)
 locations that have a non-null BH_BOTTOM_ELEV.  These are considered 'picks'
 for interpolation with regard to checking against interpolated bedrock 
-surfaces.
+surfaces. In addition, bedrock elevations are included.
 
 #### V_SYS_PTTW_EXPIRY_DATE_MAX
 
@@ -3602,4 +3609,4 @@ V_SYS_YPDT_VL_GEOLOGY (above) for additional details.
 This view returns the information in D_LOCATION related to the 'YPDT Viewlog
 Header Well'.
 
-*Last Modified: 2023-10-11*
+*Last Modified: 2024-02-07*

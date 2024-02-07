@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.5"
 author: "ormgpmd"
-date:   "20230801"
+date:   "20240207"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -611,6 +611,12 @@ V_QA_NEW_BOREHOLE (above) for additional details.
 This view returns all 'new' records from the D_LOCATION table.  Refer to
 V_QA_NEW_D_BOREHOLE (above) for additional details.
 
+#### V_SUM_BH_DRILL_GROUP_YEAR
+
+Returns a count of BH_DRILL_METHODs used for drilling for boreholes per year.
+Note that the methods have been grouped based upon BH_DRILL_METHOD_ALT_CODE in
+R_BH_DRILL_METHOD_CODE.
+
 #### V_SUM_FIELD_LAB_VALUES
 
 This view returns the summary of laboratory records (from
@@ -753,4 +759,4 @@ with boreholes when working with cross-sections.  In particular, top and
 bottom elevations for screens are returned for applicable locations; the TEXT
 field (name) must be populated with 'SCREEN'.
 
-*Last Modified: 2023-08-01*
+*Last Modified: 2024-02-07*
