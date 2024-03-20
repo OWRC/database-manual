@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.1"
 author: "ormgpmd"
-date:   "20221125"
+date:   "20240320"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -278,6 +278,18 @@ This table allows additional names to be associated with intervals (through an
 INT_ID) as found in D_INTERVAL (note that three names INT_NAME, INT_NAME_ALT1
 and INT_NAME_ALT2 are already available for naming intervals in the D_INTERVAL
 table).
+
+#### D_INTERVAL_ATTR
+
+Attributes for a particular interval that don't fit into the various
+fields available in the interval-based data tables (i.e. those tables that
+contain an INT_ID column) can be stored here.  These attributes are defined
+using the ATTR_CODE field (which links to the R_ATTR_CODE table).  Similar in
+structure to the S_CONSTANT table, the attributes can be integer (VALI),
+floating point (VALF) or character values (VAL_DEF).  Ranges of values can be
+specified using the secondary field available for each the previous types.
+
+Refer also to D_LOCATION_ATTR (for location based attributes).
 
 #### D_INTERVAL_ATTRIBUTE
 
@@ -928,4 +940,4 @@ the 'Dated Version' (both primary and secondary).  This includes the number of
 records for each available location type, each available interval type and
 each available reading group code type.
 
-*Last Modified: 2022-11-25*
+*Last Modified: 2024-03-20*
