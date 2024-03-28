@@ -4,7 +4,7 @@
 --***** create a new series of LOC_IDs and BH_IDs we'll use to update 
 --***** some of the FM_ tables before importing into the master database
 
---***** Note that the MOE_20230324 database needs to compare directly against
+--***** Note that the MOE_20240326 database needs to compare directly against
 --***** the master database
 
 -- make sure that the DATA_ID has been included in the master database
@@ -28,13 +28,14 @@
 -- v20210119 523
 -- v20220328 524
 -- v20230324 525
+-- v20240326 526
 
 select
 *
 from 
 [OAK_20160831_MASTER].[dbo].[D_DATA_SOURCE]
 where
-data_id= 525
+data_id= 526
 
 -- create the master LOC_ID
 
@@ -43,7 +44,7 @@ data_id= 525
 select
 COUNT(*)
 from 
-MOE_20230324.[dbo].[M_D_LOCATION]
+MOE_20240326.[dbo].[M_D_LOCATION]
 
 -- 2016.05.31 28188 locations
 -- 2017.09.05 17185 locations
@@ -53,12 +54,13 @@ MOE_20230324.[dbo].[M_D_LOCATION]
 -- v20210119 24619 locations
 -- v20220328 15235 locations
 -- v20230324 18826 locations
+-- v20240326 23131 locations
 
 -- how many in YC_????????_BH_ID and in M_D_BOREHOLE
 
-select count(*) FROM MOE_20230324.[dbo].[YC_20230324_BH_ID]
+select count(*) FROM MOE_20240326.[dbo].[YC_20240326_BH_ID]
 
-select count(*) FROM MOE_20230324.[dbo].[M_D_BOREHOLE]
+select count(*) FROM MOE_20240326.[dbo].[M_D_BOREHOLE]
 
 -- 2016.05.31 28188 in both
 -- 2017.09.05 17185 in both
@@ -68,6 +70,7 @@ select count(*) FROM MOE_20230324.[dbo].[M_D_BOREHOLE]
 -- v20210119 24619 both (after bh_drill_method_code update - see G_10_09_05)
 -- v20220328 15235 in both
 -- v20230324 18826 in both
+-- v20240326 23131 in both
 
  -- use YC_????????_BH_ID to assemble the LOC_ID/BH_ID transformations
 
@@ -84,12 +87,12 @@ dloc.BORE_HOLE_ID
 ,dloc.BH_ID
 ,ROW_NUMBER() over (order by BORE_HOLE_ID) as rnum
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as dloc
+MOE_20240326.dbo.YC_20240326_BH_ID as dloc
 ) as t1
 inner join
 (
 select
-top 25000
+top 30000
 v.NEW_ID
 ,ROW_NUMBER() over (order by NEW_ID) as rnum
 from 
@@ -111,7 +114,7 @@ t1.BORE_HOLE_ID
 ,t1.BH_ID
 ,cast(null as int) as new_BH_ID
 ,ROW_NUMBER() over (order by t1.BORE_HOLE_ID) as rnum
-into MOE_20230324.dbo.YC_20230324_new_LOC_ID_BH_ID
+into MOE_20240326.dbo.YC_20240326_new_LOC_ID_BH_ID
 from 
 (
 select
@@ -119,12 +122,12 @@ dloc.BORE_HOLE_ID
 ,dloc.BH_ID
 ,ROW_NUMBER() over (order by BORE_HOLE_ID) as rnum
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as dloc
+MOE_20240326.dbo.YC_20240326_BH_ID as dloc
 ) as t1
 inner join
 (
 select
-top 25000
+top 30000
 v.NEW_ID
 ,ROW_NUMBER() over (order by NEW_ID) as rnum
 from 
@@ -139,7 +142,7 @@ select LOC_ID from OAK_20160831_MASTER.dbo.D_LOCATION
 on
 t1.rnum=t2.rnum
 
-drop table moe_20230324.dbo.yc_20230324_new_loc_id_bh_id
+drop table moe_20240326.dbo.yc_20240326_new_loc_id_bh_id
 
 
 --***** 20230510 Populate new BH_ID after this (commented out) section
@@ -164,7 +167,7 @@ y.BORE_HOLE_ID
 ,t2.new_BH_ID
 ,y.rnum
 from 
-MOE_20230324.dbo.YC_20230324_new_LOC_ID_BH_ID as y
+MOE_20240326.dbo.YC_20240326_new_LOC_ID_BH_ID as y
 inner join
 (
 select
@@ -173,7 +176,7 @@ t1.new_BH_ID
 from 
 (
 select 
-top 20000
+top 30000
 v.NEW_ID as new_BH_ID
 from 
 OAK_20160831_MASTER.dbo.V_SYS_RANDOM_ID_BULK_001 as v
@@ -188,11 +191,11 @@ select BH_ID from OAK_20160831_MASTER.dbo.D_BOREHOLE
 on y.rnum=t2.rnum
 
 
-update MOE_20230324.dbo.YC_20230324_new_LOC_ID_BH_ID
+update MOE_20240326.dbo.YC_20240326_new_LOC_ID_BH_ID
 set
 new_BH_ID=t2.new_BH_ID
 from 
-MOE_20230324.dbo.YC_20230324_new_LOC_ID_BH_ID as y
+MOE_20240326.dbo.YC_20240326_new_LOC_ID_BH_ID as y
 inner join
 (
 select
@@ -201,7 +204,7 @@ t1.new_BH_ID
 from 
 (
 select 
-top 25000
+top 30000
 v.NEW_ID as new_BH_ID
 from 
 OAK_20160831_MASTER.dbo.V_SYS_RANDOM_ID_BULK_001 as v

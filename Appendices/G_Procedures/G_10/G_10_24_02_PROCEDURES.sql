@@ -9,6 +9,7 @@
 -- v20210119 DATA_ID 523
 -- v20220328 DATA_ID 524
 -- v20230324 DATA_ID 525
+-- v20240326 DATA_ID 526
 
 --***** 20200721 
 --***** The following has been automated
@@ -94,7 +95,7 @@ dloc.loc_id
 ,cast( convert(bigint,dloc.loc_coord_easting_ouom) as varchar(20) )  as x
 ,cast( convert(bigint,dloc.loc_coord_northing_ouom) as varchar(20) ) as y
 from 
-moe_20230324.dbo.m_d_location as dloc
+moe_20240326.dbo.m_d_location as dloc
 ) as t
 on dloc.loc_id=t.loc_id
 
@@ -102,8 +103,8 @@ update oak_20160831_master.dbo.d_location
 set
 loc_coord_easting_ouom=t.x
 ,loc_coord_northing_ouom=t.y
-,sys_temp1= '20230324a'
-,sys_temp2= 20230324
+,sys_temp1= '20240326d'
+,sys_temp2= 20240326
 from 
 oak_20160831_master.dbo.d_location as dloc
 inner join 
@@ -113,7 +114,7 @@ dloc.loc_id
 ,cast( convert(bigint,dloc.loc_coord_easting_ouom) as varchar(20) )  as x
 ,cast( convert(bigint,dloc.loc_coord_northing_ouom) as varchar(20) ) as y
 from 
-moe_20230324.dbo.m_d_location as dloc
+moe_20240326.dbo.m_d_location as dloc
 ) as t
 on dloc.loc_id=t.loc_id
 
@@ -221,6 +222,7 @@ on dloc.loc_id=t.loc_id
 -- v20210119 46518 rows
 -- v20220328 
 -- v20230324 12087 rows
+-- v20240326 16347 rows
 
 select
 v.*
@@ -231,15 +233,15 @@ on dgl.geol_id=v.geol_id
 inner join oak_20160831_master.dbo.d_location as dloc
 on v.loc_id=dloc.loc_id
 where 
-dloc.data_id= 525
+dloc.data_id= 526
 
 
 update oak_20160831_master.dbo.d_geology_layer 
 set
 geol_top_elev=v.new_geol_top_elev
 ,geol_bot_elev=v.new_geol_bot_elev
-,sys_temp1= '20230324a'
-,sys_temp2= 20230324
+,sys_temp1= '20240326d'
+,sys_temp2= 20240326
 from 
 oak_20160831_master.dbo.d_geology_layer as dgl
 inner join oak_20160831_master.dbo.v_sys_geol_lay_elevs as v
@@ -247,7 +249,7 @@ on dgl.geol_id=v.geol_id
 inner join oak_20160831_master.dbo.d_location as dloc
 on v.loc_id=dloc.loc_id
 where 
-dloc.data_id= 525
+dloc.data_id= 526
 
 
 --***** D_BOREHOLE
@@ -259,6 +261,7 @@ dloc.data_id= 525
 -- v20210119 3631 rows
 -- v20220328 763 rows
 -- v20230324 742 rows
+-- v20240326 
 
 select
 v.*
@@ -269,13 +272,13 @@ on dbore.loc_id=v.loc_id
 inner join oak_20160831_master.dbo.d_location as dloc
 on v.loc_id=dloc.loc_id
 where 
-dloc.data_id= 525 
+dloc.data_id= 526
 
 update oak_20160831_master.dbo.d_borehole
 set
 bh_bedrock_elev= v.new_bh_bedrock_elev
-,sys_temp1= '20230324a'
-,sys_temp2= 20230324
+,sys_temp1= '20240326e'
+,sys_temp2= 20240326
 from 
 oak_20160831_master.dbo.d_borehole as dbore
 inner join oak_20160831_master.dbo.v_sys_bh_bedrock_elev as v
@@ -283,7 +286,7 @@ on dbore.loc_id=v.loc_id
 inner join oak_20160831_master.dbo.d_location as dloc
 on v.loc_id=dloc.loc_id
 where 
-dloc.data_id= 525 
+dloc.data_id= 526
 
 
 
@@ -297,6 +300,7 @@ dloc.data_id= 525
 -- v20210119 4146 rows
 -- v20220328 9095 rows
 -- v20230324 12394 rows
+-- v20240326 14700 rows
 
 select
 count(*)
@@ -308,7 +312,7 @@ inner join oak_20160831_master.dbo.d_location as dloc
 on dint.loc_id=dloc.loc_id
 where 
 dint.int_type_code= 28
-and dloc.data_id= 525
+and dloc.data_id= 526
 
 delete from oak_20160831_master.dbo.d_interval_monitor
 where 
@@ -324,7 +328,7 @@ inner join oak_20160831_master.dbo.d_location as dloc
 on dint.loc_id=dloc.loc_id
 where 
 dint.int_type_code= 28
-and dloc.data_id= 525
+and dloc.data_id= 526
 )
 
 --***** update monitor elevations and depth-in-metres
@@ -335,6 +339,7 @@ and dloc.data_id= 525
 -- v20210119 20455 rows
 -- v20220328 
 -- v20230324 6406 rows
+-- v20240326 8463 rows
 
 select
 v.*
@@ -347,15 +352,15 @@ on dim.int_id=dint.int_id
 inner join oak_20160831_master.dbo.d_location as dloc
 on dint.loc_id=dloc.loc_id
 where 
-dloc.data_id= 525
+dloc.data_id= 526
 
 
 update oak_20160831_master.dbo.d_interval_monitor
 set
 mon_top_elev= v.new_mon_top_elev
 ,mon_bot_elev= v.new_mon_bot_elev
-,sys_temp1= '20230324a'
-,sys_temp2= 20230324
+,sys_temp1= '20240326e'
+,sys_temp2= 20240326
 from 
 oak_20160831_master.dbo.d_interval_monitor as dim
 inner join oak_20160831_master.dbo.v_sys_int_mon_elevs as v
@@ -365,7 +370,7 @@ on dim.int_id=dint.int_id
 inner join oak_20160831_master.dbo.d_location as dloc
 on dint.loc_id=dloc.loc_id
 where 
-dloc.data_id= 525
+dloc.data_id= 526
 
 -- populate DIM top and bottom depths
 
@@ -375,6 +380,7 @@ dloc.data_id= 525
 -- v20210119 20455
 -- v20220328 6117 rows
 -- v20230324 6406 rows
+-- v20240326 
 
 select
 v.*
@@ -387,15 +393,15 @@ on dim.int_id=dint.int_id
 inner join oak_20160831_master.dbo.d_location as dloc
 on dint.loc_id=dloc.loc_id
 where 
-dloc.data_id= 525
+dloc.data_id= 526
 
 
 update oak_20160831_master.dbo.d_interval_monitor
 set
 mon_top_depth_m=v.new_mon_top_depth_m
 ,mon_bot_depth_m=v.new_mon_bot_depth_m
-,sys_temp1= '20230324d'
-,sys_temp2= 20230324
+,sys_temp1= '20240326f'
+,sys_temp2= 20240326
 from 
 oak_20160831_master.dbo.d_interval_monitor as dim
 inner join oak_20160831_master.dbo.v_sys_int_mon_depths_m as v
@@ -405,7 +411,7 @@ on dim.int_id=dint.int_id
 inner join oak_20160831_master.dbo.d_location as dloc
 on dint.loc_id=dloc.loc_id
 where 
-dloc.data_id= 525
+dloc.data_id= 526
 
 
 

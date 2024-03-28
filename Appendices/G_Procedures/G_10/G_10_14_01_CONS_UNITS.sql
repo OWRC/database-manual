@@ -13,14 +13,15 @@
 -- v20210119 0 rows (?)
 -- v20220328 3 rows
 -- v20230324 0 rows
+-- v20240326 0 rows
 
 select 
 ycb.LOC_ID
 ,ycb.BH_ID
 ,ycm.*
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as ycb
-inner join MOE_20230324.dbo.M_D_BOREHOLE_CONSTRUCTION as ycm
+MOE_20240326.dbo.YC_20240326_BH_ID as ycb
+inner join MOE_20240326.dbo.M_D_BOREHOLE_CONSTRUCTION as ycm
 on ycb.BORE_HOLE_ID=ycm.BH_ID
 where 
 not(ycm.CON_UNIT_OUOM in ('m','ft'))
@@ -28,7 +29,7 @@ not(ycm.CON_UNIT_OUOM in ('m','ft'))
 -- for construction, we're assuming anything that's an inch should be a ft
 -- a note is added to CON_COMMENT for this
 
-update MOE_20230324.dbo.M_D_BOREHOLE_CONSTRUCTION
+update MOE_20240326.dbo.M_D_BOREHOLE_CONSTRUCTION
 set
  CON_UNIT_OUOM='ft'
 ,CON_TOP_OUOM=CON_TOP_OUOM/12
@@ -39,9 +40,9 @@ CON_UNIT_OUOM='inch'
 
 --***** Various corrections below
 
-select * from MOE_20230324.dbo.M_D_BOREHOLE_CONSTRUCTION where con_unit_ouom= 'cm'
+select * from MOE_20240326.dbo.M_D_BOREHOLE_CONSTRUCTION where con_unit_ouom= 'cm'
 
-update MOE_20230324.dbo.M_D_BOREHOLE_CONSTRUCTION
+update MOE_20240326.dbo.M_D_BOREHOLE_CONSTRUCTION
 set
 con_unit_ouom= 'm'
 ,con_top_ouom= con_top_ouom/10

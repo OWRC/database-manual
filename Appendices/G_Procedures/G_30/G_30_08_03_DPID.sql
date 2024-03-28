@@ -11,19 +11,20 @@
 select
 count(*) 
 from 
-moe_20230324.dbo.o_d_pumptest
+moe_20240326.dbo.o_d_pumptest
 
 -- v20190509 1667 rows
 -- v20200721 1013 rows
 -- v20210119 15 rows
 -- v20220328 107 rows
 -- v20230324 539
+-- v20240326 1617
 
-update moe_20230324.dbo.o_d_pumptest
+update moe_20240326.dbo.o_d_pumptest
 set
 pump_test_id= t2.pump_test_id
 from 
-moe_20230324.dbo.o_d_pumptest as d
+moe_20240326.dbo.o_d_pumptest as d
 inner join 
 (
 select
@@ -32,7 +33,7 @@ t.pump_test_id
 from 
 (
 select
-top 1000
+top 5000
 v.new_id as pump_test_id
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -73,10 +74,10 @@ select
 [PUMPTEST_METHOD_CODE], 
 [PUMPTEST_TYPE_CODE], 
 [WATER_CLARITY_CODE], 
-cast( '20230512g' as varchar(255) ) as SYS_TEMP1,
-cast( 20230512 as int ) as SYS_TEMP2
+cast( '20240326q' as varchar(255) ) as SYS_TEMP1,
+cast( 20240326 as int ) as SYS_TEMP2
 from 
-moe_20230324.dbo.o_d_pumptest 
+moe_20240326.dbo.o_d_pumptest 
 
 -- update the O_D_PUMPTEST_STEP table with the new PUMP_TEST_ID
 
@@ -85,13 +86,14 @@ moe_20230324.dbo.o_d_pumptest
 -- v20210119 12 rows
 -- v20220328 83 rows
 -- v20230324 502 
+-- v20240326 1555
 
-update moe_20230324.dbo.o_d_pumptest_step
+update moe_20240326.dbo.o_d_pumptest_step
 set
 pump_test_id= dp.pump_test_id
 from 
-moe_20230324.dbo.o_d_pumptest_Step as dps
-inner join moe_20230324.dbo.o_d_pumptest as dp
+moe_20240326.dbo.o_d_pumptest_Step as dps
+inner join moe_20240326.dbo.o_d_pumptest as dp
 on dps.moe_pump_test_id=dp.moe_pump_test_id
 
 -- get the number of rows
@@ -99,15 +101,15 @@ on dps.moe_pump_test_id=dp.moe_pump_test_id
 select
 count(*) 
 from 
-moe_20230324.dbo.o_d_pumptest_step
+moe_20240326.dbo.o_d_pumptest_step
 
 -- populate the SYS_RECORD_ID field
 
-update moe_20230324.dbo.o_d_pumptest_step
+update moe_20240326.dbo.o_d_pumptest_step
 set
 sys_record_id= t2.sri
 from 
-moe_20230324.dbo.o_d_pumptest_step as d
+moe_20240326.dbo.o_d_pumptest_step as d
 inner join
 (
 select
@@ -116,7 +118,7 @@ t.sri
 from 
 (
 select
-top 1000
+top 5000
 v.new_id as sri
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -153,10 +155,10 @@ select
 [PUMP_END], 
 [DATA_ID], 
 [SYS_RECORD_ID], 
-cast( '20230512g' as varchar(255) ) as SYS_TEMP1,
-cast( 20230512 as int ) as SYS_TEMP2
+cast( '20240326r' as varchar(255) ) as SYS_TEMP1,
+cast( 20240326 as int ) as SYS_TEMP2
 from 
-moe_20230324.dbo.o_d_pumptest_step
+moe_20240326.dbo.o_d_pumptest_step
 
 
 

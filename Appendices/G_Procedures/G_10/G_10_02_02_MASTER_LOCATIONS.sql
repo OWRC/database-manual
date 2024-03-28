@@ -28,6 +28,7 @@
 -- v20210119 no rows are returned
 -- v20220328 no rows are returned
 -- v20230324 no rows are returned
+-- v20240326 no rows are returned
 
 select
 t2.WELL_ID
@@ -38,15 +39,15 @@ select
 y.WELL_ID 
 ,count(*) as rcount
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
+MOE_20240326.dbo.YC_20240326_BH_ID as y
 inner join 
 (
 select
 f.BORE_HOLE_ID 
 ,count(*) as rcount
 from 
-MOE_20230324.dbo.tblFormation as f
-inner join MOE_20230324.dbo.YC_20230324_BH_ID as y
+MOE_20240326.dbo.tblFormation as f
+inner join MOE_20240326.dbo.YC_20240326_BH_ID as y
 on f.BORE_HOLE_ID=y.BORE_HOLE_ID 
 group by 
 f.bore_hole_id
@@ -67,20 +68,21 @@ t2.rcount>1
 -- v20210119 17458 rows updated
 -- v20220328 5856 rows updated
 -- v20230324 6554 rows updated
+-- v20240326 8682 rows updated
 
-update MOE_20230324.dbo.YC_20230324_BH_ID
+update MOE_20240326.dbo.YC_20240326_BH_ID
 set
 LOC_MASTER_LOC_ID=y.BORE_HOLE_ID
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
+MOE_20240326.dbo.YC_20240326_BH_ID as y
 inner join
 (
 select
 f.BORE_HOLE_ID 
 ,count(*) as rcount
 from 
-MOE_20230324.dbo.tblFormation as f
-inner join MOE_20230324.dbo.YC_20230324_BH_ID as y
+MOE_20240326.dbo.tblFormation as f
+inner join MOE_20240326.dbo.YC_20240326_BH_ID as y
 on f.BORE_HOLE_ID=y.BORE_HOLE_ID 
 group by 
 f.bore_hole_id
@@ -98,7 +100,7 @@ y.WELL_ID
 ,y.BORE_HOLE_ID 
 ,y.LOC_MASTER_LOC_ID 
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
+MOE_20240326.dbo.YC_20240326_BH_ID as y
 where 
 LOC_MASTER_LOC_ID<>1
 
@@ -110,6 +112,7 @@ LOC_MASTER_LOC_ID<>1
 -- v20210119 0 rows returned
 -- v20220328 0 rows returned
 -- v20230324 0 rows returned
+-- v20240326 0 rows returned
 
 select
 t2.WELL_ID
@@ -126,7 +129,7 @@ y.WELL_ID
 ,y.BORE_HOLE_ID 
 ,y.LOC_MASTER_LOC_ID 
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
+MOE_20240326.dbo.YC_20240326_BH_ID as y
 where 
 LOC_MASTER_LOC_ID<>1
 ) as t
@@ -149,11 +152,12 @@ t2.rcount>1
 -- v20210119 525 rows returned
 -- v20220328 19 rows returned
 -- v20230324 0 rows returned
+-- v20240326 0 rows returned
 
 select
 y.*
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
+MOE_20240326.dbo.YC_20240326_BH_ID as y
 inner join
 (
 select
@@ -161,7 +165,7 @@ y.WELL_ID
 ,y.BORE_HOLE_ID 
 ,y.LOC_MASTER_LOC_ID 
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
+MOE_20240326.dbo.YC_20240326_BH_ID as y
 where 
 LOC_MASTER_LOC_ID<>1
 ) as t
@@ -175,18 +179,19 @@ y.LOC_MASTER_LOC_ID=1
 -- v20210119 7161 rows returned
 -- v20220328 9379 rows returned
 -- v20230324 12272 rows returned
+-- v20240326 14449 rows returned
 
 select
 *
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
+MOE_20240326.dbo.YC_20240326_BH_ID as y
 where 
 y.loc_master_loc_id= 1
 
 -- we'll make all the 1 values a null for ease in both cluster and 
 -- single BORE_HOLE_IDs
 
-update MOE_20230324.dbo.YC_20230324_BH_ID
+update MOE_20240326.dbo.YC_20240326_BH_ID
 set
 LOC_MASTER_LOC_ID=null 
 where 

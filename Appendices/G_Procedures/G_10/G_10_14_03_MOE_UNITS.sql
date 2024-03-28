@@ -12,14 +12,15 @@
 -- v20210119 0 rows
 -- v20220328 0 rows
 -- v20230324 0 rows
+-- v20240327 0 rows
 
 select
 ycb.LOC_ID
 ,ycb.BH_ID
 ,moeh.*
 from 
-MOE_20230324.dbo.TblHole as moeh
-inner join MOE_20230324.dbo.YC_20230324_BH_ID as ycb
+MOE_20240326.dbo.TblHole as moeh
+inner join MOE_20240326.dbo.YC_20240326_BH_ID as ycb
 on moeh.Bore_Hole_ID=ycb.BORE_HOLE_ID
 where
 moeh.Depth_to is not null
@@ -30,11 +31,11 @@ and not(moeh.HOLE_DEPTH_UOM in ('m','ft'))
 select
 *
 from 
-MOE_20230324.dbo.TblHole as moeh
+MOE_20240326.dbo.TblHole as moeh
 where 
 bore_hole_id= 1007382101
 
-update MOE_20230324.dbo.TblHole
+update MOE_20240326.dbo.TblHole
 set
 depth_to= depth_to/12
 ,hole_depth_uom= 'ft'

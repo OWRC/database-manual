@@ -18,7 +18,8 @@
 -- v20200721 6697 rows
 -- v20210119 14052 rows
 -- v20220328 4772 rows
--- v20230324 5419 rows
+-- v20230326? 5419 rows
+-- v20240326 6985 rows
  
 select 
 ycb.BORE_HOLE_ID as TMP_LOC_ID 
@@ -32,17 +33,17 @@ ycb.BORE_HOLE_ID as TMP_LOC_ID
 ,moes.SCRN_DEPTH_UOM as MON_UNIT_OUOM
 ,cast(null as varchar(255)) as MON_COMMENT
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as ycb
+MOE_20240326.dbo.YC_20240326_BH_ID as ycb
 inner join 
 --left outer join
-MOE_20230324.dbo.TblPipe as moep
+MOE_20240326.dbo.TblPipe as moep
 on ycb.BORE_HOLE_ID=moep.Bore_Hole_ID
 inner join
 --left outer join
-MOE_20230324.dbo.TblScreen as moes
+MOE_20240326.dbo.TblScreen as moes
 on moep.PIPE_ID=moes.PIPE_ID
 left outer join
-MOE_20230324.dbo.YC_20230324_MOE_SLOT as moeslot
+MOE_20240326.dbo.YC_20240326_MOE_SLOT as moeslot
 on moes.Slot=moeslot.MOE_SLOT
 where 
 moes.SCRN_TOP_DEPTH is not null 
@@ -60,19 +61,19 @@ ycb.BORE_HOLE_ID as TMP_LOC_ID
 ,moes.SCRN_END_DEPTH as MON_BOT_OUOM
 ,moes.SCRN_DEPTH_UOM as MON_UNIT_OUOM
 ,cast(null as varchar(255)) as MON_COMMENT
-into MOE_20230324.dbo.YC_20230324_DINTMON
+into MOE_20240326.dbo.YC_20240326_DINTMON
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as ycb
+MOE_20240326.dbo.YC_20240326_BH_ID as ycb
 inner join 
 --left outer join
-MOE_20230324.dbo.TblPipe as moep
+MOE_20240326.dbo.TblPipe as moep
 on ycb.BORE_HOLE_ID=moep.Bore_Hole_ID
 inner join
 --left outer join
-MOE_20230324.dbo.TblScreen as moes
+MOE_20240326.dbo.TblScreen as moes
 on moep.PIPE_ID=moes.PIPE_ID
 left outer join
-MOE_20230324.dbo.YC_20230324_MOE_SLOT as moeslot
+MOE_20240326.dbo.YC_20240326_MOE_SLOT as moeslot
 on moes.Slot=moeslot.MOE_SLOT
 where 
 moes.SCRN_TOP_DEPTH is not null 

@@ -11,6 +11,7 @@
 -- v20210119 20457
 -- v20220328 27610
 -- v20230324 26974
+-- v20240326 35884
 
 -- note that in some cases, there could-be/are multiple BORE_HOLE_IDs for a single
 -- LOC_ID; the extra rows are considered to be decommissioned or modified well records
@@ -18,7 +19,7 @@
 select
 dbore.loc_id
 ,v.moe_bore_hole_id
-into moe_20230324.dbo.ORMGP_20230324_base_DBHCONS
+into moe_20240326.dbo.ORMGP_20240326_base_DBHCONS
 from 
 oak_20160831_master.dbo.d_borehole as dbore
 inner join oak_20160831_master.dbo.d_location as dloc
@@ -53,7 +54,7 @@ dbore.loc_id,v.moe_bore_hole_id
 select
 count(*) 
 from 
-moe_20230324.dbo.ORMGP_20230324_base_DBHCONS
+moe_20240326.dbo.ORMGP_20240326_base_DBHCONS
 
 -- assemble the casing information
 
@@ -62,6 +63,7 @@ moe_20230324.dbo.ORMGP_20230324_base_DBHCONS
 -- v20210119 518 rows
 -- v20220328 191 rows
 -- v20230324 1781 rows
+-- v20240326 10094 rows
 
 select
 -- note that we're using BORE_HOLE_ID as a temporary BH_ID
@@ -83,12 +85,12 @@ as [CON_SUBTYPE_CODE]
 ,moec.CASING_DIAMETER as [CON_DIAMETER_OUOM]
 ,moec.CASING_DIAMETER_UOM as [CON_DIAMETER_UNIT_OUOM]
 ,convert(varchar(255),null) as CON_COMMENT
-into MOE_20230324.dbo.ORMGP_20230324_upd_DBHCONS
+into MOE_20240326.dbo.ORMGP_20240326_upd_DBHCONS
 from 
-MOE_20230324.dbo.ORMGP_20230324_base_DBHCONS as y
-inner join MOE_20230324.dbo.TblPipe as moep
+MOE_20240326.dbo.ORMGP_20240326_base_DBHCONS as y
+inner join MOE_20240326.dbo.TblPipe as moep
 on y.moe_BORE_HOLE_ID=moep.Bore_Hole_ID
-inner join MOE_20230324.dbo.TblCasing as moec
+inner join MOE_20240326.dbo.TblCasing as moec
 on moep.PIPE_ID=moec.PIPE_ID
 where
 not
@@ -102,7 +104,7 @@ and moec.CASING_DIAMETER_UOM is null
 select
 count(*)
 from 
-MOE_20230324.dbo.ORMGP_20230324_upd_DBHCONS
+MOE_20240326.dbo.ORMGP_20240326_upd_DBHCONS
 
 -- assemble the plug information
 
@@ -111,8 +113,9 @@ MOE_20230324.dbo.ORMGP_20230324_upd_DBHCONS
 -- v20210119 1010 rows
 -- v20220328 538 
 -- v20230324 4589 (2808)
+-- v20240326 30881 (20787)
 
-insert into MOE_20230324.dbo.ORMGP_20230324_upd_DBHCONS
+insert into MOE_20240326.dbo.ORMGP_20240326_upd_DBHCONS
 (LOC_ID,BH_ID,CON_SUBTYPE_CODE,CON_TOP_OUOM,CON_BOT_OUOM,CON_UNIT_OUOM)
 select 
 -- note that we're using BORE_HOLE_ID as a temporary BH_ID
@@ -123,8 +126,8 @@ y.LOC_ID
 ,moep.PLUG_TO   as [CON_BOT_OUOM]
 ,moep.PLUG_DEPTH_UOM as [CON_UNIT_OUOM]
 from 
-MOE_20230324.dbo.ORMGP_20230324_base_DBHCONS as y
-inner join MOE_20230324.dbo.TblPlug as moep
+MOE_20240326.dbo.ORMGP_20240326_base_DBHCONS as y
+inner join MOE_20240326.dbo.TblPlug as moep
 on y.moe_BORE_HOLE_ID=moep.BORE_HOLE_ID
 where 
 not 
@@ -137,7 +140,7 @@ and moep.PLUG_DEPTH_UOM is null
 select
 count(*)
 from 
-MOE_20230324.dbo.ORMGP_20230324_upd_DBHCONS
+MOE_20240326.dbo.ORMGP_20240326_upd_DBHCONS
 
 -- check that the tops are less than the bottom
 
@@ -145,6 +148,7 @@ MOE_20230324.dbo.ORMGP_20230324_upd_DBHCONS
 -- v20200721 256 rows
 -- v20210119 163 rows
 -- v20230324 384 rows
+-- v20240326 1948 rows
 
 SELECT 
 [BH_ID]
@@ -155,11 +159,11 @@ SELECT
 ,[CON_DIAMETER_OUOM]
 ,[CON_DIAMETER_UNIT_OUOM]
 ,[CON_COMMENT]
-FROM MOE_20230324.[dbo].ORMGP_20230324_upd_DBHCONS
+FROM MOE_20240326.[dbo].ORMGP_20240326_upd_DBHCONS
 where
 CON_TOP_OUOM>CON_BOT_OUOM
 
-update MOE_20230324.[dbo].ORMGP_20230324_upd_DBHCONS
+update MOE_20240326.[dbo].ORMGP_20240326_upd_DBHCONS
 set
 CON_TOP_OUOM=CON_BOT_OUOM
 ,CON_BOT_OUOM=CON_TOP_OUOM
@@ -177,6 +181,7 @@ CON_TOP_OUOM>CON_BOT_OUOM
 -- v20210119 1528 rows
 -- v20220328 538 
 -- v20230324 4589 rows
+-- v20240326 30881 rows
 
 SELECT 
 d.[BH_ID]
@@ -187,22 +192,22 @@ d.[BH_ID]
 ,[CON_DIAMETER_OUOM]
 ,[CON_DIAMETER_UNIT_OUOM]
 ,[CON_COMMENT]
-,cast( 525 as int ) as DATA_ID
+,cast( 526 as int ) as DATA_ID
 ,cast(null as int) as SYS_RECORD_ID
-,cast( '20230512a' as varchar(255) ) as SYS_TEMP1
-,cast( 20230512 as int ) as SYS_TEMP2
+,cast( '20240326i' as varchar(255) ) as SYS_TEMP1
+,cast( 20240326 as int ) as SYS_TEMP2
 ,ROW_NUMBER() over (order by y.BH_ID) as rkey
 ,y.bh_id as moe_bore_hole_id
-into moe_20230324.dbo.O_D_BOREHOLE_CONSTRUCTION
+into moe_20240326.dbo.O_D_BOREHOLE_CONSTRUCTION
 FROM 
-MOE_20230324.[dbo].ORMGP_20230324_upd_DBHCONS as y
+MOE_20240326.[dbo].ORMGP_20240326_upd_DBHCONS as y
 inner join oak_20160831_master.dbo.d_borehole as d
 on y.loc_id=d.loc_id
 
 select
 count(*)
 from 
-moe_20230324.dbo.O_D_BOREHOLE_CONSTRUCTION
+moe_20240326.dbo.O_D_BOREHOLE_CONSTRUCTION
 
 -- update the SYS_RECORD_ID
 -- remember to change the number of rows created
@@ -212,7 +217,7 @@ od.bh_id
 ,od.rkey
 ,t2.sys_record_id
 from 
-moe_20230324.dbo.o_d_borehole_construction as od
+moe_20240326.dbo.o_d_borehole_construction as od
 inner join
 (
 select
@@ -221,7 +226,7 @@ t.sys_record_id
 from 
 (
 select
-top 7000
+top 35000
 v.new_id as sys_record_id
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -232,11 +237,11 @@ v.new_id not in
 ) as t2
 on od.rkey=t2.rkey
 
-update moe_20230324.dbo.o_d_borehole_construction
+update moe_20240326.dbo.o_d_borehole_construction
 set
 sys_record_id=t2.sys_record_id
 from 
-moe_20230324.dbo.o_d_borehole_construction as od
+moe_20240326.dbo.o_d_borehole_construction as od
 inner join
 (
 select
@@ -245,7 +250,7 @@ t.sys_record_id
 from 
 (
 select
-top 7000
+top 35000
 v.new_id as sys_record_id
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -287,6 +292,6 @@ select
 [SYS_TEMP1], 
 [SYS_TEMP2]
 from 
-moe_20230324.dbo.o_d_borehole_construction
+moe_20240326.dbo.o_d_borehole_construction
 
 

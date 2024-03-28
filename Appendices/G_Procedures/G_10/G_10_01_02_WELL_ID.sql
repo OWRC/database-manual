@@ -32,15 +32,16 @@ from
   ,tbh.EAST83
   ,tbh.NORTH83
   from 
-  MOE_20230324.dbo.TblBore_Hole as tbh
+  MOE_20240326.dbo.TblBore_Hole as tbh
   left outer join OAK_20160831_MASTER.dbo.V_SYS_MOE_LOCATIONS as v
   on cast(tbh.WELL_ID as int)=v.MOE_WELL_ID
 ) as missing
-inner join MOE_20230324.dbo.YC_20230324_LOC_COORD_OUOM_CODE as yccode
+inner join MOE_20240326.dbo.YC_20240326_LOC_COORD_OUOM_CODE as yccode
 on missing.ZONE=yccode.ZONE
 where 
 missing.LOC_ID is null 
 and yccode.ZONE is not null
+and ( yccode.zone= 17 or yccode.zone= 18 )
 and missing.EAST83 is not null 
 and missing.NORTH83 is not null
 --order by 
@@ -51,7 +52,7 @@ select
  distinct(missing.WELL_ID)
 --,ROW_NUMBER() over (order by missing.WELL_ID) as [rnum]
 ,cast(null as int) as well_id_rnum
-into MOE_20230324.dbo.YC_20230324_WELL_ID_AVAIL
+into MOE_20240326.dbo.YC_20240326_WELL_ID_AVAIL
 from 
 (
   select 
@@ -61,15 +62,16 @@ from
   ,tbh.EAST83
   ,tbh.NORTH83
   from 
-  MOE_20230324.dbo.TblBore_Hole as tbh
+  MOE_20240326.dbo.TblBore_Hole as tbh
   left outer join OAK_20160831_MASTER.dbo.V_SYS_MOE_LOCATIONS as v
   on cast(tbh.WELL_ID as int)=v.MOE_WELL_ID
 ) as missing
-inner join MOE_20230324.dbo.YC_20230324_LOC_COORD_OUOM_CODE as yccode
+inner join MOE_20240326.dbo.YC_20240326_LOC_COORD_OUOM_CODE as yccode
 on missing.ZONE=yccode.ZONE
 where 
 missing.LOC_ID is null 
 and yccode.ZONE is not null
+and ( yccode.zone= 17 or yccode.zone= 18 )
 and missing.EAST83 is not null 
 and missing.NORTH83 is not null
 
@@ -82,9 +84,13 @@ and missing.NORTH83 is not null
 -- v20210119 367677 WELL_IDs not in ormgpdb
 -- v20220328 366060 WELL_IDs not in ormgpdb
 -- v20230324 18826  WELL_IDs not in ormgpdb (note that this comparison has been reduced to z17/18 due to data import error for tblBore_Hole)
+-- v20240326 372071
 
 select
 count(*)
 from 
-MOE_20230324.dbo.YC_20230324_WELL_ID_AVAIL
+MOE_20240326.dbo.YC_20240326_WELL_ID_AVAIL
+
+DROP TABLE "dbo"."YC_20240326_WELL_ID_AVAIL"
+
 

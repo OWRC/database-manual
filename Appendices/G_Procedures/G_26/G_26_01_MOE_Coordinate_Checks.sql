@@ -16,6 +16,7 @@
 -- v20210202 523 
 -- v20220328 524
 -- v20230324 525
+-- v20240326 526
 
 --***** Coordinate Check - MOE Z17/Z18 Coordinates (transformed)
 
@@ -32,14 +33,77 @@
 --***** These two zones are now combined in the table YC_20220328_BORE_HOLE_ID_COORDS_YC; zone_orig
 --***** is now just zone; we're using the table created in G.10.1
 
---***** 20230324
+--***** v20230324
 --***** Note that all coordinates have been translated to zone 17 and we are comparing all locations
 --***** based upon the bore_hole_id/loc_id combination no matter the current QA_COORD_CODE; this is being
---***** added to DLSH as a record only as these records should not be necessarily trusted
+--***** added to DLSH as a record only as these records should not be necessarily trusted; the comparison
+--***** table should be tblbore_hole_byzone_xy which has the following fields
 
--- v20230324 1009 rows
+--BORE_HOLE_ID
+--MOE_WELL_ID
+--x
+--y
+--UTMRC
+--ELEVRC
+--LOCATION_METHOD
+--IMPROVEMENT_LOCATION_METHOD
+--IMPROVEMENT_LOCATION_SOURCE
+--ELEVATION
+--ZONE
+--EAST83
+--NORTH83
+
+--***** note that the last three will be used to calculate x and y (utm z17) coordinates
+
+-- specify the DATA_ID of the current import (to avoid)
+
+-- v20240326 523386 records
+
+select
+bore_hole_id
+,cast(well_id as int) as moe_well_id
+,cast( null as int) as x
+,cast( null as int ) as y
+,cast( utmrc as int ) as utmrc
+,elevrc
+,location_method
+,improvement_location_method
+,improvement_location_source
+,elevation
+,[zone] as uzone
+,east83
+,north83
+into moe_20240326.dbo.tblbore_hole_byzone_xy_src
+from 
+moe_20240326.dbo.tblbore_hole as m
+inner join oak_20160831_master.dbo.v_sys_moe_locations as v
+on m.bore_hole_id=v.moe_bore_hole_id
+inner join oak_20160831_master.dbo.d_location as dloc
+on v.loc_id=dloc.loc_id
+where
+zone in (17,18)
+and ( dloc.data_id is null or dloc.data_id <> 526 )
+
+select
+count(*) as rcount
+from 
+moe_20240326.dbo.tblbore_hole_byzone_xy_src
+
+-- from here, use an external GIS to translate the coordinates to (x,y) utm z17, nad 83;
+-- the comparison table should be called tblbore_hole_byzone_xy
+
+-- v20240326 523386 records
+
+select
+count(*) as rcount
+from 
+moe_20240326.dbo.tblbore_hole_byzone_xy
+
+-- v20230324 348 rows
 
 -- uncomment the insert part of the statement to add to DLSH
+
+-- modify LOC_COORD_DATE, LOC_COORD_DATA_ID, LOC_ELEV_DATE, SYS_TEMP1 and SYS_TEMP2
 
 --insert into oak_20160831_master.dbo.d_location_spatial_hist
 --(
@@ -49,7 +113,7 @@
 select
 dloc.LOC_ID
 ,cast( 5 as int ) as LOC_COORD_HIST_CODE 
-,cast( '2023-03-24' as datetime ) as LOC_COORD_DATE
+,cast( '2024-03-26' as datetime ) as LOC_COORD_DATE
 ,m.x as X
 ,m.y as Y
 ,cast( 26917 as int ) as EPSG_CODE
@@ -76,13 +140,13 @@ when m.improvement_location_source is not null then m.improvement_location_sourc
 else ''
 end
 as varchar(255)) as LOC_COORD_METHOD
-,cast( 525 as int ) as LOC_COORD_DATA_ID
+,cast( 526 as int ) as LOC_COORD_DATA_ID
 ,case
 when m.elevation is not null then cast( 2 as int ) 
 else null
 end as LOC_ELEV_CODE
 ,case 
-when m.elevation is not null then cast( '2023-03-24' as datetime ) 
+when m.elevation is not null then cast( '2024-03-26' as datetime ) 
 else null
 end as LOC_ELEV_DATE
 ,m.elevation as LOC_ELEV
@@ -94,34 +158,42 @@ end as LOC_ELEV_UNIT_CODE
 when len(m.elevrc)>0 and isnumeric( m.elevrc )=1 then cast(m.elevrc as int) 
 else null
 end as QA_ELEV_CODE
-,cast( '20230324f' as varchar(255) ) as SYS_TEMP1
-,cast( 20230324 as int ) as SYS_TEMP2
+,cast( '20240328s' as varchar(255) ) as SYS_TEMP1
+,cast( 20240328 as int ) as SYS_TEMP2
 from 
-moe_20230324.dbo.tblbore_hole_byzone_xy as m
-inner join oak_20160831_master.dbo.d_location_alias as dla
-on m.bore_hole_id=cast(dla.loc_name_alias as int)
+moe_20240326.dbo.tblbore_hole_byzone_xy as m
+inner join oak_20160831_master.dbo.v_sys_moe_locations as dla
+on m.bore_hole_id=dla.moe_bore_hole_id
+--inner join oak_20160831_master.dbo.d_location_alias as dla
+--on m.bore_hole_id=cast(dla.loc_name_alias as int)
 inner join oak_20160831_master.dbo.d_location as dloc
 on dla.loc_id=dloc.loc_id
 inner join oak_20160831_master.dbo.v_sys_loc_coords_all as v
 on dla.loc_id=v.loc_id
 where
-dla.loc_alias_type_code= 3
 -- do not include the current DATA_ID
-and (dloc.data_id is null or dloc.data_id<>525)
+(dloc.data_id is null or dloc.data_id <> 526)
+-- the error cannot be unknown
 and m.utmrc<>9
+-- the coordinates cannot be within 5m of the current coordinates
 and 
 (
 not( m.x between ( v.x - 5 ) and (v.x + 5) )
 or not( m.y between (v.y - 5 ) and ( v.y + 5 ) )
 ) 
+-- the coordinates cannot have already been updated by the MOE
 and not( dla.loc_id in ( select distinct( loc_id ) from oak_20160831_master.dbo.d_location_spatial_hist where loc_coord_hist_code= 5 ) )
+-- the coordinates cannot have been updated by the ORMGP
+and not( dla.loc_id in ( select distinct( loc_id ) from oak_20160831_master.dbo.d_location_qc where check_code= 10 and check_process_code in (1,2) ) )
 
 
 -- check the inserted rows
 
-select * from oak_20160831_master.dbo.d_location_spatial_hist where loc_coord_hist_code= 5 and loc_coord_data_id= 525
+select * from oak_20160831_master.dbo.d_location_spatial_hist where loc_coord_hist_code= 5 and loc_coord_data_id= 526
 
--- remove the blank values
+-- remove the blank values; update DATA_ID
+
+-- v20240326 7 rows
 
 select
 *
@@ -129,7 +201,7 @@ from
 oak_20160831_master.dbo.d_location_spatial_hist
 where
 loc_coord_hist_code= 5
-and loc_coord_data_id= 525
+and loc_coord_data_id= 526
 and len(loc_coord_method)=0
 
 update oak_20160831_master.dbo.d_location_spatial_hist
@@ -137,23 +209,225 @@ set
 loc_coord_method= null
 where
 loc_coord_hist_code= 5
-and loc_coord_data_id= 525
+and loc_coord_data_id= 526
 and len(loc_coord_method)=0
 
+
+--***** v20240326 following has been disabled 
 
 -- check the locations that have been updated in comparison with the current coordinate information;
 -- make sure to update DEF_MOE_UPD_DID in S_CONSTANT to the latest MOE import
 
+--select
+--*
+--from 
+--v_sys_chk_loc_coords_moe_upd
+--order by
+--loc_id
+
+
+-- Check QA_COORD_CODE
+
+-- do any of the updated locations have a current QA_COORD_CODE of 9 or
+-- have lower QA_COORD_CODE values; look at the comments as well
+
+-- v20240326 44
 
 select
-*
+v.loc_id
+,v.spat_id
+,v.x
+,v.y
+,v.qa_coord_code
+,dlsh.spat_id as m_spat_id
+,dlsh.x as m_x
+,dlsh.y as m_y
+,dlsh.qa_coord_code as m_qa_coord_code
+,dlsh2.loc_coord_method
+,dlsh2.loc_coord_comment
+,dloc.loc_coord_comment as d_loc_coord_comment
+from
+oak_20160831_master.dbo.v_sys_loc_coords as v
+inner join oak_20160831_master.dbo.d_location as dloc
+on v.loc_id=dloc.loc_id
+inner join oak_20160831_master.dbo.d_location_spatial_hist as dlsh
+on v.loc_id=dlsh.loc_id
+inner join oak_20160831_master.dbo.d_location_spatial_hist as dlsh2
+on v.spat_id=dlsh2.spat_id
+where
+--( v.qa_coord_code=9 or v.qa_coord_code > dlsh.qa_coord_code )
+v.qa_coord_code= 9
+and dlsh.loc_coord_hist_code= 5
+and dlsh.loc_coord_data_id= 526
+-- the coordinates cannot have been updated by the ORMGP
+and not( v.loc_id in ( select distinct( loc_id ) from oak_20160831_master.dbo.d_location_qc where check_code= 10 and check_process_code in (1,2) ) )
+
+
+--***** v20240326 update the coordinates for those that have a QA_COORD_CODE of 9; leave the remainder
+
+select
+d.*
 from 
-v_sys_chk_loc_coords_moe_upd
-order by
-loc_id
+oak_20160831_master.dbo.d_location_spatial as d
+inner join 
+(
+select
+v.loc_id
+,dlsh.spat_id as m_spat_id
+from
+oak_20160831_master.dbo.v_sys_loc_coords as v
+inner join oak_20160831_master.dbo.d_location as dloc
+on v.loc_id=dloc.loc_id
+inner join oak_20160831_master.dbo.d_location_spatial_hist as dlsh
+on v.loc_id=dlsh.loc_id
+inner join oak_20160831_master.dbo.d_location_spatial_hist as dlsh2
+on v.spat_id=dlsh2.spat_id
+where
+v.qa_coord_code= 9
+and dlsh.loc_coord_hist_code= 5
+and dlsh.loc_coord_data_id= 526
+-- the coordinates cannot have been updated by the ORMGP
+and not( v.loc_id in ( select distinct( loc_id ) from oak_20160831_master.dbo.d_location_qc where check_code= 10 and check_process_code in (1,2) ) )
+) as t
+on d.loc_id=t.loc_id
+
+-- update SYS_TEMP1 and SYS_TEMP2
+
+-- v20240326 44 rows
+
+update oak_20160831_master.dbo.d_location_spatial 
+set
+spat_id= t.m_spat_id
+,spatial_comment= null
+,data_id= null
+,sys_temp1= '20240328t'
+,sys_temp2= 20240328
+from 
+oak_20160831_master.dbo.d_location_spatial as d
+inner join 
+(
+select
+v.loc_id
+,dlsh.spat_id as m_spat_id
+from
+oak_20160831_master.dbo.v_sys_loc_coords as v
+inner join oak_20160831_master.dbo.d_location as dloc
+on v.loc_id=dloc.loc_id
+inner join oak_20160831_master.dbo.d_location_spatial_hist as dlsh
+on v.loc_id=dlsh.loc_id
+inner join oak_20160831_master.dbo.d_location_spatial_hist as dlsh2
+on v.spat_id=dlsh2.spat_id
+where
+v.qa_coord_code= 9
+and dlsh.loc_coord_hist_code= 5
+and dlsh.loc_coord_data_id= 526
+-- the coordinates cannot have been updated by the ORMGP
+and not( v.loc_id in ( select distinct( loc_id ) from oak_20160831_master.dbo.d_location_qc where check_code= 10 and check_process_code in (1,2) ) )
+) as t
+on d.loc_id=t.loc_id
+
+-- update D_LOCATION
+
+-- v20240326 44 rows
+
+select
+d.*
+from 
+oak_20160831_master.dbo.d_location as d
+where
+loc_id in
+( select loc_id from oak_20160831_master.dbo.v_sys_loc_coords where sys_temp1= '20240328t' )
 
 
--- QA_COORD_CODE 9
+update oak_20160831_master.dbo.d_location
+set
+loc_coord_easting= v.x
+,loc_coord_northing= v.y
+,loc_coord_code= null
+,loc_coord_easting_ouom= null
+,loc_coord_northing_ouom= null
+,loc_coord_ouom_code= null
+,loc_coord_comment= null
+from 
+oak_20160831_master.dbo.d_location as d
+inner join oak_20160831_master.dbo.v_sys_loc_coords as v
+on d.loc_id=v.loc_id
+where
+v.sys_temp1= '20240328t'
+
+
+-- update D_LOCATION_QA
+
+-- v20240326 44 rows
+
+select
+d.*
+from 
+oak_20160831_master.dbo.d_location_qa as d
+inner join oak_20160831_master.dbo.v_sys_loc_coords as v
+on d.loc_id=v.loc_id
+where
+v.sys_temp1= '20240328t' 
+
+
+update oak_20160831_master.dbo.d_location_qa
+set
+qa_coord_confidence_code= v.qa_coord_code
+,qa_coord_source= null
+,qa_coord_method= null
+,qa_coord_comment= null
+,qa_elev_confidence_code= 10
+,qa_elev_source= null
+,qa_elev_method= null 
+,qa_elev_comment= null
+,sys_temp1= '20240328t'
+,sys_temp2= 20240328
+from 
+oak_20160831_master.dbo.d_location_qa as d
+inner join oak_20160831_master.dbo.v_sys_loc_coords as v
+on d.loc_id=v.loc_id
+where
+v.sys_temp1= '20240328t'
+
+
+-- update D_LOCATION_GEOM
+
+-- v20240326 44 rows
+
+select
+d.*
+from 
+oak_20160831_master.dbo.d_location_geom as d
+inner join oak_20160831_master.dbo.v_sys_loc_coords as v
+on d.loc_id=v.loc_id
+where
+v.sys_temp1= '20240328t'
+
+
+update  oak_20160831_master.dbo.d_location_geom
+set
+geom= vg.geom
+,geom_wkb=vgw.geom_wkb
+,coord_check= 10000
+,sys_temp1= '20240328t'
+,sys_temp2= 20240328
+from 
+oak_20160831_master.dbo.d_location_geom as d
+inner join oak_20160831_master.dbo.v_sys_loc_coords as v
+on d.loc_id=v.loc_id
+inner join oak_20160831_master.dbo.v_sys_loc_geometry as vg
+on d.loc_id=vg.loc_id
+inner join oak_20160831_master.dbo.v_sys_loc_geometry_wkb as vgw
+on d.loc_id=vgw.loc_id
+where
+v.sys_temp1= '20240328t'
+
+
+--***** v20240326
+--***** The following were not run (i.e. QA_COORD_CODE < 9 comparison)
+
+
+
 
 -- for those that have an original QA_COORD_CODE of 9, replace with the updated coordinates (if the new QA_COORD_CODE is lower);
 -- this is the base script; change the SYS_TEMP1 and SYS_TEMP2 values; note that we're tagging D_LOCATION_GEOM with a CHECK_CODE
@@ -167,8 +441,8 @@ v2.loc_id
 ,'20230511a' as sys_temp1
 ,20230511 as sys_temp2
 from 
-v_sys_chk_loc_coords_moe_upd as v1
-inner join v_sys_chk_loc_coords_moe_upd as v2
+oak_20160831_master.dbo.v_sys_chk_loc_coords_moe_upd as v1
+inner join oak_20160831_master.dbo.v_sys_chk_loc_coords_moe_upd as v2
 on v1.loc_id=v2.loc_id
 where
 v1.qa_coord_code= 9
@@ -682,7 +956,7 @@ coord_check= 10000
 --,cast( '20230324f' as varchar(255) ) as SYS_TEMP1
 --,cast( 20230324 as int ) as SYS_TEMP2
 --from 
---moe_20230324.dbo.tblbore_hole_byzone_xy as m
+--moe_20240326.dbo.tblbore_hole_byzone_xy as m
 --inner join oak_20160831_master.dbo.d_location_alias as dla
 --on m.bore_hole_id=cast(dla.loc_name_alias as int)
 --inner join oak_20160831_master.dbo.d_location as dloc
@@ -701,7 +975,7 @@ coord_check= 10000
 --) 
 --and not( dla.loc_id in ( select distinct( loc_id ) from oak_20160831_master.dbo.d_location_spatial_hist where loc_coord_hist_code= 5 ) )
 --
---select * from moe_20230324.dbo.tblbore_hole_byzone_xy
+--select * from moe_20240326.dbo.tblbore_hole_byzone_xy
 --
 ----***** 20230324 
 ----***** This is the previous check

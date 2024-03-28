@@ -10,6 +10,7 @@
 -- V20210119 DATA_ID 523
 -- v20220328 DATA_ID 524 
 -- v20230324 DATA_ID 525 
+-- v20240326 DATA_ID 526 
 
 -- update the DATA_ID, 
 
@@ -17,6 +18,7 @@
 -- v20210119 141 rows
 -- v20220328 786 rows
 -- v20230324 5632
+-- v20240326 17515
 
 select
 curr.Pump_Test_id as moe_pump_test_id
@@ -26,13 +28,13 @@ curr.Pump_Test_id as moe_pump_test_id
 ,cast(moept.RATE_UOM as varchar(50)) as PUMP_RATE_UNITS_OUOM
 ,dateadd(minute,curr.TestDuration,dpump.PUMPTEST_DATE) as [PUMP_START]
 ,dateadd(minute,prev.TestDuration,dpump.PUMPTEST_DATE) as [PUMP_END]
-,cast(525 as int) as DATA_ID
+,cast(526 as int) as DATA_ID
 ,null as [SYS_RECORD_ID]
 ,null as [rkey]
 ,prev.TestType as [testtype]
 ,prev.TestLevel as [testlevel]
 ,prev.TESTLEVEL_UOM as [testlevel_uom]
-into MOE_20230324.dbo.ORMGP_20230324_upd_DPUMPSTEP
+into MOE_20240326.dbo.ORMGP_20240326_upd_DPUMPSTEP
 from
 (
 	select
@@ -40,7 +42,7 @@ from
 	,moeptd.TestDuration
 	,ROW_NUMBER() over (order by moeptd.Pump_Test_id,moeptd.TestDuration) as rnum
 	from 
-	MOE_20230324.dbo.TblPump_Test_Detail as moeptd
+	MOE_20240326.dbo.TblPump_Test_Detail as moeptd
 	where 
 	moeptd.TestType='D'
 ) as [curr]
@@ -54,30 +56,31 @@ inner join
 	,moeptd.TESTLEVEL_UOM
 	,ROW_NUMBER() over (order by moeptd.Pump_Test_id,moeptd.TestDuration) as rnum
 	from 
-	MOE_20230324.dbo.TblPump_Test_Detail as moeptd
+	MOE_20240326.dbo.TblPump_Test_Detail as moeptd
 	where 
 	moeptd.TestType='D'
 ) as [prev]
 on curr.Pump_Test_id=prev.Pump_Test_id and curr.rnum=(prev.rnum-1)
-inner join MOE_20230324.dbo.TblPump_Test as moept
+inner join MOE_20240326.dbo.TblPump_Test as moept
 on curr.Pump_Test_id=moept.PUMP_TEST_ID
-inner join moe_20230324.dbo.o_d_pumptest as dpump
+inner join moe_20240326.dbo.o_d_pumptest as dpump
 on curr.pump_test_id=dpump.moe_pump_test_id
 order by 
 curr.Pump_Test_id,PUMP_START
 
-select count(*) as rcount from MOE_20230324.dbo.ORMGP_20230324_upd_DPUMPSTEP
+select count(*) as rcount from MOE_20240326.dbo.ORMGP_20240326_upd_DPUMPSTEP
 
---drop table ORMGP_20230324_upd_DPUMPSTEP
+--drop table ORMGP_20240326_upd_DPUMPSTEP
  
--- now add the first step - the previous code create all the other steps
+-- now add the first step - the previous code creates all the other steps
 
 -- v20200721 885 rows
 -- v20210119 12 rows
 -- v20220328 875 rows (total of R and D)
 -- v20230324 6134
+-- v20240326 17515
 
-insert into MOE_20230324.dbo.ORMGP_20230324_upd_DPUMPSTEP
+insert into MOE_20240326.dbo.ORMGP_20240326_upd_DPUMPSTEP
 (
 moe_pump_test_id
 ,[PUMP_RATE]
@@ -101,7 +104,7 @@ curr.Pump_Test_id as moe_pump_test_id
 ,cast(moept.RATE_UOM as varchar(50)) as PUMP_RATE_UNITS_OUOM
 ,dateadd(minute,0,dpump.PUMPTEST_DATE) as [PUMP_START]
 ,dateadd(minute,curr.TestDuration,dpump.PUMPTEST_DATE) as [PUMP_END]
-,cast(525 as int) as DATA_ID
+,cast(526 as int) as DATA_ID
 ,cast(null as int) as [SYS_RECORD_ID]
 ,cast(null as int) as [rkey]
 ,moeptd.TestType as [testtype]
@@ -113,24 +116,24 @@ from
     moeptd.Pump_Test_id
     ,min(moeptd.TestDuration) as TestDuration
     from 
-	MOE_20230324.dbo.TblPump_Test_Detail as moeptd
+	MOE_20240326.dbo.TblPump_Test_Detail as moeptd
 	where 
 	moeptd.TestType='D' 
 	group by
 	moeptd.Pump_Test_id
 ) as curr
-inner join MOE_20230324.dbo.TblPump_Test as moept
+inner join MOE_20240326.dbo.TblPump_Test as moept
 on curr.Pump_Test_id=moept.PUMP_TEST_ID
-inner join MOE_20230324.dbo.TblPump_Test_Detail as moeptd
+inner join MOE_20240326.dbo.TblPump_Test_Detail as moeptd
 on curr.Pump_Test_id=moeptd.Pump_Test_id and curr.TestDuration=moeptd.TestDuration
-inner join moe_20230324.dbo.o_d_pumptest as dpump
+inner join moe_20240326.dbo.o_d_pumptest as dpump
 on curr.pump_test_id=dpump.moe_pump_test_id
 where
 moeptd.TestType='D'
 order by 
 curr.Pump_Test_id,PUMP_START
 
-select count(*) as rcount from MOE_20230324.dbo.ORMGP_20230324_upd_DPUMPSTEP
+select count(*) as rcount from MOE_20240326.dbo.ORMGP_20240326_upd_DPUMPSTEP
 
 -- we can now look at the recovery information
 
@@ -139,8 +142,9 @@ select count(*) as rcount from MOE_20230324.dbo.ORMGP_20230324_upd_DPUMPSTEP
 -- v20210119 0 rows
 -- v20220328 0 rows
 -- v20230324 0 rows
+-- v20240326 0 
 
---insert into moe_20230324.dbo.ormgp_20230324_upd_dpumpstep
+--insert into moe_20240326.dbo.ormgp_20240326_upd_dpumpstep
 --(
 --moe_pump_test_id
 --,pump_end
@@ -169,7 +173,7 @@ from
 	,moeptd.TestLevel
 	,moeptd.TESTLEVEL_UOM
 	from 
-	MOE_20230324.dbo.TblPump_Test_Detail as moeptd
+	MOE_20240326.dbo.TblPump_Test_Detail as moeptd
 	where 
 	moeptd.TestType='R'
 ) as [curr]
@@ -179,16 +183,16 @@ inner join
 	ycps.moe_Pump_Test_id
 	,max(ycps.PUMP_END) as enddate
 	from 
-	MOE_20230324.dbo.ORMGP_20230324_upd_dpumpstep as ycps
+	MOE_20240326.dbo.ORMGP_20240326_upd_dpumpstep as ycps
 	where 
 	ycps.TestType='D' 
 	group by
 	ycps.moe_Pump_Test_id
 ) as mt
 on curr.Pump_Test_id=mt.moe_Pump_Test_id
-inner join MOE_20230324.dbo.TblPump_Test as moept
+inner join MOE_20240326.dbo.TblPump_Test as moept
 on curr.Pump_Test_id=moept.PUMP_TEST_ID
-inner join MOE_20230324.dbo.o_D_PUMPTEST as dpump
+inner join MOE_20240326.dbo.o_D_PUMPTEST as dpump
 on curr.Pump_Test_id=dpump.pump_test_id
 order by 
 curr.Pump_Test_id,PUMP_END
@@ -202,6 +206,7 @@ curr.Pump_Test_id,PUMP_END
 -- v20210119 12 rows
 -- v20220328 83 rows
 -- v20230324 502
+-- v20240326 1555
 
 select
 cast( null as int ) as PUMP_TEST_ID
@@ -212,10 +217,10 @@ cast( null as int ) as PUMP_TEST_ID
 ,t1.PUMP_RATE_UNITS_OUOM
 ,t1.PUMP_START
 ,t1.PUMP_END
-,cast(525 as int) as DATA_ID
+,cast(526 as int) as DATA_ID
 ,t1.SYS_RECORD_ID
 ,t1.rkey
-into MOE_20230324.dbo.O_D_PUMPTEST_STEP 
+into MOE_20240326.dbo.O_D_PUMPTEST_STEP 
 from 
 (
 SELECT
@@ -228,25 +233,26 @@ SELECT
 ,max([PUMP_END]) as [PUMP_END]
 ,cast( null as int ) as SYS_RECORD_ID
 ,ROW_NUMBER() over (order by moe_PUMP_TEST_ID) as rkey
-FROM MOE_20230324.[dbo].ormgp_20230324_upd_dpumpstep
+FROM MOE_20240326.[dbo].ormgp_20240326_upd_dpumpstep
 where 
 testtype='D'
 group by
 moe_Pump_Test_id,PUMP_RATE,PUMP_RATE_UNITS,PUMP_RATE_OUOM,PUMP_RATE_UNITS_OUOM 
 ) as t1
 
-select count(*) as rcount from MOE_20230324.dbo.O_D_PUMPTEST_STEP 
+select count(*) as rcount from MOE_20240326.dbo.O_D_PUMPTEST_STEP 
 
 -- create the compatible D_INTERVAL_TEMPORAL_2 table populated with
 -- the drawdown and recovery data
 
--- add an indexed ID field to MOE_20230324.[dbo].ORMGP_20230324_upd_DPUMPSTEP
+-- add an indexed ID field to MOE_20240326.[dbo].ORMGP_20240326_upd_DPUMPSTEP
 
 -- v20190509 31155 rows
 -- v20200721 
 -- v20210119 153 rows
 -- v20220328 1033 rows
 -- v20230324 6134
+-- v20240326 19070
 
 select
 dp.INT_ID
@@ -273,10 +279,10 @@ end as varchar(255) ) as [RD_COMMENT]
 ,dps.DATA_ID as [DATA_ID]
 ,dps.SYS_RECORD_ID
 ,dps.rkey 
-into moe_20230324.dbo.O_D_INTERVAL_TEMPORAL_2_70899
+into moe_20240326.dbo.O_D_INTERVAL_TEMPORAL_2_70899
 from 
-MOE_20230324.[dbo].ORMGP_20230324_upd_DPUMPSTEP as dps
-inner join MOE_20230324.dbo.O_D_PUMPTEST as dp
+MOE_20240326.[dbo].ORMGP_20240326_upd_DPUMPSTEP as dps
+inner join MOE_20240326.dbo.O_D_PUMPTEST as dp
 on dps.moe_PUMP_TEST_ID=dp.moe_PUMP_TEST_ID
 inner join oak_20160831_master.dbo.d_interval as dint
 on dp.int_id=dint.int_id
@@ -288,12 +294,12 @@ and dbore.bh_gnd_elev is not null
 order by
 dp.INT_ID,RD_DATE
 
-drop table moe_20230324.dbo.O_D_INTERVAL_TEMPORAL_2_70899
+drop table moe_20240326.dbo.O_D_INTERVAL_TEMPORAL_2_70899
 
 select
 count(*)
 from 
-moe_20230324.dbo.o_d_interval_temporal_2_70899
+moe_20240326.dbo.o_d_interval_temporal_2_70899
 
 -- update the SYS_RECORD_ID field
 
@@ -302,16 +308,19 @@ moe_20230324.dbo.o_d_interval_temporal_2_70899
 -- note that for version v20220328 and v20230324, rkey was not populated; updated by hand;
 -- modify this in the future
 
+--***** v20240326 didn't modify; update rkey by hand
+
 -- v20200721 10309 rows
 -- v20210119 153 rows
 -- v20220328 1033 rows
 -- v20230324 6134
+-- v20240326 19070
 
-update moe_20230324.dbo.o_d_interval_temporal_2_70899
+update moe_20240326.dbo.o_d_interval_temporal_2_70899
 set
 sys_record_id= t2.sri
 from 
-moe_20230324.dbo.o_d_interval_temporal_2_70899 as d
+moe_20240326.dbo.o_d_interval_temporal_2_70899 as d
 inner join
 (
 select
@@ -320,7 +329,7 @@ t.sri
 from 
 (
 select
-top 10000
+top 25000
 v.new_id as sri
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -370,10 +379,10 @@ select
 [RD_COMMENT], 
 [DATA_ID], 
 [SYS_RECORD_ID],
-cast( '20230512f' as varchar(255) ) as SYS_TEMP1,
-cast( 20230512 as int ) as SYS_TEMP2
+cast( '20240328p' as varchar(255) ) as SYS_TEMP1,
+cast( 20240328 as int ) as SYS_TEMP2
 from 
-moe_20230324.dbo.o_d_interval_temporal_2_70899 
+moe_20240326.dbo.o_d_interval_temporal_2_70899 
 
 
 

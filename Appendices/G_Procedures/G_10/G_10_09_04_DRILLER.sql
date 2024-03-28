@@ -14,6 +14,7 @@ select
 t.BH_DRILLER_DESCRIPTION
 ,t.BH_DRILLER_DESCRIPTION_LONG
 ,t.BH_DRILLER_ALT_CODE
+,526 as DATA_ID
 from 
 (
 select
@@ -21,8 +22,8 @@ cast('MOE Driller No. ' + cast(moewwr.CONTRACTOR as varchar(255)) as varchar(255
 ,cast('MOE Driller No. ' + cast(moewwr.CONTRACTOR as varchar(255)) as varchar(255)) as BH_DRILLER_DESCRIPTION_LONG
 ,cast(moewwr.CONTRACTOR as varchar(255)) as BH_DRILLER_ALT_CODE
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-left outer join MOE_20230324.dbo.TblWWR as moewwr
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+left outer join MOE_20240326.dbo.TblWWR as moewwr
 on y.MOE_WELL_ID=moewwr.MOE_WELL_ID
 left outer join OAK_20160831_MASTER.dbo.R_BH_DRILLER_CODE as rbdc
 --on moewwr.CONTRACTOR collate database_default=rbdc.BH_DRILLER_ALT_CODE collate database_default 
@@ -40,13 +41,15 @@ t.BH_DRILLER_DESCRIPTION,t.BH_DRILLER_DESCRIPTION_LONG,t.BH_DRILLER_ALT_CODE
 -- v20200721 22 rows
 -- v20210119 29 rows
 -- v20230324 
+-- v20240326 37 rows
 
 insert into [OAK_20160831_MASTER].dbo.R_BH_DRILLER_CODE
-(BH_DRILLER_DESCRIPTION,BH_DRILLER_DESCRIPTION_LONG,BH_DRILLER_ALT_CODE)
+( BH_DRILLER_DESCRIPTION,BH_DRILLER_DESCRIPTION_LONG,BH_DRILLER_ALT_CODE,DATA_ID )
 select
 t.BH_DRILLER_DESCRIPTION
 ,t.BH_DRILLER_DESCRIPTION_LONG
 ,t.BH_DRILLER_ALT_CODE
+,526 as DATA_ID
 from 
 (
 select
@@ -54,8 +57,8 @@ cast('MOE Driller No. ' + cast(moewwr.CONTRACTOR as varchar(255)) as varchar(255
 ,cast('MOE Driller No. ' + cast(moewwr.CONTRACTOR as varchar(255)) as varchar(255)) as BH_DRILLER_DESCRIPTION_LONG
 ,cast(moewwr.CONTRACTOR as varchar(255)) as BH_DRILLER_ALT_CODE
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-left outer join MOE_20230324.dbo.TblWWR as moewwr
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+left outer join MOE_20240326.dbo.TblWWR as moewwr
 on y.MOE_WELL_ID=moewwr.MOE_WELL_ID
 left outer join OAK_20160831_MASTER.dbo.R_BH_DRILLER_CODE as rbdc
 --on moewwr.CONTRACTOR collate database_default=rbdc.BH_DRILLER_ALT_CODE collate database_default 
@@ -73,14 +76,17 @@ t.BH_DRILLER_DESCRIPTION,t.BH_DRILLER_DESCRIPTION_LONG,t.BH_DRILLER_ALT_CODE
 --***** as we're working against a weekly db (not the master, a backup), pull across and hold any drillers
 --***** we've added in a temporary table (to be added to the master db table)
 
+--***** v20240326 added data_id check instead of using sys_time_stamp
+
 select
 BH_DRILLER_CODE
 ,BH_DRILLER_DESCRIPTION
 ,BH_DRILLER_DESCRIPTION_LONG
 ,BH_DRILLER_ALT_CODE
+,DATA_ID
 ,SYS_TIME_STAMP
 ,SYS_USER_STAMP
-into MOE_20230324.dbo.M_R_BH_DRILLER_CODE
+into MOE_20240326.dbo.M_R_BH_DRILLER_CODE
 from
 oak_20160831_master.dbo.r_bh_driller_code
 where 
@@ -88,7 +94,8 @@ where
 --sys_time_stamp>'2019-05-15'
 --sys_time_stamp>'2020-07-30'
 --sys_time_stamp>'2021-01-19'
-sys_time_stamp>'2023-03-24'
+--sys_time_stamp>'2023-03-24'
+data_id= 526
 --order by
 --sys_time_stamp desc
 

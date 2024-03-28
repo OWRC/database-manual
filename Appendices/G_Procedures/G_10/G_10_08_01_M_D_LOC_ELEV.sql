@@ -16,11 +16,12 @@
 -- v20210119 0 present
 -- v20220328 0 present
 -- v20230324 0 present
+-- v20240326 0 present
 
 select
 dlqa.*
 from 
-MOE_20230324.dbo.M_D_LOCATION_QA as dlqa
+MOE_20240326.dbo.M_D_LOCATION_QA as dlqa
 where 
 --QA_ELEV_CONFIDENCE_CODE=1
 QA_COORD_CONFIDENCE_CODE=1
@@ -32,64 +33,64 @@ QA_COORD_CONFIDENCE_CODE=1
 select
 y.BORE_HOLE_ID as LOC_ID
 ,cast(4 as int) as LOC_COORD_HIST_CODE
-,cast( '2023-03-24' as datetime ) as LOC_COORD_DATE
-,ycoord.east83 as X
-,ycoord.north83 as Y
+,cast( '2024-03-26' as datetime ) as LOC_COORD_DATE
+,ycoord.x as X
+,ycoord.y as Y
 ,cast( 26917 as int ) as EPSG_CODE
-,ycoord.east83_orig as X_OUOM
-,ycoord.north83_orig as Y_OUOM
+,ycoord.east83 as X_OUOM
+,ycoord.north83 as Y_OUOM
 ,cast( ( case when ycoord.zone=17 then 26917 else 26918 end ) as int ) as EPSG_CODE_OUOM
 ,dlqa.qa_coord_confidence_code as QA_COORD_CODE
-,cast( 525 as int ) as LOC_COORD_DATA_ID
+,cast( 526 as int ) as LOC_COORD_DATA_ID
 ,cast( ( case when m.location_method is not null and len(m.location_method)>0 then m.location_method else null end ) as varchar(255) ) as LOC_COORD_METHOD
 ,cast( ( case when m.elevation is not null then 2 else null end ) as int ) as LOC_ELEV_CODE 
-,cast( ( case when m.elevation is not null then '2023-05-02' else null end ) as datetime ) as LOC_ELEV_DATE
+,cast( ( case when m.elevation is not null then '2024-03-26' else null end ) as datetime ) as LOC_ELEV_DATE
 ,cast(m.ELEVATION as float) as LOC_ELEV
 ,cast( ( case when m.elevation is not null then 6 else null end ) as int ) as LOC_ELEV_UNIT_CODE
 ,cast(m.ELEVATION as float) as LOC_ELEV_OUOM
 ,cast( ( case when m.elevation is not null then 'masl' else null end ) as varchar(50) ) as LOC_ELEV_UNIT_OUOM
 ,cast( null as int ) as QA_ELEV_CODE
-,cast( ( case when m.elevation is not null then 525 else null end ) as int ) as LOC_ELEV_DATA_ID
+,cast( ( case when m.elevation is not null then 526 else null end ) as int ) as LOC_ELEV_DATA_ID
 ,cast( ( case when m.elevrc is not null and len(m.elevrc)>0 then m.elevrc else null end ) as varchar(255) ) as LOC_ELEV_COMMENT
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-inner join MOE_20230324.dbo.TblBore_Hole as m
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+inner join MOE_20240326.dbo.TblBore_Hole as m
 on y.BORE_HOLE_ID=m.BORE_HOLE_ID
-inner join MOE_20230324.dbo.YC_20230324_BORE_HOLE_ID_COORDS_YC as ycoord
+inner join MOE_20240326.dbo.YC_20240326_BORE_HOLE_ID_COORDS_YC as ycoord
 on y.bore_hole_id=ycoord.bore_hole_id
-inner join MOE_20230324.dbo.M_D_LOCATION_QA as dlqa
+inner join MOE_20240326.dbo.M_D_LOCATION_QA as dlqa
 on y.bore_hole_id=dlqa.loc_id
 
 select
 y.BORE_HOLE_ID as LOC_ID
 ,cast(4 as int) as LOC_COORD_HIST_CODE
-,cast( '2023-03-24' as datetime ) as LOC_COORD_DATE
-,ycoord.east83 as X
-,ycoord.north83 as Y
+,cast( '2024-03-26' as datetime ) as LOC_COORD_DATE
+,ycoord.x as X
+,ycoord.y as Y
 ,cast( 26917 as int ) as EPSG_CODE
-,ycoord.east83_orig as X_OUOM
-,ycoord.north83_orig as Y_OUOM
+,ycoord.east83 as X_OUOM
+,ycoord.north83 as Y_OUOM
 ,cast( ( case when ycoord.zone=17 then 26917 else 26918 end ) as int ) as EPSG_CODE_OUOM
 ,dlqa.qa_coord_confidence_code as QA_COORD_CODE
-,cast( 525 as int ) as LOC_COORD_DATA_ID
+,cast( 526 as int ) as LOC_COORD_DATA_ID
 ,cast( ( case when m.location_method is not null and len(m.location_method)>0 then m.location_method else null end ) as varchar(255) ) as LOC_COORD_METHOD
 ,cast( ( case when m.elevation is not null then 2 else null end ) as int ) as LOC_ELEV_CODE 
-,cast( ( case when m.elevation is not null then '2023-05-02' else null end ) as datetime ) as LOC_ELEV_DATE
+,cast( ( case when m.elevation is not null then '2024-03-26' else null end ) as datetime ) as LOC_ELEV_DATE
 ,cast(m.ELEVATION as float) as LOC_ELEV
 ,cast( ( case when m.elevation is not null then 6 else null end ) as int ) as LOC_ELEV_UNIT_CODE
 ,cast(m.ELEVATION as float) as LOC_ELEV_OUOM
 ,cast( ( case when m.elevation is not null then 'masl' else null end ) as varchar(50) ) as LOC_ELEV_UNIT_OUOM
 ,cast( null as int ) as QA_ELEV_CODE
-,cast( ( case when m.elevation is not null then 525 else null end ) as int ) as LOC_ELEV_DATA_ID
+,cast( ( case when m.elevation is not null then 526 else null end ) as int ) as LOC_ELEV_DATA_ID
 ,cast( ( case when m.elevrc is not null and len(m.elevrc)>0 then m.elevrc else null end ) as varchar(255) ) as LOC_ELEV_COMMENT
-into MOE_20230324.dbo.M_D_LOCATION_SPATIAL_HIST
+into MOE_20240326.dbo.M_D_LOCATION_SPATIAL_HIST
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-inner join MOE_20230324.dbo.TblBore_Hole as m
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+inner join MOE_20240326.dbo.TblBore_Hole as m
 on y.BORE_HOLE_ID=m.BORE_HOLE_ID
-inner join MOE_20230324.dbo.YC_20230324_BORE_HOLE_ID_COORDS_YC as ycoord
+inner join MOE_20240326.dbo.YC_20240326_BORE_HOLE_ID_COORDS_YC as ycoord
 on y.bore_hole_id=ycoord.bore_hole_id
-inner join MOE_20230324.dbo.M_D_LOCATION_QA as dlqa
+inner join MOE_20240326.dbo.M_D_LOCATION_QA as dlqa
 on y.bore_hole_id=dlqa.loc_id
 
 -- populate D_LOCATION_SPATIAL_HIST with the DEM elevations
@@ -100,19 +101,19 @@ on y.bore_hole_id=dlqa.loc_id
 select
 y.BORE_HOLE_ID as LOC_ID
 ,cast(4 as int) as LOC_COORD_HIST_CODE
-,cast( '2023-03-24' as datetime ) as LOC_COORD_DATE
-,ycoord.east83 as X
-,ycoord.north83 as Y
+,cast( '2024-03-26' as datetime ) as LOC_COORD_DATE
+,ycoord.x as X
+,ycoord.y as Y
 ,cast( 26917 as int ) as EPSG_CODE
-,ycoord.east83_orig as X_OUOM
-,ycoord.north83_orig as Y_OUOM
+,ycoord.east83 as X_OUOM
+,ycoord.north83 as Y_OUOM
 ,cast( ( case when ycoord.zone=17 then 26917 else 26918 end ) as int ) as EPSG_CODE_OUOM
 ,dlqa.qa_coord_confidence_code as QA_COORD_CODE
-,cast( 525 as int ) as LOC_COORD_DATA_ID
+,cast( 526 as int ) as LOC_COORD_DATA_ID
 ,cast( ( case when m.location_method is not null and len(m.location_method)>0 then m.location_method else null end ) as varchar(255) ) as LOC_COORD_METHOD
 --,cast( ( case when ye.dem_mnr=-9999 then 5 else 3 end ) as int ) as LOC_ELEV_CODE
 ,3 as LOC_ELEV_CODE
-,cast( '2023-05-02' as datetime ) as LOC_ELEV_DATE
+,cast( '2024-03-26' as datetime ) as LOC_ELEV_DATE
 --,cast( ( case when ye.dem_mnr=-9999 then ye.dem_srtm else ye.dem_mnr end ) as float ) as LOC_ELEV
 ,ye.dem_mnr as LOC_ELEV
 ,cast( 6 as int ) as LOC_ELEV_UNIT_CODE
@@ -123,17 +124,17 @@ y.BORE_HOLE_ID as LOC_ID
 ,cast( null as int ) as LOC_ELEV_DATA_ID
 ,cast( null as varchar(255) ) as LOC_ELEV_COMMENT
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-inner join MOE_20230324.dbo.YC_20230324_BORE_HOLE_ID_ELEVS as ye
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+inner join MOE_20240326.dbo.YC_20240326_BORE_HOLE_ID_ELEVS as ye
 on y.bore_hole_id=ye.bore_hole_id
-inner join MOE_20230324.dbo.TblBore_Hole as m
+inner join MOE_20240326.dbo.TblBore_Hole as m
 on y.BORE_HOLE_ID=m.BORE_HOLE_ID
-inner join MOE_20230324.dbo.YC_20230324_BORE_HOLE_ID_COORDS_YC as ycoord
+inner join MOE_20240326.dbo.YC_20240326_BORE_HOLE_ID_COORDS_YC as ycoord
 on y.bore_hole_id=ycoord.bore_hole_id
-inner join MOE_20230324.dbo.M_D_LOCATION_QA as dlqa
+inner join MOE_20240326.dbo.M_D_LOCATION_QA as dlqa
 on y.bore_hole_id=dlqa.loc_id
 
-insert into MOE_20230324.dbo.M_D_LOCATION_SPATIAL_HIST
+insert into MOE_20240326.dbo.M_D_LOCATION_SPATIAL_HIST
 (
 LOC_ID
 ,LOC_COORD_HIST_CODE
@@ -160,19 +161,19 @@ LOC_ID
 select
 y.BORE_HOLE_ID as LOC_ID
 ,cast(4 as int) as LOC_COORD_HIST_CODE
-,cast( '2023-03-24' as datetime ) as LOC_COORD_DATE
-,ycoord.east83 as X
-,ycoord.north83 as Y
+,cast( '2024-03-26' as datetime ) as LOC_COORD_DATE
+,ycoord.x as X
+,ycoord.y as Y
 ,cast( 26917 as int ) as EPSG_CODE
-,ycoord.east83_orig as X_OUOM
-,ycoord.north83_orig as Y_OUOM
+,ycoord.east83 as X_OUOM
+,ycoord.north83 as Y_OUOM
 ,cast( ( case when ycoord.zone=17 then 26917 else 26918 end ) as int ) as EPSG_CODE_OUOM
 ,dlqa.qa_coord_confidence_code as QA_COORD_CODE
-,cast( 525 as int ) as LOC_COORD_DATA_ID
+,cast( 526 as int ) as LOC_COORD_DATA_ID
 ,cast( ( case when m.location_method is not null and len(m.location_method)>0 then m.location_method else null end ) as varchar(255) ) as LOC_COORD_METHOD
 --,cast( ( case when ye.dem_mnr=-9999 then 5 else 3 end ) as int ) as LOC_ELEV_CODE
 ,3 as LOC_ELEV_CODE
-,cast( '2023-05-02' as datetime ) as LOC_ELEV_DATE
+,cast( '2024-03-26' as datetime ) as LOC_ELEV_DATE
 --,cast( ( case when ye.dem_mnr=-9999 then ye.dem_srtm else ye.dem_mnr end ) as float ) as LOC_ELEV
 ,ye.dem_mnr as LOC_ELEV
 ,cast( 6 as int ) as LOC_ELEV_UNIT_CODE
@@ -183,14 +184,14 @@ y.BORE_HOLE_ID as LOC_ID
 ,cast( null as int ) as LOC_ELEV_DATA_ID
 ,cast( null as varchar(255) ) as LOC_ELEV_COMMENT
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-inner join MOE_20230324.dbo.YC_20230324_BORE_HOLE_ID_ELEVS as ye
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+inner join MOE_20240326.dbo.YC_20240326_BORE_HOLE_ID_ELEVS as ye
 on y.bore_hole_id=ye.bore_hole_id
-inner join MOE_20230324.dbo.TblBore_Hole as m
+inner join MOE_20240326.dbo.TblBore_Hole as m
 on y.BORE_HOLE_ID=m.BORE_HOLE_ID
-inner join MOE_20230324.dbo.YC_20230324_BORE_HOLE_ID_COORDS_YC as ycoord
+inner join MOE_20240326.dbo.YC_20240326_BORE_HOLE_ID_COORDS_YC as ycoord
 on y.bore_hole_id=ycoord.bore_hole_id
-inner join MOE_20230324.dbo.M_D_LOCATION_QA as dlqa
+inner join MOE_20240326.dbo.M_D_LOCATION_QA as dlqa
 on y.bore_hole_id=dlqa.loc_id
 
 
@@ -198,22 +199,25 @@ on y.bore_hole_id=dlqa.loc_id
 -- How many original
 -- v20230324 18826 (null)
 -- v20230324 0 (2)
+-- v20240326 0
 
-select count(*) from MOE_20230324.dbo.M_D_LOCATION_SPATIAL_HIST where loc_coord_hist_code= 4 and ( loc_elev_code= 2 ) -- or loc_elev_code is null )
+select count(*) from MOE_20240326.dbo.M_D_LOCATION_SPATIAL_HIST where loc_coord_hist_code= 4 and ( loc_elev_code= 2 ) -- or loc_elev_code is null )
 
 -- How many MNR
 -- v20230324 18826
+-- v20240326 23131 
 
-select count(*) from MOE_20230324.dbo.M_D_LOCATION_SPATIAL_HIST where loc_coord_hist_code= 4 and loc_elev_code= 3
+select count(*) from MOE_20240326.dbo.M_D_LOCATION_SPATIAL_HIST where loc_coord_hist_code= 4 and loc_elev_code= 3
 
 -- v20210119 49238 rows
 -- v20220328 30470 rows
 -- v20230324 37652 rows
+-- v20240326 46262 rows
 
 select
 count(*) 
 from 
-MOE_20230324.dbo.M_D_LOCATION_SPATIAL_HIST
+MOE_20240326.dbo.M_D_LOCATION_SPATIAL_HIST
 
 -- Note that D_LOCAITON_SPATIAL will be created at a later step
 
@@ -235,8 +239,8 @@ y.BORE_HOLE_ID as LOC_ID
 -- we'll use SYS_TEMP2 to note which rows is the assigned elevation
 ,cast(null as int) as SYS_TEMP2
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-inner join MOE_20230324.dbo.TblBore_Hole as m
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+inner join MOE_20240326.dbo.TblBore_Hole as m
 on y.BORE_HOLE_ID=m.BORE_HOLE_ID
 --where 
 --m.ELEVATION is not null
@@ -248,10 +252,10 @@ y.BORE_HOLE_ID as LOC_ID
 ,cast(m.ELEVATION as float) as LOC_ELEV_MASL
 -- we'll use SYS_TEMP2 to note which rows is the assigned elevation
 ,cast(null as int) as SYS_TEMP2
-into MOE_20230324.dbo.M_D_LOCATION_ELEV_HIST
+into MOE_20240326.dbo.M_D_LOCATION_ELEV_HIST
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-inner join MOE_20230324.dbo.TblBore_Hole as m
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+inner join MOE_20240326.dbo.TblBore_Hole as m
 on y.BORE_HOLE_ID=m.BORE_HOLE_ID
 where 
 m.ELEVATION is not null
@@ -263,7 +267,7 @@ m.ELEVATION is not null
 select 
 max(LOC_ELEV_ID) 
 from 
-MOE_20230324.dbo.M_D_LOCATION_ELEV_HIST
+MOE_20240326.dbo.M_D_LOCATION_ELEV_HIST
 
 -- v20170905 17151 max
 -- v20180530 15487 max
@@ -282,13 +286,13 @@ y.BORE_HOLE_ID as LOC_ID
 -- we'll use SYS_TEMP2 to note which rows is the assigned elevation
 ,cast(1 as int) as SYS_TEMP2
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-inner join MOE_20230324.dbo.YC_20230324_BORE_HOLE_ID_ELEVS as e
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+inner join MOE_20240326.dbo.YC_20240326_BORE_HOLE_ID_ELEVS as e
 on y.BORE_HOLE_ID=e.BORE_HOLE_ID
 where
 e.DEM_MNR <> -9999
 
-insert into MOE_20230324.dbo.M_D_LOCATION_ELEV_HIST
+insert into MOE_20240326.dbo.M_D_LOCATION_ELEV_HIST
 (LOC_ID,LOC_ELEV_ID,LOC_ELEV_CODE,LOC_ELEV_MASL,SYS_TEMP2)
 select
 y.BORE_HOLE_ID as LOC_ID
@@ -298,8 +302,8 @@ y.BORE_HOLE_ID as LOC_ID
 -- we'll use SYS_TEMP2 to note which rows is the assigned elevation
 ,cast(1 as int) as SYS_TEMP2
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-inner join MOE_20230324.dbo.YC_20230324_BORE_HOLE_ID_ELEVS as e
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+inner join MOE_20240326.dbo.YC_20240326_BORE_HOLE_ID_ELEVS as e
 on y.BORE_HOLE_ID=e.BORE_HOLE_ID
 where
 e.DEM_MNR <> -9999
@@ -311,7 +315,7 @@ e.DEM_MNR <> -9999
 select 
 max(LOC_ELEV_ID) 
 from 
-MOE_20230324.dbo.M_D_LOCATION_ELEV_HIST
+MOE_20240326.dbo.M_D_LOCATION_ELEV_HIST
 
 -- v20170905 34336 max
 -- v20180530 31062 max
@@ -328,13 +332,13 @@ y.BORE_HOLE_ID as LOC_ID
 ,cast(5 as int) as LOC_ELEV_CODE
 ,e.DEM_SRTM as LOC_ELEV_MASL
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-inner join MOE_20230324.dbo.YC_20230324_BORE_HOLE_ID_ELEVS as e
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+inner join MOE_20240326.dbo.YC_20240326_BORE_HOLE_ID_ELEVS as e
 on y.BORE_HOLE_ID=e.BORE_HOLE_ID
 where 
 e.DEM_SRTM <> -9999
 
-insert into MOE_20230324.dbo.M_D_LOCATION_ELEV_HIST
+insert into MOE_20240326.dbo.M_D_LOCATION_ELEV_HIST
 (LOC_ID,LOC_ELEV_ID,LOC_ELEV_CODE,LOC_ELEV_MASL)
 select
 y.BORE_HOLE_ID as LOC_ID
@@ -342,8 +346,8 @@ y.BORE_HOLE_ID as LOC_ID
 ,cast(5 as int) as LOC_ELEV_CODE
 ,e.DEM_SRTM as LOC_ELEV_MASL
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-inner join MOE_20230324.dbo.YC_20230324_BORE_HOLE_ID_ELEVS as e
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+inner join MOE_20240326.dbo.YC_20240326_BORE_HOLE_ID_ELEVS as e
 on y.BORE_HOLE_ID=e.BORE_HOLE_ID
 where 
 e.DEM_SRTM <> -9999
@@ -355,14 +359,14 @@ e.DEM_SRTM <> -9999
 select
 *
 from 
-MOE_20230324.dbo.M_D_LOCATION_ELEV_HIST as dleh
+MOE_20240326.dbo.M_D_LOCATION_ELEV_HIST as dleh
 left outer join
 (
 select
 loc_id
 ,sys_temp2
 from
-MOE_20230324.dbo.M_D_LOCATION_ELEV_HIST
+MOE_20240326.dbo.M_D_LOCATION_ELEV_HIST
 where
 sys_temp2=1
 ) as t
@@ -371,18 +375,18 @@ where
 dleh.loc_elev_code=5
 and t.sys_temp2 is null
 
-update MOE_20230324.dbo.M_D_LOCATION_ELEV_HIST
+update MOE_20240326.dbo.M_D_LOCATION_ELEV_HIST
 set
 sys_temp2= 1
 from 
-MOE_20230324.dbo.M_D_LOCATION_ELEV_HIST as dleh
+MOE_20240326.dbo.M_D_LOCATION_ELEV_HIST as dleh
 left outer join
 (
 select
 loc_id
 ,sys_temp2
 from
-MOE_20230324.dbo.M_D_LOCATION_ELEV_HIST
+MOE_20240326.dbo.M_D_LOCATION_ELEV_HIST
 where
 sys_temp2=1
 ) as t
@@ -398,7 +402,7 @@ and t.sys_temp2 is null
 select
 count(*) 
 from 
-MOE_20230324.dbo.M_D_LOCATION_ELEV_HIST as m
+MOE_20240326.dbo.M_D_LOCATION_ELEV_HIST as m
 where 
 m.sys_temp2=1
 
@@ -415,7 +419,7 @@ LOC_ID
 ,LOC_ELEV_ID
 ,LOC_ELEV_MASL as ASSIGNED_ELEV
 from 
-MOE_20230324.dbo.M_D_LOCATION_ELEV_HIST
+MOE_20240326.dbo.M_D_LOCATION_ELEV_HIST
 where 
 SYS_TEMP2=1
 
@@ -423,9 +427,9 @@ select
 LOC_ID
 ,LOC_ELEV_ID
 ,LOC_ELEV_MASL as ASSIGNED_ELEV
-into MOE_20230324.dbo.M_D_LOCATION_ELEV
+into MOE_20240326.dbo.M_D_LOCATION_ELEV
 from 
-MOE_20230324.dbo.M_D_LOCATION_ELEV_HIST
+MOE_20240326.dbo.M_D_LOCATION_ELEV_HIST
 where 
 SYS_TEMP2=1
 
@@ -452,7 +456,7 @@ SYS_TEMP2=1
 select
 count(*)
 from 
-MOE_20230324.dbo.m_d_location_elev_hist
+MOE_20240326.dbo.m_d_location_elev_hist
 where 
 --loc_elev_code= 5
 --loc_elev_code= 3
@@ -466,14 +470,14 @@ loc_elev_code= 2
 select
 count(*) 
 from 
-MOE_20230324.dbo.M_D_LOCATION_ELEV
+MOE_20240326.dbo.M_D_LOCATION_ELEV
 
 -- v20200721 23369 rows
 
 select
 count(*) 
 from 
-MOE_20230324.dbo.M_D_LOCATION_ELEV_HIST
+MOE_20240326.dbo.M_D_LOCATION_ELEV_HIST
 
 
 

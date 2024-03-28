@@ -11,6 +11,7 @@
 -- v20210126 0 rows
 -- v20220328 0 rows
 -- v20230324 0 rows
+-- v20240327 0 rows
 
 select 
 ycb.LOC_ID

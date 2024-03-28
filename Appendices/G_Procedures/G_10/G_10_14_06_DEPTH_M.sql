@@ -7,9 +7,9 @@
 
 select
 *
-into MOE_20230324.dbo.YC_20230324_BH_ID_bckup
+into MOE_20240326.dbo.YC_20240326_BH_ID_bckup
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID
+MOE_20240326.dbo.YC_20240326_BH_ID
 
 -- make all the units m's; note that none of these should be null
 
@@ -21,13 +21,14 @@ MOE_20230324.dbo.YC_20230324_BH_ID
 -- v20200721 6409 rows
 -- v20210119 11161 rows
 -- v20230324 3493 rows
+-- v20240326 5380 rows
  
 select
 ycb.LOC_ID
 ,ycb.FM_MAX_DEPTH*0.3048 as FM_MAX_DEPTH_M
 ,ycb.FM_MAX_DEPTH_UNITS
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as ycb
+MOE_20240326.dbo.YC_20240326_BH_ID as ycb
 where 
 ycb.FM_MAX_DEPTH_UNITS='ft'
 and ycb.FM_MAX_DEPTH is not null
@@ -39,8 +40,9 @@ and ycb.FM_MAX_DEPTH is not null
 -- v20210119 11161 rows
 -- v20220328 3062 rows
 -- v20230324 3493 rows
+-- v20240326 5380 rows
 
-update MOE_20230324.dbo.YC_20230324_BH_ID
+update MOE_20240326.dbo.YC_20240326_BH_ID
 set
 FM_MAX_DEPTH=FM_MAX_DEPTH*0.3048
 ,FM_MAX_DEPTH_UNITS='m'
@@ -55,11 +57,12 @@ and FM_MAX_DEPTH is not null
 -- v20210119 0 rows
 -- v20220328 0 rows
 -- v20230324 0 rows
+-- v20240326 0 rows
 
 select
 *
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID
+MOE_20240326.dbo.YC_20240326_BH_ID
 where 
 FM_MAX_DEPTH is null
 and FM_MAX_DEPTH_UNITS is not null
@@ -73,13 +76,14 @@ and FM_MAX_DEPTH_UNITS is not null
 -- v20210119 11496 rows
 -- v20220328 3291 rows
 -- v20230324 0 rows
+-- v20240326 5893 rows
 
 select
 ycb.LOC_ID
 ,ycb.MOE_MAX_DEPTH*0.3048 as MOE_MAX_DEPTH_M
 ,ycb.MOE_MAX_DEPTH_UNITS
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as ycb
+MOE_20240326.dbo.YC_20240326_BH_ID as ycb
 where 
 ycb.MOE_MAX_DEPTH_UNITS='ft'
 and ycb.MOE_MAX_DEPTH is not null
@@ -91,8 +95,9 @@ and ycb.MOE_MAX_DEPTH is not null
 -- v20210119 11496 rows
 -- v20220328 3291 rows
 -- v20230324 0 rows
+-- v20240326 5893 rows
 
-update MOE_20230324.dbo.YC_20230324_BH_ID
+update MOE_20240326.dbo.YC_20240326_BH_ID
 set
 MOE_MAX_DEPTH=MOE_MAX_DEPTH*0.3048
 ,MOE_MAX_DEPTH_UNITS='m'
@@ -107,11 +112,12 @@ and MOE_MAX_DEPTH is not null
 -- v20210119 0 rows
 -- v20220328 0 rows
 -- v20230324 0 rows
+-- v20240326 0 rows
 
 select
 *
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID
+MOE_20240326.dbo.YC_20240326_BH_ID
 where 
 MOE_MAX_DEPTH is null
 and MOE_MAX_DEPTH_UNITS is not null
@@ -125,13 +131,14 @@ and MOE_MAX_DEPTH_UNITS is not null
 -- v20210119 13689 rows
 -- v20220328 3711 rows
 -- v20230324 4078 rows
+-- v20240326 6198 rows
 
 select
 ycb.LOC_ID
 ,ycb.CON_MAX_DEPTH*0.3048 as CON_MAX_DEPTH_M
 ,ycb.CON_MAX_DEPTH_UNITS
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as ycb
+MOE_20240326.dbo.YC_20240326_BH_ID as ycb
 where 
 ycb.CON_MAX_DEPTH_UNITS='ft'
 and ycb.CON_MAX_DEPTH is not null
@@ -143,8 +150,9 @@ and ycb.CON_MAX_DEPTH is not null
 -- v20210119 13689 rows
 -- v20220328 3711 rows
 -- v20230324 4078 rows
+-- v20240326 6198
 
-update MOE_20230324.dbo.YC_20230324_BH_ID
+update MOE_20240326.dbo.YC_20240326_BH_ID
 set
 CON_MAX_DEPTH=CON_MAX_DEPTH*0.3048
 ,CON_MAX_DEPTH_UNITS='m'
@@ -159,11 +167,12 @@ and CON_MAX_DEPTH is not null
 -- v20210119 666 rows
 -- v20220328 138 rows
 -- v20230324 138 rows
+-- v20240326 407 rows
 
 select
 *
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID
+MOE_20240326.dbo.YC_20240326_BH_ID
 where 
 CON_MAX_DEPTH is null
 and CON_MAX_DEPTH_UNITS is not null

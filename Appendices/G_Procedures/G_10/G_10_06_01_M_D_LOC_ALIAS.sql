@@ -12,16 +12,16 @@ y.BORE_HOLE_ID as LOC_ID
 ,cast(3 as int) as [LOC_ALIAS_TYPE_CODE]
 ,cast(null as int) as SYS_RECORD_ID
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
+MOE_20240326.dbo.YC_20240326_BH_ID as y
 
 select 
 y.BORE_HOLE_ID as LOC_ID
 ,cast(y.BORE_HOLE_ID as varchar(255)) as LOC_NAME_ALIAS
 ,cast(3 as int) as [LOC_ALIAS_TYPE_CODE]
 ,cast(null as int) as SYS_RECORD_ID
-into MOE_20230324.dbo.M_D_LOCATION_ALIAS
+into MOE_20240326.dbo.M_D_LOCATION_ALIAS
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
+MOE_20240326.dbo.YC_20240326_BH_ID as y
 
 -- this is to track the WELL_ID; note that LOC_ID is the BORE_HOLE_ID (at the moment)
 
@@ -30,42 +30,42 @@ y.LOC_ID
 ,cast(y.LOC_ORIGINAL_NAME as varchar(255)) as LOC_NAME_ALIAS
 ,cast(4 as int) as [LOC_ALIAS_TYPE_CODE]
 from 
-MOE_20230324.dbo.M_D_LOCATION as y
+MOE_20240326.dbo.M_D_LOCATION as y
 
-insert into MOE_20230324.dbo.M_D_LOCATION_ALIAS
+insert into MOE_20240326.dbo.M_D_LOCATION_ALIAS
 (LOC_ID,LOC_NAME_ALIAS,LOC_ALIAS_TYPE_CODE)
 select
 y.LOC_ID
 ,cast(y.LOC_ORIGINAL_NAME as varchar(255)) as LOC_NAME_ALIAS
 ,cast(4 as int) as [LOC_ALIAS_TYPE_CODE]
 from 
-MOE_20230324.dbo.M_D_LOCATION as y
+MOE_20240326.dbo.M_D_LOCATION as y
 
 -- this is to track the MOE Tag number which is attached to the WELL_ID; nulls are dropped
 
 -- note that as of v20220328, we've added a MOE_WELL_ID integer field to avoid collation issues
--- (i.e. instead of using the character based WELL_ID field)
+-- (i.e. instead of using the character based WELL_ID field); this is currently accomplished by hand
 
 select 
 y.BORE_HOLE_ID as LOC_ID
 ,cast(m.TAG as varchar(255)) as LOC_NAME_ALIAS
 ,cast(1 as int) as [LOC_ALIAS_TYPE_CODE]
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-inner join MOE_20230324.dbo.TblWWR as m
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+inner join MOE_20240326.dbo.TblWWR as m
 on y.MOE_WELL_ID=m.MOE_WELL_ID
 where 
 m.TAG is not null
 
-insert into MOE_20230324.dbo.M_D_LOCATION_ALIAS
+insert into MOE_20240326.dbo.M_D_LOCATION_ALIAS
 (LOC_ID,LOC_NAME_ALIAS,LOC_ALIAS_TYPE_CODE)
 select 
 y.BORE_HOLE_ID as LOC_ID
 ,cast(m.TAG as varchar(255)) as LOC_NAME_ALIAS
 ,cast(1 as int) as [LOC_ALIAS_TYPE_CODE]
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-inner join MOE_20230324.dbo.TblWWR as m
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+inner join MOE_20240326.dbo.TblWWR as m
 on y.MOE_WELL_ID=m.MOE_WELL_ID
 where 
 m.TAG is not null
@@ -77,21 +77,21 @@ y.BORE_HOLE_ID as LOC_ID
 ,cast(m.AUDIT_NO as varchar(255)) as LOC_NAME_ALIAS
 ,cast(2 as int) as [LOC_ALIAS_TYPE_CODE]
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-inner join MOE_20230324.dbo.TblWWR as m
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+inner join MOE_20240326.dbo.TblWWR as m
 on y.MOE_WELL_ID=m.MOE_WELL_ID
 where 
 m.AUDIT_NO is not null
 
-insert into MOE_20230324.dbo.M_D_LOCATION_ALIAS
+insert into MOE_20240326.dbo.M_D_LOCATION_ALIAS
 (LOC_ID,LOC_NAME_ALIAS,LOC_ALIAS_TYPE_CODE)
 select 
 y.BORE_HOLE_ID as LOC_ID
 ,cast(m.AUDIT_NO as varchar(255)) as LOC_NAME_ALIAS
 ,cast(2 as int) as [LOC_ALIAS_TYPE_CODE]
 from 
-MOE_20230324.dbo.YC_20230324_BH_ID as y
-inner join MOE_20230324.dbo.TblWWR as m
+MOE_20240326.dbo.YC_20240326_BH_ID as y
+inner join MOE_20240326.dbo.TblWWR as m
 on y.MOE_WELL_ID=m.MOE_WELL_ID
 where 
 m.AUDIT_NO is not null
@@ -132,16 +132,21 @@ m.AUDIT_NO is not null
 -- type 2 18819 rows
 -- type 3 18826 rows
 -- type 4 18826 rows
+-- v20240326
+-- type 1 21056 rows
+-- type 2 23131 rows
+-- type 3 23131 rows
+-- type 4 23131 rows
 
 select
 count(*)
 from 
-MOE_20230324.dbo.M_D_LOCATION_ALIAS
+MOE_20240326.dbo.M_D_LOCATION_ALIAS
 where 
---LOC_ALIAS_TYPE_CODE= 1
+LOC_ALIAS_TYPE_CODE= 1
 --LOC_ALIAS_TYPE_CODE= 2
 --LOC_ALIAS_TYPE_CODE= 3
-LOC_ALIAS_TYPE_CODE=  4
+--LOC_ALIAS_TYPE_CODE=  4
 
 --delete from m_d_location_alias
 --where loc_alias_type_code=4

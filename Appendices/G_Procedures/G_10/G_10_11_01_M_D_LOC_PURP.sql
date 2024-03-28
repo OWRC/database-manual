@@ -295,7 +295,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=0 then
      when dloc.LOC_MOE_USE_2ND_CODE=0 then
          case
          when dbore.BH_STATUS_CODE is null then 5 -- Industrial
-         when dbore.BH_STATUS_CODE in (1,5) then 10 -- Water Supply
+         when dbore.BH_STATUS_CODE in (1,5,10) then 10 -- Water Supply
          else null
          end
      -- MOE USE2 1 - Domestic
@@ -474,7 +474,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=0 then
      when dloc.LOC_MOE_USE_2ND_CODE=0 then
          case
          when dbore.BH_STATUS_CODE is null then 10 -- Water Supply
-         when dbore.BH_STATUS_CODE in (1,4,5,10,12) then 10 -- Water Supply
+         when dbore.BH_STATUS_CODE in (1,4,5,10,11,12,13) then 10 -- Water Supply
          when dbore.BH_STATUS_CODE in (2,3) then 3 -- Engineering
          when dbore.BH_STATUS_CODE in (9) then 4 -- Dewatering
          else null
@@ -658,6 +658,12 @@ when dloc.LOC_MOE_USE_1ST_CODE=0 then
          when dbore.BH_STATUS_CODE in (10) then 10 -- Water Supply
          else null
          end
+     -- MOE USE2 2 - Livestock
+     when dloc.LOC_MOE_USE_2ND_CODE=2 then
+         case
+         when dbore.BH_STATUS_CODE in ( 10 ) then 1 -- Agricultural
+         else null
+         end
      -- MOE USE2 4 - Industrial
      when dloc.LOC_MOE_USE_2ND_CODE=4 then 
          case 
@@ -665,7 +671,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=0 then
          when dbore.BH_STATUS_CODE in (1,2,3,5,6,7,10,11,12,13) then 5 -- Industrial
          when dbore.BH_STATUS_CODE in (4,14,15) then 3 -- Engineering
          else null 
-         ende= 7
+         end
      -- MOE USE2 5 - Commercial
      when dloc.LOC_MOE_USE_2ND_CODE=5 then 
          case 
@@ -679,7 +685,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=0 then
          else null
          end
      -- MOE USE2 7 - Public Supply
-     when dloc.LOC_MOE_USE_2ND_CODE=7
+     when dloc.LOC_MOE_USE_2ND_CODE=7 then
          case
          when dbore.BH_STATUS_CODE is null then 10
          when dbore.BH_STATUS_CODE in (7) then 10
@@ -702,7 +708,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=0 then
      -- MOE USE2 11 - Test Hole
      when dloc.LOC_MOE_USE_2ND_CODE=11 then
          case
-         when dbore.BH_STATUS_CODE in (10) then 3 -- Engineering
+         when dbore.BH_STATUS_CODE in (3,10) then 3 -- Engineering
          else null
          end
      -- MOE USE2 12 - Dewatering
@@ -834,7 +840,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=0 then
      -- MOE USE2 10 - Other
      when dloc.LOC_MOE_USE_2ND_CODE=10 then 
          case 
-         when dbore.BH_STATUS_CODE in (2,3,10) then 3 -- Engineering
+         when dbore.BH_STATUS_CODE in (2,3,10,14) then 3 -- Engineering
          else null 
          end
      -- MOE USE2 11 - Test Hole
@@ -1002,7 +1008,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=0 then
 	-- MOE USE2 10 - Other
 	when dloc.LOC_MOE_USE_2ND_CODE=10 then
 	    case
-	    when dbore.BH_STATUS_CODE in (14) then 3 -- Engineering
+	    when dbore.BH_STATUS_CODE in (2,14) then 3 -- Engineering
 	    else null
 	    end
 	-- MOE USE2 12 -- Dewatering
@@ -1308,7 +1314,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=1 then
      when dloc.LOC_MOE_USE_2ND_CODE=0 then
          case
          when dbore.BH_STATUS_CODE is null then 28 -- Other Industrial
-         when dbore.BH_STATUS_CODE in (1,5) then 28 -- Other Industrial
+         when dbore.BH_STATUS_CODE in (1,5,10) then 28 -- Other Industrial
          else null
          end
      -- MOE USE2 1 - Domestic
@@ -1485,7 +1491,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=1 then
      when dloc.LOC_MOE_USE_2ND_CODE=0 then
          case
          when dbore.BH_STATUS_CODE is null then 33 -- Other Water Supply
-         when dbore.BH_STATUS_CODE in (1,3,4,5,9,10,12) then 33 -- Other Water Supply
+         when dbore.BH_STATUS_CODE in (1,3,4,5,9,10,11,12,13) then 33 -- Other Water Supply
          when dbore.BH_STATUS_CODE in (2) then 58 -- Munipal Monitor
          else null
          end 
@@ -1674,6 +1680,12 @@ when dloc.LOC_MOE_USE_1ST_CODE=1 then
          when dbore.BH_STATUS_CODE in (10) then 33 -- Other Water Supply
          else null
          end
+     -- MOE USE2 2 - Livestock
+     when dloc.LOC_MOE_USE_2ND_CODE=2 then
+         case
+         when dbore.BH_STATUS_CODE in ( 9,10 ) then 50 -- Stock
+         else null
+         end
      -- MOE USE2 4 - Industrial
      when dloc.LOC_MOE_USE_2ND_CODE=4 then 
          case 
@@ -1721,7 +1733,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=1 then
 	 -- MOE USE2 11 - Test Hole
 	 when dloc.LOC_MOE_USE_2ND_CODE=11 then 
 	     case 
-		 when dbore.BH_STATUS_CODE in (10,11,14) then 51 -- Monitoring Well
+		 when dbore.BH_STATUS_CODE in (3,10,11,14) then 51 -- Monitoring Well
 		 else null 
 		 end
      -- MOE USE2 12 - Dewatering
@@ -1857,7 +1869,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=1 then
      -- MOE USE2 10 - Other
      when dloc.LOC_MOE_USE_2ND_CODE=10 then 
          case 
-         when dbore.BH_STATUS_CODE in (2,10) then 51 -- Monitor/Obs Well
+         when dbore.BH_STATUS_CODE in (2,10,14) then 51 -- Monitor/Obs Well
          when dbore.BH_STATUS_CODE=3 then 47 -- Geotech Testhole
          else null 
          end 
@@ -2026,7 +2038,7 @@ when dloc.LOC_MOE_USE_1ST_CODE=1 then
       -- MOE USE2 10 - Other
       when dloc.LOC_MOE_USE_2ND_CODE=10 then
           case
-          when dbore.BH_STATUS_CODE in (14) then 51 -- Monitoring Well
+          when dbore.BH_STATUS_CODE in (2,14) then 51 -- Monitoring Well
           else null
           end
       -- MOE USE2 12 - Dewatering
@@ -2042,15 +2054,15 @@ when dloc.LOC_MOE_USE_1ST_CODE=1 then
  end as [SECONDARY_PURPOSE_CODE]
 ,cast(null as int) as SYS_RECORD_ID
 ,row_number() over (order by dloc.LOC_ID) as rkey
-into MOE_20230324.dbo.M_D_LOCATION_PURPOSE
+into MOE_20240326.dbo.M_D_LOCATION_PURPOSE
 from 
-MOE_20230324.dbo.M_D_LOCATION as dloc
-inner join MOE_20230324.dbo.M_D_BOREHOLE as dbore
+MOE_20240326.dbo.M_D_LOCATION as dloc
+inner join MOE_20240326.dbo.M_D_BOREHOLE as dbore
 on dloc.LOC_ID=dbore.LOC_ID 
 
 --***** END_TAG
 
-drop table moe_20230324.dbo.m_d_location_purpose
+drop table moe_20240326.dbo.m_d_location_purpose
 
 --***** The following check is used when NULL values are calculated when assigning the
 --***** purpose codes to each location
@@ -2061,6 +2073,7 @@ drop table moe_20230324.dbo.m_d_location_purpose
 -- v20210119 162 rows
 -- v20220328 8 rows
 -- v20230324 2 rows
+-- v20240326 7 rows
 
 select
 t2.LOC_STATUS_CODE
@@ -2083,16 +2096,16 @@ from
 select 
 dpurp.LOC_ID 
 from 
-MOE_20230324.dbo.M_D_LOCATION_PURPOSE as dpurp
+MOE_20240326.dbo.M_D_LOCATION_PURPOSE as dpurp
 where 
 dpurp.PRIMARY_PURPOSE_CODE is null
 or dpurp.SECONDARY_PURPOSE_CODE is null
 group by 
 dpurp.LOC_ID
 ) as t
-inner join MOE_20230324.dbo.M_D_LOCATION as yloc
+inner join MOE_20240326.dbo.M_D_LOCATION as yloc
 on t.LOC_ID=yloc.LOC_ID 
-left outer join MOE_20230324.dbo.M_D_BOREHOLE as ybore
+left outer join MOE_20240326.dbo.M_D_BOREHOLE as ybore
 on t.LOC_ID=ybore.LOC_ID
 group by
 yloc.LOC_STATUS_CODE,ybore.BH_STATUS_CODE,yloc.LOC_MOE_USE_1ST_CODE,yloc.LOC_MOE_USE_2ND_CODE

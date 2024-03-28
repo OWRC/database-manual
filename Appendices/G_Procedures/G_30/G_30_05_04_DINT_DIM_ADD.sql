@@ -12,6 +12,7 @@
 -- v20210119 431 rows
 -- v20220328 180 rows
 -- v20230324 1515
+-- v20240326 9895
 
 select
 d.int_name
@@ -23,7 +24,7 @@ d.int_name
 ,d.int_start_date
 ,dint.int_start_date
 from 
-moe_20230324.dbo.o_d_interval as d
+moe_20240326.dbo.o_d_interval as d
 inner join oak_20160831_master.dbo.d_interval as dint
 on d.int_id=dint.int_id
 where 
@@ -53,7 +54,7 @@ int_name= d.int_name
 ,sys_temp2= d.sys_temp2
 from 
 oak_20160831_master.dbo.d_interval as dint
-inner join moe_20230324.dbo.o_d_interval as d
+inner join moe_20240326.dbo.o_d_interval as d
 on dint.int_id=d.int_id
 where 
 d.int_exists=1
@@ -70,39 +71,41 @@ or
 -- v20210119 max rkey 469
 -- v20220328 max rkey 182 
 -- v20230324 max rkey 1516
+-- v20240326 max rkey 9898
 
 -- note that this is the highest number
 select
 max(rkey) as max_rkey
 from 
-moe_20230324.dbo.o_d_interval as dint
+moe_20240326.dbo.o_d_interval as dint
 
 -- v20200721 6 rows
 -- v20210119 38 rows
 -- v20220328 2
 -- v20230324 1 
+-- v20240326 3
 
 select
 count(*) 
 from 
-moe_20230324.dbo.o_d_interval as dint
+moe_20240326.dbo.o_d_interval as dint
 where 
 dint.int_exists is null
 
 select
 *
 from 
-moe_20230324.dbo.o_d_interval as dint
+moe_20240326.dbo.o_d_interval as dint
 where 
 dint.int_exists is null
 
 -- create the random INT_IDs, don't forget to change the count as necessary
 
-update moe_20230324.dbo.o_d_interval
+update moe_20240326.dbo.o_d_interval
 set
 int_id= t2.int_id
 from 
-moe_20230324.dbo.o_d_interval as dint
+moe_20240326.dbo.o_d_interval as dint
 inner join
 (
 select
@@ -153,7 +156,7 @@ select
 [SYS_TEMP1], 
 [SYS_TEMP2]
 from 
-moe_20230324.dbo.o_d_interval as d
+moe_20240326.dbo.o_d_interval as d
 where
 d.int_exists is null
 
@@ -167,13 +170,14 @@ d.int_exists is null
 -- v20210119 474 ( 43 had null INT_IDs )
 -- v20220328 189 ( 2 had null INT_IDs )
 -- v20230324 1 
+-- v20240326 3
 
-update moe_20230324.dbo.o_d_interval_monitor
+update moe_20240326.dbo.o_d_interval_monitor
 set
 int_id= dint.int_id
 from 
-moe_20230324.dbo.o_d_interval_monitor as dim
-inner join moe_20230324.dbo.o_d_interval as dint
+moe_20240326.dbo.o_d_interval_monitor as dim
+inner join moe_20240326.dbo.o_d_interval as dint
 on dim.tmp_int_id=dint.tmp_int_id
 where
 dint.int_exists is null
@@ -181,22 +185,24 @@ dint.int_exists is null
 select
 *
 from 
-moe_20230324.dbo.o_d_interval_monitor
+moe_20240326.dbo.o_d_interval_monitor
 where
 int_id is null
+
+-- v20240326 10019
 
 select
 count(*) 
 from 
-moe_20230324.dbo.o_d_interval_monitor
+moe_20240326.dbo.o_d_interval_monitor
 
 -- and add the random MON_IDs; don't forget to change the count
 
-update moe_20230324.dbo.o_d_interval_monitor
+update moe_20240326.dbo.o_d_interval_monitor
 set
 mon_id= t2.mon_id
 from 
-moe_20230324.dbo.o_d_interval_monitor as d
+moe_20240326.dbo.o_d_interval_monitor as d
 inner join
 (
 select
@@ -205,7 +211,7 @@ t.mon_id
 from 
 (
 select
-top 5000
+top 15000
 v.new_id as mon_id
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -221,6 +227,7 @@ on d.rkey=t2.rkey
 -- v20210119 474 rows
 -- v20220328 189 rows
 -- v20230324 1545
+-- v20240326 10017
 
 select
 [INT_ID], 
@@ -238,7 +245,7 @@ select
 [SYS_TEMP1], 
 [SYS_TEMP2]
 from
-moe_20230324.dbo.o_d_interval_monitor as odim
+moe_20240326.dbo.o_d_interval_monitor as odim
 where
 odim.int_id not in
 ( select distinct(int_id) from oak_20160831_master.dbo.d_interval_monitor )
@@ -278,7 +285,7 @@ select
 [SYS_TEMP1], 
 [SYS_TEMP2]
 from
-moe_20230324.dbo.o_d_interval_monitor as odim
+moe_20240326.dbo.o_d_interval_monitor as odim
 where
 odim.int_id not in
 ( select distinct(int_id) from oak_20160831_master.dbo.d_interval_monitor )

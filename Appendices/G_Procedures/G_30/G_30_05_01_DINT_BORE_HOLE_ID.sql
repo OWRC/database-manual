@@ -14,11 +14,12 @@
 -- v20210119 28339 rows
 -- v20220328 35587
 -- v20230324 34225
+-- v20240326 43328
 
 select
 t.*
 ,dint.int_id
-into moe_20230324.dbo.ORMGP_20230324_base_DINT
+into moe_20240326.dbo.ORMGP_20240326_base_DINT
 from 
 (
 select
@@ -50,9 +51,9 @@ on t.loc_id=dint.loc_id
 select
 count(*)
 from 
-moe_20230324.dbo.ORMGP_20230324_base_DINT
+moe_20240326.dbo.ORMGP_20240326_base_DINT
 
-drop table moe_20230324.dbo.ORMGP_20230324_base_DINT
+drop table moe_20240326.dbo.ORMGP_20240326_base_DINT
 
 -- get those that actually have reported screens; this creates the dintmon table
 
@@ -61,6 +62,7 @@ drop table moe_20230324.dbo.ORMGP_20230324_base_DINT
 -- v20210119 445 rows
 -- v20220328 92 rows
 -- v20230324 925
+-- v20240328 7278
 
 select 
 d.LOC_ID
@@ -75,17 +77,17 @@ d.LOC_ID
 ,moes.SCRN_END_DEPTH as MON_BOT_OUOM
 ,moes.SCRN_DEPTH_UOM as MON_UNIT_OUOM
 ,cast(null as varchar(255)) as MON_COMMENT
-into moe_20230324.dbo.ORMGP_20230324_upd_DINTMON
+into moe_20240326.dbo.ORMGP_20240326_upd_DINTMON
 from 
-moe_20230324.dbo.ORMGP_20230324_base_DINT as d
+moe_20240326.dbo.ORMGP_20240326_base_DINT as d
 inner join 
-MOE_20230324.dbo.TblPipe as moep
+MOE_20240326.dbo.TblPipe as moep
 on d.moe_bore_hole_id=moep.Bore_Hole_ID
 inner join
-MOE_20230324.dbo.TblScreen as moes
+MOE_20240326.dbo.TblScreen as moes
 on moep.PIPE_ID=moes.PIPE_ID
 left outer join
-MOE_20230324.dbo.YC_20230324_MOE_SLOT as moeslot
+MOE_20240326.dbo.YC_20240326_MOE_SLOT as moeslot
 on moes.Slot=moeslot.MOE_SLOT
 where 
 moes.SCRN_TOP_DEPTH is not null 
@@ -94,7 +96,7 @@ or moes.SCRN_END_DEPTH is not null
 select
 count(*) 
 from 
-moe_20230324.dbo.ORMGP_20230324_upd_DINTMON
+moe_20240326.dbo.ORMGP_20240326_upd_DINTMON
 
-drop table moe_20230324.dbo.ORMGP_20230324_upd_DINTMON
+drop table moe_20240326.dbo.ORMGP_20240326_upd_DINTMON
 

@@ -13,12 +13,14 @@
 -- v20210119 DATA_ID 523 
 -- v20220328 DATA_ID 524 
 -- v20230324 DATA_ID 525
+-- v20240326 DATA_ID 526
 
 -- v20190509 3605 rows
 -- v20200721 5893 rows
 -- v20210119 1315 rows
 -- v20220328 374 rows
 -- v20230324 4012 rows
+-- v20240326 24474 rows
 
 select
 od.LOC_ID
@@ -67,26 +69,26 @@ end as int) as GEOL_MAT3_CODE
  when moef.MAT1 is null and moef.MAT2 is null and moef.MAT3 is not null then 'No mat1 or mat2, assigned mat3 to mat1'
  else null 
 end as varchar(255)) as GEOL_COMMENT
-,cast( 525 as int ) as DATA_ID
-,'20230512a' as SYS_TEMP1
-,20230512 as SYS_TEMP2
+,cast( 526 as int ) as DATA_ID
+,'20240326g' as SYS_TEMP1
+,20240326 as SYS_TEMP2
 ,row_number() over (order by od.loc_id) as rkey
-into MOE_20230324.dbo.O_D_GEOLOGY_LAYER
+into MOE_20240326.dbo.O_D_GEOLOGY_LAYER
 from 
-MOE_20230324.dbo.ORMGP_20230324_upd_DGL as od
-inner join MOE_20230324.dbo.TblFormation as moef
+MOE_20240326.dbo.ORMGP_20240326_upd_DGL as od
+inner join MOE_20240326.dbo.TblFormation as moef
 on od.moe_bore_hole_id=moef.bore_hole_id
 inner join oak_20160831_master.dbo.d_borehole as dbore
 on od.loc_id=dbore.loc_id
 
--- what is the count
-
 --drop table o_d_geology_layer
+
+-- what is the count
 
 select
 count(*) 
 from 
-MOE_20230324.dbo.O_D_GEOLOGY_LAYER
+MOE_20240326.dbo.O_D_GEOLOGY_LAYER
 
 -- create/update the GEOL_IDs
 
@@ -95,7 +97,7 @@ od.loc_id
 ,od.rkey
 ,t2.geol_id
 from 
-moe_20230324.dbo.o_d_geology_layer as od
+moe_20240326.dbo.o_d_geology_layer as od
 inner join
 (
 select
@@ -104,7 +106,7 @@ t.geol_id
 from 
 (
 select
-top 7000
+top 30000
 v.new_id as geol_id
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -115,11 +117,11 @@ v.new_id not in
 ) as t2
 on od.rkey=t2.rkey
 
-update moe_20230324.dbo.o_d_geology_layer
+update moe_20240326.dbo.o_d_geology_layer
 set
 geol_id=t2.geol_id
 from 
-moe_20230324.dbo.o_d_geology_layer as od
+moe_20240326.dbo.o_d_geology_layer as od
 inner join
 (
 select
@@ -128,7 +130,7 @@ t.geol_id
 from 
 (
 select
-top 7000
+top 30000
 v.new_id as geol_id
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -178,7 +180,7 @@ select
 [SYS_TEMP1], 
 [SYS_TEMP2]
 from 
-moe_20230324.dbo.o_d_geology_layer 
+moe_20240326.dbo.o_d_geology_layer 
 
 
 

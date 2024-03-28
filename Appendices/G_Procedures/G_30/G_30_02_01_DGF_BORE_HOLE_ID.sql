@@ -31,16 +31,18 @@ on tblwater
 -- v20210119 307 rows
 -- v20220328 146 rows
 -- v20230324 1182 rows
+-- v20240326 3352 rows
 
--- drop table moe_20230324.dbo.ormgp_20230324_upd_dgf
+-- drop table moe_20240326.dbo.ormgp_20240326_upd_dgf
 
 -- v20210119 Time to Run: 663 seconds
+-- v20240326 Time to Run: 662 seconds
 
 select
 t.*
 ,t2.rcount_moe
 --count(*) as rcount
-into moe_20230324.dbo.ORMGP_20230324_upd_DGF
+into moe_20240326.dbo.ORMGP_20240326_upd_DGF
 from 
 (
 select
@@ -81,8 +83,8 @@ select
 moep.bore_hole_id
 ,count(*) as rcount_moe
 from 
-MOE_20230324.dbo.TblPipe as moep
-inner join MOE_20230324.[dbo].[TblWater] as moew
+MOE_20240326.dbo.TblPipe as moep
+inner join MOE_20240326.[dbo].[TblWater] as moew
 on moep.PIPE_ID=moew.PIPE_ID
 group by
 moep.bore_hole_id
@@ -94,7 +96,7 @@ on t.moe_bore_hole_id=t2.bore_hole_id
 select
 count(*) 
 from 
-moe_20230324.dbo.ORMGP_20230324_upd_DGF
+moe_20240326.dbo.ORMGP_20240326_upd_DGF
 
 
 
