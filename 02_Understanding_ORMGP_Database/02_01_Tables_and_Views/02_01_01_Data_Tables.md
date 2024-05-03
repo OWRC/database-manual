@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.1"
 author: "ormgpmd"
-date:   "20240320"
+date:   "20240503"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -398,6 +398,10 @@ The following interval types are currently found in this table
 This table is currently underutilized and will be re-evaluated in the next
 version of the database.
 
+#### D_INTERVAL_QC_DATA
+
+Used for tracking of data correction and update at the interval level.
+
 #### D_INTERVAL_REF_ELEV
 
 Water levels measured in a well are generally taken either from the 'Top of
@@ -764,6 +768,15 @@ This table is required by and is populated through SiteFX.  This table is used
 for the import of logger data and tracks the name of loggers and the interval
 that they are associated with.  
 
+#### D_LOGGER_QC
+
+Used for tracking of logger data imports through the ORMGP website.
+
+#### D_LOGGER_QC_DDS
+
+Used for tracking the DATA_IDs assigned while importing logger data through
+the ORMGP website.  Not that DDS refers to the D_DATA_SOURCE table.
+
 #### D_OWNER
 
 This table was created prior to the MOE removing the OWN_NAME from their
@@ -940,4 +953,4 @@ the 'Dated Version' (both primary and secondary).  This includes the number of
 records for each available location type, each available interval type and
 each available reading group code type.
 
-*Last Modified: 2024-03-20*
+*Last Modified: 2024-05-03*

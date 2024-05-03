@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.2"
 author: "ormgpmd"
-date:   "20230314"
+date:   "20240503"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -342,6 +342,11 @@ through GROUP_LOC_CODE in D_GROUP_LOCATION.
 This table provides the capability to categorize the different groups of
 locations created.  This is related through GROUP_LOC_TYPE_CODE in
 R_GROUP_LOC_CODE.
+
+#### R_GROUP_PICK_CODE
+
+This table contains information for groupings of geologic picks as found in
+the D_PICK_EXTERNAL table. 
 
 #### R_INT_TYPE_CODE
 
@@ -725,7 +730,7 @@ D_INTERVAL_TEMPORAL_2) are automatically converted (to 'masl') if a
 'reference' elevation (as found in D_INTERVAL_REF_ELEV) is specified for the
 interval.
 
-* ftbref
+* ftbrefdata_id= 240054014
 * fbref
 * fbtop
 * fbtoc
@@ -748,4 +753,22 @@ interval.
 This is adapted from the MOE water well database and is related through
 WATER_CLARITY_CODE in D_PUMPTEST.
 
-*Last Modified: 2023-03-14*
+#### R_WQ_STANDARD
+
+These are the Water Quality Standards as specified by various documents (see
+R_WQ_STANDARD_SOURCE for details; note that DWS refers to drinking water
+standard). Each corresponds to a specifc RD_NAME_CODE and/or a parameter
+description and is defined through values of: MAC - Maximum Acceptable
+Concentration; IMAC - Interim MAC; AO - Aesthetic Objective; OG - Operational
+Guideline.  Units and unit codes are associated with each group. 
+
+These field definitions are sourced from: Ontario Ministry of the Environment
+(2003) Technical Support Document for Ontario Drinking Water Standards,
+Objectives and Guidelines.  June, 2003.
+
+#### R_WQ_STANDARD_SOURCE
+
+This contains the references from which the entries in R_WQ_STANDARD were
+taken.
+
+*Last Modified: 2024-05-03*

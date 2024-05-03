@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.6"
 author: "ormgpmd"
-date:   "20240207"
+date:   "20240503"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -2333,6 +2333,11 @@ LOC_TYPE_CODE is '1' (i.e. 'Well or Borehole').  Both the native spatial
 geometry and the 'well known binary' (WKB) geometry for the location is
 returned.
 
+#### V_SYS_GROUP_LOC_INT_SCREEN
+
+Returns all LOC_IDs and INT_IDs that have been grouped as a well nest (i.e.
+having a GROUP_LOC_TYPE_CODE of [6] or [7]).
+
 #### V_SYS_INT_MON_COORDS
 
 This view returns the coordinates and top- and bottom-depths for all valid
@@ -2390,6 +2395,11 @@ than the former.
 This view returns all INT_TYPE_CODE's whose INT_TYPE_ALT_CODE (in
 R_INT_TYPE_CODE) matches 'Screen'.  All of these are considered 'screened'
 intervals that will (likely) appear in D_INTERVAL_MONITOR.
+
+#### V_SYS_INT_TYPE_CODE_SCREEN_REP
+
+Returns those INT_TYPE_CODEs that are considered to be [reported] (as opposed
+to, for example, assumed).
 
 #### V_SYS_INTERVAL_ELEV
 
@@ -3442,6 +3452,17 @@ the presence a particular feature type (indicated by a value of 1) as follows:
 * Position 5: Water Found - Gas
 * Position 6: Water Found - Iron
 
+#### V_SYS_W_GENERAL_GROUP_INT
+
+Returns all those grouped LOC_IDs and INT_IDs (along with their group names)
+associated with borehole and surface water sites (i.e. those with a
+GROUP_INT_TYPE_CODE of [4]).
+
+#### V_SYS_W_GENERAL_GROUP_LOC
+
+Returns all those grouped LOC_IDs (along with their group names) associated
+with well nests (i.e. those with a GROUP_LOC_TYPE_CODE of [6] or [7]).
+
 #### V_SYS_W_GENERAL_GW_LEVEL_LOG
 
 This view is used to populate the W_GENERAL_GW_LEVEL table (generally weekly)
@@ -3612,4 +3633,4 @@ V_SYS_YPDT_VL_GEOLOGY (above) for additional details.
 This view returns the information in D_LOCATION related to the 'YPDT Viewlog
 Header Well'.
 
-*Last Modified: 2024-02-07*
+*Last Modified: 2024-05-03*
