@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.6"
 author: "ormgpmd"
-date:   "20240503"
+date:   "20241209"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -2749,20 +2749,10 @@ related permit using V_SYS_PTTW_RELATED_ALL.
 These series of views are used when importing 'new' PTTW locations into the
 master database.  They are not for the general user.
 
-#### V_SYS_PTTW_FIND_PRESENT
-
-This view returns all LOC_IDs indicating a PTTW location as well as any
-related PTTW locations.
-
 #### V_SYS_PTTW_FIND_RELATED_ALL
 
 This view returns all permutations of PTTW_PERMIT_NUMBER (with LOC_ID) along
 with their PTTW_EXPIRED_BY and PTTW_AMENDED_BY permit numbers.
-
-#### V_SYS_PTTW_FIND_RELATED_NEW
-
-Using V_SYS_PTTW_FIND_PRESENT and V_SYS_PTTW_FIND_RELATED_ALL as a base, this
-view returns all 'new' related permits LOC_IDs.
 
 #### V_SYS_PTTW_RELATED_ALL
 
@@ -3633,4 +3623,4 @@ V_SYS_YPDT_VL_GEOLOGY (above) for additional details.
 This view returns the information in D_LOCATION related to the 'YPDT Viewlog
 Header Well'.
 
-*Last Modified: 2024-05-03*
+*Last Modified: 2024-12-09*
