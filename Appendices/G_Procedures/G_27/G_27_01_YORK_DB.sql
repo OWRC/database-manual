@@ -337,37 +337,41 @@ select * from oak_20160831_master.dbo.d_data_source where data_id>= 240003500
 insert into oak_20160831_master.dbo.d_data_source
 ( data_id, data_type, data_description, data_filename, data_added_date )
 values 
-( 240003509,'Chemistry','Updated York Data - Chemistry; York DB 20240721','SiteFX_Fullbkp_20240721(1).bak', '2024-09-09' )
+( 240003512,'Chemistry','Updated York Data - Chemistry; York DB 20250425','SiteFX_Full_backup_20250425.bak', '2025-05-08' )
 
 
 -- generate the identifiers necessary for incorporation in the master db
 
 -- v20230717 5057 records
 -- v20240909 4697 records
-select * from yorkdb_20250425.dbo.dit1a
+-- v20250425 3508 records
+select * from yorkdb_20250425_subset.dbo.dit1a
 
 -- v20230717 max rkey 286986 
 -- v20240909 max rkey 461614
-select max(rkey) from yorkdb_20250425.dbo.dit1a
+-- v20250425 max rkey 367692
+select max(rkey) from yorkdb_20250425_subset.dbo.dit1a
 
 -- v20230717 19892 records
 -- v20240909 19358 records
-select * from yorkdb_20250425.dbo.dit1b
+-- v20250425 10667 records
+select * from yorkdb_20250425_subset.dbo.dit1b
 
 -- v20230717 max rkey 19892 
 -- v20240909 max rkey 19358
-select max(rkey) from yorkdb_20250425.dbo.dit1b
+-- v20250425 max rkey 10667
+select max(rkey) from yorkdb_20250425_subset.dbo.dit1b
 
 -- update the TOP count
 select
 y.sam_id
 ,y.ypdt_sam_id
 ,t2.sam_id_new
-update temphold.dbo.dit1a
+update yorkdb_20250425_subset.dbo.dit1a
 set
 ypdt_sam_id= t2.sam_id_new
 from 
-temphold.dbo.dit1a as y
+yorkdb_20250425_subset.dbo.dit1a as y
 inner join 
 (
 select
@@ -407,20 +411,20 @@ ypdt_int_id as int_id
 ,sam_sample_date_ouom
 ,sam_comment
 ,sys_time_stamp
-,240003509 as data_id
-,'20240909a' as sys_temp1
-,20240909 as sys_temp2
+,240003512 as data_id
+,'20250508a' as sys_temp1
+,20250508 as sys_temp2
 from 
-temphold.dbo.dit1a
+yorkdb_20250425_subset.dbo.dit1a
 
 -- add the new sam_id to dit1b and create the new sys_record_id
 
-update temphold.dbo.dit1b
+update yorkdb_20250425_subset.dbo.dit1b
 set
 ypdt_sam_id= d1a.ypdt_sam_id
 from 
-temphold.dbo.dit1b as d1b
-inner join temphold.dbo.dit1a as d1a
+yorkdb_20250425_subset.dbo.dit1b as d1b
+inner join yorkdb_20250425_subset.dbo.dit1a as d1a
 on d1b.sam_id=d1a.sam_id
 
 -- update the TOP count
@@ -428,11 +432,11 @@ select
 y.sys_record_id
 ,y.ypdt_sys_record_id
 ,t2.sri_new
-update temphold.dbo.dit1b
+update yorkdb_20250425_subset.dbo.dit1b
 set
 ypdt_sys_record_id= t2.sri_new
 from 
-temphold.dbo.dit1b as y
+yorkdb_20250425_subset.dbo.dit1b as y
 inner join 
 (
 select
@@ -473,10 +477,10 @@ ypdt_sam_id as sam_id
 ,ypdt_unit_description as rd_unit_ouom
 ,rd_comment
 ,sys_time_stamp
-,'20240909a' as sys_temp1
-,20240909 as sys_temp2
+,'20250508a' as sys_temp1
+,20250508 as sys_temp2
 from 
-temphold.dbo.dit1b
+yorkdb_20250425_subset.dbo.dit1b
 
 
 
@@ -995,31 +999,32 @@ ormgp_cur_sys_record_id is null
 select * from oak_20160831_master.dbo.d_data_source where data_id>= 240003500
 
 -- v20240909
+-- v20250425
 
 insert into oak_20160831_master.dbo.d_data_source
 ( data_id,data_type,data_description,data_filename, data_added_date )
 values 
-( 240003510,'Water Levels and Other','Updated York Data - Various Temporal 2 (new); York DB 20240721','SiteFX_Fullbkp_20240721(1).bak', '2024-09-09' )
+( 240003513,'Water Levels and Other','Updated York Data - Various Temporal 2 (new); York DB 20250425','SiteFX_Full_backup_20250425.bak', '2025-05-08' )
 
 insert into oak_20160831_master.dbo.d_data_source
 ( data_id,data_type,data_description,data_filename, data_added_date )
 values 
-( 240003511,'Water Levels and Other','Updated York Data - Various Temporal 2 (replacement); York DB 20240721','SiteFX_Fullbkp_20240721(1).bak', '2024-09-09' )
+( 240003514,'Water Levels and Other','Updated York Data - Various Temporal 2 (replacement); York DB 20250425','SiteFX_Full_backup_20250425.bak', '2025-05-08' )
 
-select * from temphold.dbo.dit2
+select * from yorkdb_20250425_subset.dbo.dit2
 
 -- Those records with a non-null ormgp_cur_sys_record_id will use an update
 -- query; note the DATA_ID and the removal of the _ouom field values
 
 update oak_20160831_master.dbo.d_interval_temporal_2
 set
-data_id= 240003511
+data_id= 240003514
 ,rd_value= d.rd_value
 ,rd_value_ouom=null
 ,rd_unit_ouom=null
 from 
 oak_20160831_master.dbo.d_interval_temporal_2 as d2
-inner join temphold.dbo.dit2 as d
+inner join yorkdb_20250425_subset.dbo.dit2 as d
 on d2.sys_record_id=d.ormgp_cur_sys_record_id
 
 
@@ -1055,7 +1060,7 @@ min(rkey) as rkey_min
 ,max(rkey) as rkey_max
 ,count(*) as total_records
 from 
-temphold.dbo.dit2
+yorkdb_20250425_subset.dbo.dit2
 where
 ormgp_add_sys_record_id is null
 and ormgp_cur_sys_record_id is null
@@ -1064,7 +1069,7 @@ select
 max(rkey) as rkey_max
 ,count(*) as rcount
 from 
-temphold.dbo.dit2
+yorkdb_20250425_subset.dbo.dit2
 where
 ormgp_add_sys_record_id is not null
 and ormgp_cur_sys_record_id is null
@@ -1077,11 +1082,11 @@ and ormgp_cur_sys_record_id is null
 
 -- the following is run repeadedly, adding the previous max rkey to capture the next set to be imported
 
-update temphold.dbo.dit2
+update yorkdb_20250425_subset.dbo.dit2
 set
 ormgp_add_sys_record_id= t2.sri
 from 
-temphold.dbo.dit2 as d
+yorkdb_20250425_subset.dbo.dit2 as d
 inner join
 (
 select
@@ -1099,7 +1104,7 @@ new_id not in
 ( select sys_record_id from d_interval_temporal_2 )
 ) as t
 ) as t2
-on d.rkey= ( t2.rkey + 16165090 )
+on d.rkey= ( t2.rkey + 10301301 )
 where
 d.ormgp_cur_sys_record_id is null
 and d.ormgp_add_sys_record_id is null
@@ -1137,11 +1142,11 @@ d.unit_code,
 d.rd_value as rd_value_ouom,
 rrnc.rd_name_description as rd_name_ouom,
 ruc.unit_description as rd_unit_ouom,
-240003510 as data_id,
-'20240909c' as sys_temp1,
-20240909 as sys_temp2
+240003513 as data_id,
+'20250508g' as sys_temp1,
+20250508 as sys_temp2
 FROM 
-temphold.dbo.dit2 as d
+yorkdb_20250425_subset.dbo.dit2 as d
 inner join oak_20160831_master.dbo.r_rd_name_code as rrnc
 on d.rd_name_code=rrnc.rd_name_code
 left outer join oak_20160831_master.dbo.r_unit_code as ruc
@@ -1155,7 +1160,7 @@ and ormgp_add_sys_record_id is not null
 
 -- set ormgp_cur_sys_record_id to -9999 for those records that have been inserted
 
-update temphold.dbo.dit2
+update yorkdb_20250425_subset.dbo.dit2
 set
 ormgp_cur_sys_record_id= -9999
 where
@@ -1165,7 +1170,7 @@ and ormgp_cur_sys_record_id is null
 select
 *
 from 
-temphold.dbo.dit2
+yorkdb_20250425_subset.dbo.dit2
 where
 ormgp_cur_sys_record_id= -9999
 
