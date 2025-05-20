@@ -20,9 +20,9 @@ knit:   (
 
 ## Table of Contents
 
-<!--
+### [Forward](/database-manual/aForward/Forward.html)
 
-### [Forward](/database-manual/Forward/Forward.html)
+<!--
 
 ### Section 1 - Introduction
 
