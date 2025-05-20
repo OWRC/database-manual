@@ -22,13 +22,13 @@ knit:   (
 
 ### [Forward](/database-manual/aForward/Forward.html)
 
+### **[Section 1 - Introduction](/database-manual/a01_Introduction/01_01-02_Overview_and_Background.html)**
+
+* **1.0 Overview**
+* **1.1 Background**
+* **1.2 Database Versions**
+
 <!--
-
-### Section 1 - Introduction
-
-* **[1.1 Overview](/database-manual/01_Introduction/01_01-02_Overview_and_Background.html)**
-* **[1.2 Background](/database-manual/01_Introduction/01_01-02_Overview_and_Background.html)**
-* **[1.3 Database Versions](/database-manual/01_Introduction/01_03_Database_Versions.html)**
 
 ### Section 2 - Understanding the ORMGP Database
 
@@ -120,9 +120,13 @@ knit:   (
 
 * **[4.5 Background Processing and Updates](/database-manual/04_Technical/04_05_Background_Processing_Updates/04_05_Background_Processing_Updates.html)**
 
-### [References](/database-manual/References/References.html)
+-->
+
+### [References](/database-manual/aReferences/References.html)
 
 ### Appendices
+
+<!--
 
 * **[A - Basic Outline and Use of Structured Query Language (SQL)](/database-manual/Appendices/A_SQL_Outline/A_SQL_Outline.html)**
 
