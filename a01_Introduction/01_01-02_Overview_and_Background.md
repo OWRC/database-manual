@@ -54,8 +54,8 @@ The ultimate goal of ORMGP data management is to maintain a water
 management database system that is reliable, up to date and relatively easy to
 use.  The guiding philosophy for the ORMGP database can be summarized as
 
-*One piece of absolutely reliable data is far better than a million pieces of
-unreliable data.*
+***One piece of absolutely reliable data is far better than a million pieces of
+unreliable data.***
 
 ### Database Contents
 
@@ -114,17 +114,15 @@ Toronto (YPDT), and their associated six Conservation Authorities (Credit
 Valley; Toronto and Region; Lake Simcoe and Region; Central Lake Ontario;
 Kawartha; and Ganaraska) formed a cooperative alliance for addressing
 groundwater issues within the collective geographical area of all partnered
-agencies.  In addition to these partners, three additional conservation
-authorities (Otonabee, Lower Trent, and Nottawasaga) also having jurisdiction
-on portions of the Oak Ridges Moraine
+agencies.  Three additional conservation authorities - Otonabee, Lower Trent
+and Nottawasaga - also having juridiction on portions of the Oak Ridges
+Moraine, joined shortly thereafter.
 
-
-, through the Conservation Authorities
-Moraine Coalition (CAMC) have also supported the development of the technical
-tools that have been developed for groundwater management.  The study area is
-shown in Figure 1.1.  At the request of the Source Water Protection project
-managers, the area was expanded slightly in recent years to incorporate more
-northerly areas to assist with Source Water Protection Planning.
+At the request of the Source Water Protection project managers, the area was
+expanded (subsequently) to incorporate more northerly areas to assist with
+Source Water Protection Planning.  In recent years, both Halton Region and
+Halton Conservation Authority have joined the program extending the ORMGP
+study area beyond the ORM.
 
 ![*Figure 1.1.1 Oak Ridges Moraine Groundwater Management Program study area
 displayed with a 25km boundary buffer; the Oak Ridges Moraine is also
@@ -133,7 +131,7 @@ Groundwater Managment Program study area displayed with a 25km boundary
 buffer; the Oak Ridges Moraine is also shown.*
 
 Since its inception in 1999 the project has transitioned through what can be
-identified as three stages: A
+identified as three stages: 
 
 * Stage 1 - 1999 to 2001 - this stage of work was undertaken by a consultant
   team and was focused on identifying issues related to groundwater management
@@ -268,6 +266,8 @@ previous version of this manual (i.e. *ORMGP Database Manual, Version 7
 geologic model (extending from the CVC, above the escarpment, to east 
 of the Durham Region)
 
+
+
 ### Database Release 4
 
 * Date: Unreleased - incorporated into Database Release 5, described below
@@ -366,7 +366,7 @@ The current distribution of all locations found within the database is shown
 
 ![*Figure 1.2.1 The spatial extents of the study area showing locations
 (boreholes, climate stations, surface water stations, reports, etc...) currently
-residing in the database.*](f01_02_01_locations.jpg)*Figure 1.2.1 The spatial
+residing in the database.*](f01_02_01_locations.png)*Figure 1.2.1 The spatial
 extents of the study area showing locations (boreholes, climate stations,
 surface water stations, reports, etc...) currently residing in the database.*
 
