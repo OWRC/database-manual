@@ -28,11 +28,11 @@ knit:   (
 * **1.1 Background**
 * **1.2 Database Versions**
 
-<!--
-
 ### Section 2 - Understanding the ORMGP Database
 
-* **[2.1 Tables and Views](/database-manual/02_Understanding_ORMGP_Database/02_01_Tables_and_Views/02_01_Tables_and_Views.html)**
+* **[2.1 Tables and Views](/database-manual/a02_Understanding_ORMGP_Database/02_01_Tables_and_Views/02_01_Tables_and_Views.html)**
+
+<!--
 
     + **[2.1.1 Data Tables (D_\*)](/database-manual/02_Understanding_ORMGP_Database/02_01_Tables_and_Views/02_01_01_Data_Tables.html)**
     + **[2.1.2 Reference Tables (R_\*)](/database-manual/02_Understanding_ORMGP_Database/02_01_Tables_and_Views/02_01_02_Reference_Tables.html)**
