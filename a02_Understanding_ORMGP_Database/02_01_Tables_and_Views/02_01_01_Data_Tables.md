@@ -228,6 +228,34 @@ pulled from a report where the unit has been identified by a third party.
 
 #### D_INT_OFFSET 
 
+Some depths are relative to a particular point of measure instead of to the
+ground surface at a particular location.  In particular, water levels measured
+in a well are generally taken either from the *Top of Pipe* or the *Top of
+Casing* (i.e. a reference point) instead of from the ground surface.  As such,
+a means by which to correct the measured value against the ground surface
+must be available.  
+
+If the offset distance is recorded, i.e. the distance between the reference
+location and the ground surface, this can be used to correct the measured
+value.  The actual value of the offset is located in the D_LOC_SPATIAL_HIST
+(DLSH) table.  This ties the offset value closely to the coordinates and
+ground elevation of the particular location.  As such, each record in this
+this table now references a record in DLSH.  Here, though, the valid start and
+end date for the particular offset (and elevation/coordinate combination) are
+stored.  This allows the offset value to change with that change (and its
+affected time period) captured through the use of these two tables (i.e. this
+one and DLSH).
+
+A change in the offset can result from damage to the monitoring pipe or from a
+more accurate survey of the reference point.  If no offset is specified for a
+particular location, a default of *0.75m* is assigned (and noted as such int
+he comments).
+
+In some cases, no valid date exists to populate the START_DATE field.  When
+this occurs, a false date of *1867-07-01* or *1967-07-01* is assumed instead,
+functioning as a marker (of an unknown date).  Note that a valid date must
+exist for each record in this table for comparison purposes.
+
 #### D_INT_PTTW 
 
 #### D_INT_PUMPTEST 
