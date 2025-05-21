@@ -1,7 +1,7 @@
 ---
 title:  "References"
 author: "ORMGP"
-date:   "20250520"
+date:   "20250521"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -23,6 +23,12 @@ Moraine Coalition and York-Peel-Durham-Toronto Groundwater Management Group.
 November, 2003.
 
 EarthFX (2005) Database Release Report Addendum.
+
+Gao, C., Shirota, J., Kelly, R.I, Brunton, F.R. and van Haaften, S. (2006)
+Bedrock topography and overburden thickness mapping, southern Ontario.
+Ontario Geological Survey, Sedimentary Geoscience Section.
+
+Ontario Geologic Survey (2010) Surficial Geology ....
 
 ORMGP (2022) ORMGP Database Manual, Version 7.  Dated Version
 20160831.20221125; November 25, 2022.
@@ -59,8 +65,6 @@ Eyles and Doughty (1996) An Environmental Database for the City Of Toronto - Pha
 
 Eyles, N, Eyles, C.H., and Miall, A.D., 1983:  Lithofacies types and vertical profile models; an alternative approach to the description and environmental interpretation of glacial diamict and diamictite sequences.  Sedimentology 30, 393-410.
 
-Gao, C., Shirota, J., Kelly, R.I, Brunton, F.R. and van Haaften, S. (2006) Bedrock topography and overburden thickness mapping, southern Ontario.  Ontario Geological Survey, Sedimentary Geoscience Section.
-
 Golder Associates, 1992. Field Procedure Manual, Appendix "A" Field Identification and Classification of Soil, p. A1-A20
 
 Institute of Hydrology.  1980.  Low Flow Studies, Res. Rep. 1.  Institute of Hydrology, Wallingford, U.K.
@@ -93,4 +97,4 @@ YPDT-CAMC (2017) YPDT-CAMC Database Manual Version 6 (Dated Version 20160831.201
 
 -->
 
-*Last Modified: 2025-05-20*
+*Last Modified: 2025-05-21*

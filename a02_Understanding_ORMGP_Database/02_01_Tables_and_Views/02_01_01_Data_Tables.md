@@ -224,7 +224,44 @@ pulled from a report where the unit has been identified by a third party.
 
 #### D_INT_LOGGER_QC 
 
+This table is used to track logger data imports as performed through the ORMGP
+website toolset.  The fields found herein are related to the details found
+within the imported logger file and the settings used to do so.  In
+particular, the following information is captured:
+
+* INT_ID - The interval in which the logger is found
+* TID - The import key linking the record to the dataset in the temporary
+  database; in addition, this is used to link to the data source identifiers
+  found in D_INT_LOGGER_QC_DDS
+* LOGIN_NAME - The web-based login of the user uploading the data
+* DATA_UPLOADED - The date at which the data was uploaded
+* FILE_NAME - The original filename of the dataset (the logger file)
+* INTERVAL_NAME - The associated interval name (from INT_NAME_ALT1)
+* INT_REF_ELEV - The reference elevation used for the data import
+* LOGGER_NAME - The name of the logger
+* LOGGER_TYPE - The logger type (a code, as specified by the user)
+* LOGGER_TYPE_TEXT - The textural version of the logger type code
+* LOGGER_SERIAL_NUMBER - The serial number of the logger pulled from the
+  import file
+* LOGGER_LOCATION - The location of the logger pulled from the import file
+* LOGGER_START_DATE - The start date of the logger data
+* LOGGER_END_DATE - The end date of the logger data
+* LOGGER_SOURCE_DATA - This is all the header information from the original
+  logger data file (unprocessed)
+* LOGGER_RECORD_COUNT - The number of records in the logger import file
+* IMPORT_START_DATE - The start date of the logger data being loaded (this may
+  be a subset of the total data available)
+* IMPORT_END_DATE - The end date of the logger data being loaded (this may be
+  a subset of the total data available)
+* DATA_RECORD_COUNT - The number of records imported
+* COR_DATA_MANUAL_DATES - Comma-delimited list of manual waterlevels (and
+  their dates) used to correct the imported logger waterlevels
+
 #### D_INT_LOGGER_QC_DDS 
+
+Each logger input recorded in D_INT_LOGGER_QC (and each parameter of that
+import) is provided with a DATA_ID (linking the import to the D_DATA_SOURCE
+table).
 
 #### D_INT_OFFSET 
 
@@ -248,8 +285,8 @@ one and DLSH).
 
 A change in the offset can result from damage to the monitoring pipe or from a
 more accurate survey of the reference point.  If no offset is specified for a
-particular location, a default of *0.75m* is assigned (and noted as such int
-he comments).
+particular location, a default of *0.75m* is assigned (and noted as such in
+the comments).
 
 In some cases, no valid date exists to populate the START_DATE field.  When
 this occurs, a false date of *1867-07-01* or *1967-07-01* is assumed instead,
@@ -257,6 +294,16 @@ functioning as a marker (of an unknown date).  Note that a valid date must
 exist for each record in this table for comparison purposes.
 
 #### D_INT_PTTW 
+
+This table incorporates information from the *Permit to Take Water* dataset
+available through the MOE.  The methodology for doing so is outlined in
+Appendix G.  Note that when possible, the particular permit (a location type)
+has been linked to a source location (e.g. a well).  This relation is captured
+in D_LOC_RELATED.
+
+The interpreted source type (PTTW_SRCID_CODE, linking to R_PTTW_SRCID_CODE)
+and water type (PTTW_WATERSRC_CODE, linking to R_PTTW_WATERSRC_CODE) is
+identified.
 
 #### D_INT_PUMPTEST 
 
@@ -321,6 +368,47 @@ exist for each record in this table for comparison purposes.
 #### D_OWNER 
 
 #### D_PICK_EXTERNAL 
+
+The records in this table contain formation information using the
+GEOL_UNIT_CODE field (linking to the R_GEOL_UNIT_CODE table) in addition to
+the coordinate (x,y) as well as the elevation (z) necessary to position this
+point within the ORMGP study area.  This allows the records here to be
+independent of the relational schema in place for regular locations (e.g.
+boreholes). 
+
+The data herein corresponds to *pick* information, similar to that within
+D_LOC_PICK.  In most cases, though, this will be related to geologic units
+that are surficial in nature (e.g. Ontario Geological Survey, 2010 and Gao et
+al, 2006).
+
+
+(using both the FORMATION and GEOL_UNIT_CODE fields) tied to a specific
+coordinate (x,y) location as well as an elevation (z).  These do not
+correspond, however, to the database location schema but are instead
+self-referencing where all information concerning a record occurs either
+within this table or within the linked data source (through DATA_ID which must
+be populated).  This includes the various quality assurance  and supplementary
+elevation information (normally found in D_LOC_SPATIAL_HIST) 
+
+
+as well as supplementary elevation
+information (as found in D_LOCATION_SPATIAL_HIST).  In particular, the latter
+should reference the particular ground surface elevation (usually a DEM) used
+as a reference base while the RD_VALUE_OUOM should be populated using the
+depth of the 'pick'.  This latter value can be calculated if the original
+value was an elevation.
+
+The date of the source (or the source data) should be included in the PDATE
+field (which should match Z_DATE unless this was calculated using a difference
+source).  The default mode is a single record equated to a single 'pick'.  In
+the case where a polyline (or polygon) was used to to capture coordinate
+information and its original form is important with regard to its inclusion
+within the database, the PGROUP field can be used to 'name' the associated
+records and their order can be specified within the PORDER field.  In most
+cases these fields will not be populated.
+
+This table was first used to capture outcrop locations (and their elevation)
+from the Gao et al (2006) dataset.
 
 #### D_VERSION 
 
