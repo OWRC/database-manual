@@ -123,7 +123,9 @@ D_INTERVAL_SOIL in previous version of the ORMGP database.  Numeric attributes
 can be stored in either the VALI field for integers or VALF field for real
 numbers.  Ranges can be specified using the matching fields available, i.e.
 VALI2 and VALF2.  Both default and text attributes can be stored in VAL_DEF
-(and VAL_DEF2); note that this can include date-formatted information.
+(and VAL_DEF2); note that this can include date-formatted information.  Note
+that the *flowing* attribute (originally found in D_INTERVAL_MONITOR) is now
+located here.
 
 Where data (e.g. temperature and conductivity) is collected for a particular
 interval (e.g. a screen) for a series of depths, these depth values can be
@@ -146,9 +148,79 @@ screened well).
 
 #### D_INT_DEPTH 
 
+The depth information associated with intervals (for certain interval types)
+is found here.  This replaces D_INTERVAL_MONITOR and D_INTERVAL_SOIL from
+previous versions of the ORMGP database.  In general, the top and bottom
+depths of the particular interval are recorded along with its diameter (as
+appropriate).  The INT_TYPE_CODE (from D_INT) will specify whether the depths
+have been reported or if they've been assumed (or calculated) based upon
+alternate information.  For example, where only casing information has been
+included, the bottom of the screen is specified as one foot below the bottom
+casing depth specified.  Refer to R_INT_TYPE_CODE for further details.
+
 #### D_INT_FORM_ASSIGN 
 
+Multiple geologic models that have been adapted or incorporated into as ORMGP
+datasets have been interpreted for each interval present in this table.  In
+this manner, any particular interval (depending upon its location) will be
+found to have a geological unit assigned to it based upon each available
+model.  Note that this assignment is automatically updated allowing for a
+modification of the associated records if the location has had its coordinates
+or elevation changed.  Further details regarding how this table is populated
+can be found in Sections 2.4.1 and 2.4.
+
+Only those intervals (i.e. with an INT_ID) that have a valid top and bottom
+depth with D_INT_DEPTH will be present in this table.
+
+The fields available include:
+
+* ASSIGNED_UNIT - The geologic unit, for the particular geologic model to
+  which the interval is assigned (see FORM_MODEL_CODE)
+* FORM_MODEL_CODE - Identifies the geologic model to which this record for
+  this interval applies (where there will be one record for each interval for
+  each geologic model being examined)
+* SLAYER - The surficial geologic unit for this location/interval
+* TLAYER - The geologic unit in which the top of the interval lies
+* BLAYER - The geologic unit in which the bottom of the interval lies
+* PLAYER - The previous/upper geologic unit above the top of the interval
+* PLAYER_VDIST - The distance from the top of the interval to the top of the
+  previous geologic unit
+* TNLAYER - The next geologic unit down from the top of the interval
+* TNLAYER_VDIST - The distance from the top of the interval to the top of the
+  next geologic unit (down from the top of the interval)
+* NLAYER - The next geologic unit down from the bottom of the interval
+* NLAYER_VDIST - The distance from the bottom of the interval to the top of
+  the next geologic unit (from the bottom of the interval)
+* BPLAYER - The previous geologic unit up from the bottom of the interval
+* BPLAYER_VDIST - The distance from the bottom of the interval to the top of
+  the previous geologic unit (from the bottom of the interval)
+* THICKNESS_M - The thickness of the geologic unit (normally an aquifer) to
+  which this interval has been assigned (found in ASSIGNED_UNIT)
+* T - The Transmissivity (m2/s; also T_SCR)
+* K - The Hydraulic Conductivity (m/s; also K_SCR)
+* T_ITER - The number of iterations necessary to calculate T (also T_ITER_SCR)
+* T_ERR - The final calculated error difference between this calculated T and
+  the previously calculated T (also T_ERR_SCR)
+* SC_LPMM - The calculated Specific Capacity incorporating Well Loss
+  (liters-per-minute per metre; also SC_LPMM_SCR)
+
+The second set of calculated fields, namely those with *_SCR* appended, use
+the screen length to calculate the particular parameter instead of using the
+THICKNESS_M value.  The methodology for populating these fields is otherwise
+equivalent and can be found in Section 2.4.5.
+
 #### D_INT_FORM_ASSIGN_FINAL 
+
+The record referenced in D_INT_FORM_ASSIGN (by DIFA_ID) is considered to be
+the *best guess* with regard to the ASSIGNED_UNIT used for this interval.
+This allows a complete geologic representation across the entire study area
+using th various available models.  Refer to Section 2.4.1 for the methology
+by which this final ASSIGNED_UNIT is determined.
+
+Note that if OVERRIDE_UNIT is not null, it indicates that this geologic unit
+will override any unit found through the referenced DIFA_ID.  A non-null
+geologic unit in MANUAL_UNIT is for reference only; it will likely have been
+pulled from a report where the unit has been identified by a third party.
 
 #### D_INT_LOGGER_QC 
 
