@@ -1,7 +1,7 @@
 ---
 title:  "Cover and Table of Contents"
 author: "ormgpmd"
-date:   "20250520"
+date:   "20250521"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -32,9 +32,8 @@ knit:   (
 
 * **[2.1 Tables and Views](/database-manual/a02_Understanding_ORMGP_Database/02_01_Tables_and_Views/02_01_Tables_and_Views.html)**
 
+    + **[2.1.1 Data Tables (D_\*)](/database-manual/a02_Understanding_ORMGP_Database/02_01_Tables_and_Views/02_01_01_Data_Tables.html)**
 <!--
-
-    + **[2.1.1 Data Tables (D_\*)](/database-manual/02_Understanding_ORMGP_Database/02_01_Tables_and_Views/02_01_01_Data_Tables.html)**
     + **[2.1.2 Reference Tables (R_\*)](/database-manual/02_Understanding_ORMGP_Database/02_01_Tables_and_Views/02_01_02_Reference_Tables.html)**
     + **[2.1.3 Other Tables](/database-manual/02_Understanding_ORMGP_Database/02_01_Tables_and_Views/02_01_03_Other_Tables.html)**
     + **[2.1.4 Views Outline](/database-manual/02_Understanding_ORMGP_Database/02_01_Tables_and_Views/02_01_04_Views.html)**
@@ -207,4 +206,4 @@ knit:   (
 
 -->
 
-*Last modified: 2025-05-20*
+*Last modified: 2025-05-21*
