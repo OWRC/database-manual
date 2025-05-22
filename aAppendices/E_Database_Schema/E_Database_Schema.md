@@ -18,7 +18,7 @@ knit:   (
 
 ## Appendix E - ORMGP Database Schema Update
 
-#### Introduction
+### Introduction
 
 A major schema update was drafted to convert the ORMGP database between
 **Version 7** (dated version **20160831.20241206**) and **Version 8** (dated
@@ -36,7 +36,7 @@ sections:
     indicates whether the table is to be dropped or where the records within
     the table end up in the new database schema
 
-#### Common Fields and Changes in the New Database Schema
+### Common Fields and Changes in the New Database Schema
 
 For all reference (i.e. R_\*) tables:
 
@@ -54,7 +54,7 @@ For (almost) all tables, the following fileds will be present:
 * SYS_TIME_STAMP
 * SYS_USER_STAMP
 
-#### Tables Present in the New Database Schema
+### Tables Present in the New Database Schema
 
 ***R_ACCESS_CODE***
 
@@ -893,7 +893,7 @@ This replaces W_GENERAL_PICK and will be automatically populated.
 
 This replaces W_GENERAL_SCREEN and will be automatically populated.
 
-##### Tables Present in the Old Database Schema
+### Tables Present in the Old Database Schema
 
 ***D_AREA_GEOM***
 
