@@ -154,10 +154,10 @@ This table is copied.
 This replaces all R_GEOL_MAT\*_CODE, R_GEOL_CONSISTENCY_CODE,
 R_GEOL_MOISTURE_CODE, R_GEOL_ORGANIC_CODE and R_GEOL_TEXTURE_CODE tables.
 
-* GEOL_MAT\*_CODE -> MAT_CODE
-* GEOL_MAT\*_DESCRIPTION -> MAT_DESC
-* GEOL_MAT\*_DESCRIPTION_LONG -> MAT_DESC_LONG
-* GEOL_MAT1_ROCK -> MAT_ROCK
+* GEOL_MAT\*_CODE is copied to MAT_CODE
+* GEOL_MAT\*_DESCRIPTION is copied to MAT_DESC
+* GEOL_MAT\*_DESCRIPTION_LONG is copied to MAT_DESC_LONG
+* GEOL_MAT1_ROCK is copied to MAT_ROCK
 
 ***R_GEOL_MATC_CODE***
 
@@ -397,13 +397,13 @@ This table is copied.
 
 This table is copied.
 
-* DATA_ID -> SYS_TEMP2 (for linking purposes)
+* DATA_ID is copied to SYS_TEMP2 (for linking purposes)
 
 ***D_GRP_INT***
 
 This replaces D_GROUP_INTERVAL.
 
-* GROUP_INT_CODE -> SYS_TEMP2 (for linking purposes)
+* GROUP_INT_CODE is copied to SYS_TEMP2 (for linking purposes)
 
 ***D_GRP_LOC***
 
@@ -419,8 +419,8 @@ This is a new table and is currently empty.
 
 This replaces D_INTERVAL.
 
-* INT_ID -> SYS_TEMP2 (for linking purposes)
-* INT_CONFIDENTIALITY_CODE -> ACCESS_CODE
+* INT_ID is copied to SYS_TEMP2 (for linking purposes)
+* INT_CONFIDENTIALITY_CODE is copied to ACCESS_CODE
 
 ***D_INT_ALIAS***
 
@@ -441,8 +441,8 @@ captured in ATTR_DATE.
 
 The BLOW_COUNT field from D_INTERVAL_SOIL is also copied.
 
-* SYS_RECORD_ID -> SYS_TEMP2 (for linking purposes)
-* SOIL_BLOW_COUNT -> VALI
+* SYS_RECORD_ID is copied to SYS_TEMP2 (for linking purposes)
+* SOIL_BLOW_COUNT is copied to VALI
 
 The MOISTURE field from D_INTERVAL_SOIL is also copied.
 
@@ -458,11 +458,11 @@ The RECOVERY field from D_INTERVAL_SOIL is also copied.
 
 This replaces D_INTERVAL_ATTRIBUTE_VALUES.
 
-* SYS_RECORD_ID -> SYS_TEMP2 (for linking purposes)
-* ATT_VALUE -> RD_VALUE
-* ATT_NAME_OUOM -> RD_NAME_OUOM
-* ATT_VALUE_OUOM -> RD_VALUE_OUOM
-* ATT_UNIT_OUOM -> RD_UNIT_OUOM
+* SYS_RECORD_ID is copied to SYS_TEMP2 (for linking purposes)
+* ATT_VALUE is copied to RD_VALUE
+* ATT_NAME_OUOM is copied to RD_NAME_OUOM
+* ATT_VALUE_OUOM is copied to RD_VALUE_OUOM
+* ATT_UNIT_OUOM is copied to RD_UNIT_OUOM
 
 ***D_INT_DEPTH***
 
@@ -494,7 +494,7 @@ These fields are copied from D_INTERVAL_SOIL.
 
 This replaces D_INTERVAL_FORM_ASSIGN.
 
-* SYS_RECORD_ID -> SYS_TEMP2 (for linking purposes)
+* SYS_RECORD_ID is copied to SYS_TEMP2 (for linking purposes)
 
 ***D_INT_FORM_ASSIGN_FINAL***
 
@@ -569,7 +569,7 @@ linked through the SYS_ANALYSIS_ID, the lowest SAM_ID value is chosen.
 
 This replaces D_INTERVAL_TEMPORAL_2.
 
-* SYS_RECORD_ID -> SYS_TEMP2 (for linking purposes)
+* SYS_RECORD_ID is copied to SYS_TEMP2 (for linking purposes)
 
 ***D_INT_TEMPORAL_3***
 
@@ -581,10 +581,10 @@ This replaces D_INTERVAL_TEMPORAL_3.
 
 This replaces D_LOCATION.
 
-* LOC_ID -> SYS_TEMP2 (for linking purposes)
-* LOC_ORIGINAL_NAME -> LOC_NAME_ORG
-* LOC_STATUS_CODE -> STATUS_CODE 
-* LOC_CONFIDENTIALITY_CODE -> ACCESS_CODE 
+* LOC_ID is copied to SYS_TEMP2 (for linking purposes)
+* LOC_ORIGINAL_NAME is copied to LOC_NAME_ORG
+* LOC_STATUS_CODE is copied to STATUS_CODE 
+* LOC_CONFIDENTIALITY_CODE is copied to ACCESS_CODE 
 
 ***D_LOC_ADDRESS***
 
@@ -625,8 +625,8 @@ The LOC_WATERSHED\* fields (and matching text) is copied from D_LOCATION.
 
 The LOC_COMMENT_LONG field is copied from D_LOCATION.
 
-* LOC_ID -> SYS_TEMP2 (for linking purposes)
-* LOC_COMMENT_LONG -> ATTR_DESC_LONG
+* LOC_ID is copied to SYS_TEMP2 (for linking purposes)
+* LOC_COMMENT_LONG is copied to ATTR_DESC_LONG
 
 The DOC_KEYWORD\* fields (collapsed to a single text string) are copied from
 D_DOCUMENT.
@@ -644,71 +644,254 @@ Fields are copied from D_GEOLOGY_FEATURE.
 
 Fields are copied from D_LOCATION_VULNERABILITY.
 
-* SYS_RECORD_ID -> SYS_TEMP2 (for linking purposes)
-* QUAT_GEOL -> VALF
-* AVI_FEB2003_FINAL -> VALI
+* SYS_RECORD_ID is copied to SYS_TEMP2 (for linking purposes)
+* QUAT_GEOL is copied to VALF
+* AVI_FEB2003_FINAL is copied to VALI
 
 The DOC_YN_\* fields are copied from D_DOCUMENT.
 
 * DOC_YN_* is copied to VALI
 * DOC_YN_ENTERED_* is copied to VALI2
 
-D_LOC_ATTR_RD
+***D_LOC_ATTR_RD***
 
-Replaces D_LOCATION_ATTRIBUTE_VALUE.
+This replaces D_LOCATION_ATTRIBUTE_VALUE.
 
-D_LOC_BOREHOLE
+***D_LOC_BOREHOLE***
 
-Replaces D_BOREHOLE.
+This replaces D_BOREHOLE.
 
-bh_bottom_depth -> botd
-bh_bottom_ouom -> bot_ouom
-bh_bottom_unit_ouom -> unit_ouom
-bh_bedrock_elev -> bedrock (depth calculated)
-bh_drill_method_code -> drill_method_code
-bh_driller_code -> driller_code
-bh_logged_person -> logged_by
-bh_check_person -> checked_by
-bh_drill_start_date -> drill_start_date
-bh_drill_end_date -> drill_end_date
-bh_diameter -> diam
-bh_diameter_ouom -> diam_ouom
-bh_diameter_unit_ouom -> diam_unit_ouom
-bh_dip -> dip
-bh_azimuth -> azimuth
-bh_comment -> drill_comment
+* BH_BOTTOM_DEPTH is copied to BOTD
+* BH_BOTTOM_OUOM is copied to BOT_OUOM
+* BH_BOTTOM_UNIT_OUOM is copied to UNIT_OUOM
+* BH_BEDROCK_ELEV is copied to BEDROCK (the depth is calculated)
+* BH_DRILL_METHOD_CODE is copied to DRILL_METHOD_CODE
+* BH_DRILLER_CODE is copied to DRILLER_CODE
+* BH_LOGGED_PERSON is copied to LOGGED_BY
+* BH_CHECK_PERSON is copied to CHECKED_BY
+* BH_DRILL_START_DATE is copied to DRILL_START_DATE
+* BH_DRILL_END_DATE is copied to DRILL_END_DATE
+* BH_DIAMETER is copied to DIAM
+* BH_DIAMETER_OUOM is copied to DIAM_OUOM
+* BH_DIAMETER_UNIT_OUOM is copied to DIAM_UNIT_OUOM
+* BH_DIP is copied to DIP
+* BH_AZIMUTH is copied to AZIMUTH
+* BH_COMMENT is copied to DRILL_COMMENT
 
-D_LOC_BOREHOLE_CONS
+***D_LOC_BOREHOLE_CONS***
 
-Replaces D_BOREHOLE_CONSTRUCTION.
+This replaces D_BOREHOLE_CONSTRUCTION.
 
-bh_id -> sys_temp2 (temporary, for linking purposes)
-con_subtype_code -> con_type_code
-con_top_ouom -> top_ouom
-con_bot_ouom -> bot_ouom
-con_unit_ouom -> unit_ouom
-con_diameter -> diam
-con_diameter_ouom -> diam_ouom
-con_diameter_unit_ouom -> diam_unit_ouom
+* BH_ID is copied to SYS_TEMP2 (for linking purposes)
+* CON_SUBTYPE_CODE is copied to CON_TYPE_CODE
+* CON_TOP_OUOM is copied to TOP_OUOM
+* CON_BOT_OUOM is copied to BOT_OUOM
+* CON_UNIT_OUOM is copied to UNIT_OUOM
+* CON_DIAMETER is copied to DIAM
+* CON_DIAMETER_OUOM is copied to DIAM_OUOM
+* CON_DIAMETER_UNIT_OUOM is copied to DIAM_UNIT_OUOM
 
+***D_LOC_DOCUMENT***
 
+This replaces D_DOCUMENT.  Almost all DOC_YN_\* and DOC_KEYWORD\* have been
+moved to D_LOC_ATTR. 
 
+* DOC_ID is copied to SYS_TEMP2 (for linking purposes)
+* DOC_FOLDER_ID is copied to DFID
+* DOC_AUTHOR_AGENCY_CODE is copied to DOC_AUTHOR_AGENCY1_CODE
+* DOC_CLIENT_AGENCY_CODE is copied to DOC_CLIENT_AGENCY1_CODE
+* DOC_TOPIC_CODE is copied to DOC_TOPIC1_CODE
+* DOC_DOCUMENT_NUMBER is copied to DOC_ORG_NUMBER
+* DOC_PROJECT_NUMBER is copied to DOC_ORG_PROJECT
+* DOC_YN_DRAFT is copied to DOC_DRAFT
+* DOC_YN_PARTIAL is copied to DOC_PARTIAL
 
+***D_LOC_GEOL_LAYER***
 
+This replaces D_GEOLOGY_LAYER.
 
+* GEOL_ID is copied to SYS_TEMP2
+* GEOL_TOP_OUOM is copied to TOP_OUOM
+* GEOL_BOT_OUOM is copied to BOT_OUOM
+* GEOL_UNIT_OUOM is copied to UNIT_OUOM
+* GEOL_MAT_COLOUR_CODE is copied to MATC_CODE
+* GEOL_MAT1_CODE is copied to MAT1_CODE
+* GEOL_MAT2_CODE is copied to MAT2_CODE
+* GEOL_MAT3_CODE is copied to MAT3_CODE
+* GEOL_MAT4_CODE is copied to MAT4_CODE
+* GEOL_DESCRIPTION is copied to GEOL_DESC
+* MAP_UNIT_NUMBER is copied to MATGSC_UNIT
+* GEOL_UNIT_CODE is copied to GEOL_ORIGINAL_UNIT  
+* GEOL_SUBCLASS_CODE is copied to REC_STATUS_CODE
+* GEOL_CONSISTENCY_CODE is copied to MATD_CODE
+* GEOL_MOISTURE_CODE is copied to MATM_CODE
+* GEOL_TEXTURE_CODE is copied to MATT_CODE
+* GEOL_ORGANIC_CODE is copied to MATO_CODE
+* GEOL_MAT_GSC_CODE is copied to MATGSC_CODE
 
+***D_LOC_GEOPHYS_LOG_DATA***
 
+This replaces D_LOCATION_GEOPHYS_LOG_DATA (a new table).
 
+***D_LOC_GEOPHYS_LOG_DETAILS***
 
+This replaces D_LOCATION_GEOPHYS_LOG_DETAILS (a new table).
 
+***D_LOC_GEOPHYS_LOG_TYPE***
 
+This replaces D_LOCATION_GEOPHYS_LOG_TYPE (a new table).
 
+***D_LOC_PICK***
 
+This replaces D_PICK.
 
+* SYS_RECORD_ID is copied to SYS_TEMP2 (for linking purposes)
+* TOP_ELEV is copied to TOPD (this is calculated)
+* FORMATION is copied to COMMENT
 
+***D_LOC_PROJECT***
 
+A new table that is to be populated.
 
+***D_LOC_PTTW***
 
+This replaces D_PTTW.
+
+* PTTW_PERMIT_NUMBER is copied to PTTW_PERMIT
+* PTTW_SOURCEID_CODE is copied to PTTW_SRCID_CODE
+* PTTW_SOURCEID_OUOM is copied to PTTW_SRCID_OUOM
+* PTTW_WATER_SOURCE_CODE is copied to PTTW_WATERSRC_CODE
+
+***D_LOC_PURPOSE***
+
+This replaces D_LOCATION_PURPOSE.  Note that the original content is being
+moved to D_LOC_PURPOSE_HIST and the current purpose set is referenced herein.
+
+***D_LOC_PURPOSE_HIST***
+
+This replaces D_LOCATION_PURPOSE.
+
+* SYS_RECORD_ID is copied to SYS_TEMP2 (for linking purposes)
+* PURPOSE_PRIMARY_CODE is copied to PURPOSE_PRI_CODE
+* PURPOSE_SECONDARY_CODE is copied to PURPOSE_SEC_CODE
+
+***D_LOC_QC***
+
+This replaces D_LOCATION_QC and is copied.
+
+***D_LOC_RELATED***
+
+This replaces D_LOCATION_RELATED, D_DOCUMENT_ASSOCIATION and
+D_PTTW_RELATED_SRC.  Note that this also replaces the use of
+LOC_MASTER_LOC_ID.
+
+***D_LOC_SPATIAL***
+
+This replaces D_LOCATION_SPATIAL.
+
+***D_LOC_SPATIAL_HIST***
+
+This replaces D_LOCATION_SPATIAL_HIST.
+
+* LOC_COORD_HIST_CODE -> LOC_COORD_CODE
+
+***D_LOC_SUMMARY***
+
+This table is to be (automatically) populated.
+
+***D_GROUP_INTERVAL***
+
+This table is copied.
+
+***D_GRP_LOC***
+
+This replaces D_GROUP_LOCATION and is copied.
+
+***D_GRP_OTH***
+
+This is a new table and is currently empty.
+
+***D_OWNER***
+
+This table is copied.
+
+***D_PICK_EXTERNAL***
+
+This table is copied.
+
+* FORMATION -> GEOL_COMMENT
+* PICK_COMMENT -> COMMENT
+
+***D_VERSION***
+
+This replaces D_VERSION_CURRENT.
+
+***D_VERSION_HIST***
+
+This replaces D_VERSION_CURRENT_HIST.
+
+***D_VERSION_STATUS***
+
+This table is copied.
+
+* READING_GROUP_CODE -> RD_GROUP_CODE
+* READING_GROUP_NAME -> RD_GROUP_NAME
+
+***S_CONSTANT***
+
+This table is copied.
+
+***S_DESC_FIELD***
+
+Currently not populated.
+
+***S_DESC_TABLE***
+
+This table is copied.
+
+***S_DESC_VIEW***
+
+This table is copied.
+
+***W_GEN***
+
+This replaces W_GENERAL and will be automatically populated.
+
+***W_GEN_DOCUMENT***
+
+This replaces W_GENERAL_DOCUMENT and will be automatically populated.
+
+***W_GEN_GEOL_LAYER***
+
+This replaces W_GEOLOGY_LAYER and will be automatically populated.
+
+***W_GEN_GROUP***
+
+This replaces W_GENERAL_GROUP and will be automatically populated.
+
+***W_GEN_GW_LEVEL***
+
+This replaces W_GENERAL_GW_LEVEL and will be automatically populated.
+
+***W_GEN_LOC_MET***
+
+This replaces W_GENERAL_LOC_MET and will be automatically populated.
+
+***W_GEN_LOC_SW***
+
+This replaces W_GENERAL_LOC_SW and will be automatically populated.
+
+***W_GEN_OTHER***
+
+This replaces W_GENERAL_OTHER and will be automatcially populated.
+
+***W_GEN_PICK***
+
+This replaces W_GENERAL_PICK and will be automatically populated.
+
+***W_GEN_SCREEN***
+
+This replaces W_GENERAL_SCREEN and will be automatically populated.
 
 ##### Tables Present in the Old Database Schema
 
