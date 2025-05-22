@@ -347,6 +347,22 @@ identified.
 
 #### D_LOC_PICK 
 
+This table contains the GEOL_UNIT_CODE (linked to R_GEOL_UNIT_CODE) and the
+depth (TOPD) at which it occurs at a particular location.  The original user
+who added the record to the table is captured by SYS_USER_STAMP (the date
+added is found in SYS_TIME_STAMP).  The field SESSIONNUM is present for
+historical purposes and relates to the original pick assemblies within the
+original Microsft Access database version.  This should now be specified
+through the DATA_ID field.
+
+Previous versions of this table had a FORMATION text field.  This was free
+form in nature, containing the textural description of the geologic unit for
+the particular record (e.g. Top of Thorncliffe).  This information has been
+moved to the COMMENT field.  In some instances, multiple formations were
+specified within the FORMATION field.  This was used to facilitate
+*pinch-outs* of overlaying units.  The last unit specifed, then, would have
+the value within TOPD.  This multiple unit declaration is now disparaged.
+
 #### D_LOC_PROJECT 
 
 #### D_LOC_PTTW 
@@ -363,9 +379,50 @@ identified.
 
 #### D_LOC_SPATIAL_HIST 
 
+WORKING ON THIS
+
+This table tracks changes in the coordinates for a particular location.  All
+coordinates that have been assigned/used by a location should be stored here;
+the current coordinates will be indicated through the
+LOC_ID/SPAT_ID values in D_LOCATION_SPATIAL.  The QA codes for both coordinate
+and elevation data will also be represented here.
+
+The X and Y fields are the default coordinates for the program and should
+match LOC_COORD_EASTING and LOC_COORD_NORTHING (respectively) in D_LOCATION
+(i.e. they are all UTM Zone 17, NAD83 datum coordinates; this will be matched
+with a '26917' value in EPSG_CODE).  Their equivalent latitude and longitude
+values (also with a datum of NAD83) are also stored here (and accessed by
+applications whose default coordinates are latitude/longitude).  Additional
+EPSG codes may be specifed for the LAT and LONG fields as well as the _OUOM
+fields.
+
+The LOC_COORD_HIST_CODE and LOC_ELEV_CODE field are used to track the source
+of the possible changes in the coordinate and elevation values.  Comments
+concerning the coordinate source and method(s) used can be found in
+LOC_COORD_METHOD, LOC_ELEV_METHOD, LOC_COORD_COMMENT and LOC_ELEV_COMMENT.
+The LOC_COORD_DATE and LOC_ELEV_DATE will match if the source of each set of
+values was the same; they will otherwise pertain to their souce data (for
+example in the case where an elevation is from a specified DEM - the
+LOC_ELEV_DATE should match the this data source).
+
 #### D_LOC_SUMMARY 
 
+This table stores weekly-calculated or -updated information for each location
+found in D_LOC and is used to speed up the general views available to users of
+the database (i.e. V_GEN\*).  Some of these data assemblies take some time to
+calculate and impacts the usability of the database when accessing this
+information on-demand.  Note that some of the data found here are normally
+available at the interval level; this information is summarized for all
+intervals found at the particular location.
+
 #### D_OWNER 
+
+The owners listed here are linked to D_LOC through OWN_ID.  Note that not all
+locations will have an owner associated with them.  Owner availability is
+dependent upon the original data source (e.g. the MOE no longer lists owner
+information within their Water Well Database distribution).  When present,
+these records can be used to determine the locations primary and secondary
+purposes.
 
 #### D_PICK_EXTERNAL 
 
@@ -374,46 +431,50 @@ GEOL_UNIT_CODE field (linking to the R_GEOL_UNIT_CODE table) in addition to
 the coordinate (x,y) as well as the elevation (z) necessary to position this
 point within the ORMGP study area.  This allows the records here to be
 independent of the relational schema in place for regular locations (e.g.
-boreholes). 
+boreholes).  This includes the various quality assurance and supplementary
+coordinate and elevation information (as found in D_LOC_SPATIAL_HIST).
 
 The data herein corresponds to *pick* information, similar to that within
-D_LOC_PICK.  In most cases, though, this will be related to geologic units
-that are surficial in nature (e.g. Ontario Geological Survey, 2010 and Gao et
-al, 2006).
-
-
-(using both the FORMATION and GEOL_UNIT_CODE fields) tied to a specific
-coordinate (x,y) location as well as an elevation (z).  These do not
-correspond, however, to the database location schema but are instead
-self-referencing where all information concerning a record occurs either
-within this table or within the linked data source (through DATA_ID which must
-be populated).  This includes the various quality assurance  and supplementary
-elevation information (normally found in D_LOC_SPATIAL_HIST) 
-
-
-as well as supplementary elevation
-information (as found in D_LOCATION_SPATIAL_HIST).  In particular, the latter
-should reference the particular ground surface elevation (usually a DEM) used
-as a reference base while the RD_VALUE_OUOM should be populated using the
-depth of the 'pick'.  This latter value can be calculated if the original
-value was an elevation.
+D_LOC_PICK (in the latter case, a location and a depth at which the top of a
+geologic unit occurs).  In most cases, though, this will be related to
+geologic units that are surficial in nature (e.g. Ontario Geological Survey,
+2010 and Gao et al, 2006) and will be linked to an original data source
+through the DATA_ID field.  Where the depth was calculated it will, in
+general, reference the ground surface elevation (usually a DEM) used as an aid
+for possible correction (at a later date).
 
 The date of the source (or the source data) should be included in the PDATE
-field (which should match Z_DATE unless this was calculated using a difference
-source).  The default mode is a single record equated to a single 'pick'.  In
+field (this should match Z_DATE unless this was calculated using a different
+source).  The default mode is a single record equated to a single *pick*.  In
 the case where a polyline (or polygon) was used to to capture coordinate
 information and its original form is important with regard to its inclusion
-within the database, the PGROUP field can be used to 'name' the associated
-records and their order can be specified within the PORDER field.  In most
-cases these fields will not be populated.
-
-This table was first used to capture outcrop locations (and their elevation)
-from the Gao et al (2006) dataset.
+within the database, the PGROUP field (which references R_GRP_PICK_CODE) can
+be used to *name* the associated records and their order can be specified
+within the PORDER field.  In most cases these fields will not be populated. 
 
 #### D_VERSION 
 
+This table contains the current primary and secondary dated versions 
+of the database.  The single row, here, is accessed when distributing
+a subset of the database to specify the PRIMARY_VERSION and SECONDARY_VERSION
+(as well as the CUT_VERSION which is populated in the output database) within
+the distributed database itself.  This specific combination of primary and
+secondary codes are directly linked to D_VERSION_CURRENT_HIST which contain
+information concerning the various database versions.
+
 #### D_VERSION_HIST 
 
+This table contains the description for each combination of primary and
+secondary database versions and updates (these are dated versions, i.e. with
+the format [yyyymmdd]).  The primary and secondary version comments should
+describe the update or modification of the database.
+
 #### D_VERSION_STATUS
+
+This table captures the *status* of the database over time and is tied
+directly to its primary and secondary *dated versions*.  This includes the
+number of records for each location type, each interval type and each reading
+group code type.  Additional records, capturing the current status of the
+database, are usually added on a monthly basis.
 
 *Last Modified: 2025-05-21*

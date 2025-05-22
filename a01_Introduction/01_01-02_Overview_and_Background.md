@@ -1,7 +1,7 @@
 ---
 title:  "Section 1.0"
 author: "ORMGP"
-date:   "20250520"
+date:   "20250522"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -222,10 +222,10 @@ water management decisions.
 
 The following is a summary of the *official* versions of the ORMGP (previously
 the YPDT-CAMC) database since the inception of the program in 2001.  In
-addition, a high level overview of significant changes and additions to the database
-over time is provided.  A more detailed outline is found in Appendix E of the
-previous version of this manual (i.e. *ORMGP Database Manual, Version 7
-(2022)*).
+addition, a high level overview of significant changes and additions to the
+database over time is provided.  A more detailed outline is found in Appendix
+E of the previous version of this manual (i.e. *ORMGP Database Manual, Version
+7, 2022*).
 
 ### Database Release 1
 
@@ -265,8 +265,6 @@ previous version of this manual (i.e. *ORMGP Database Manual, Version 7
 * Release: May to July 2006, Database release included an updated 
 geologic model (extending from the CVC, above the escarpment, to east 
 of the Durham Region)
-
-
 
 ### Database Release 4
 
@@ -370,4 +368,4 @@ residing in the database.*](f01_02_01_locations.png)*Figure 1.2.1 The spatial
 extents of the study area showing locations (boreholes, climate stations,
 surface water stations, reports, etc...) currently residing in the database.*
 
-*Last Modified: 2025-05-20*
+*Last Modified: 2025-05-22*

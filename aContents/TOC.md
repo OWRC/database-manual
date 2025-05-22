@@ -1,7 +1,7 @@
 ---
 title:  "Cover and Table of Contents"
 author: "ormgpmd"
-date:   "20250521"
+date:   "20250522"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -145,7 +145,11 @@ knit:   (
     + **D.6 Datasets Summary Page - Surface Water Records**
     + **D.7 Datasets Summary Page - Pick Records**
 
-* **[E - YPDT-CAMC/ORMGP Database Timeline](/database-manual/Appendices/E_Database_Timeline/E_Database_Timeline.html)**
+-->
+
+* **[E - ORMGP Database Schema Update](/database-manual/aAppendices/E_Database_Schema/E_Database_Schema.html)**
+
+<!--
 
 * **[F - Accessory ORMGP Databases](/database-manual/Appendices/F_Accessory_Databases/F_Accessory_Databases.html)**
 
@@ -208,4 +212,4 @@ knit:   (
 
 -->
 
-*Last modified: 2025-05-21*
+*Last modified: 2025-05-22*
