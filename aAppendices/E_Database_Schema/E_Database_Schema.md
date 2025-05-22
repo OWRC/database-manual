@@ -793,7 +793,7 @@ This replaces D_LOCATION_SPATIAL.
 
 This replaces D_LOCATION_SPATIAL_HIST.
 
-* LOC_COORD_HIST_CODE -> LOC_COORD_CODE
+* LOC_COORD_HIST_CODE is copied to LOC_COORD_CODE
 
 ***D_LOC_SUMMARY***
 
@@ -819,8 +819,8 @@ This table is copied.
 
 This table is copied.
 
-* FORMATION -> GEOL_COMMENT
-* PICK_COMMENT -> COMMENT
+* FORMATION is copied to GEOL_COMMENT
+* PICK_COMMENT is copied to COMMENT
 
 ***D_VERSION***
 
@@ -834,8 +834,8 @@ This replaces D_VERSION_CURRENT_HIST.
 
 This table is copied.
 
-* READING_GROUP_CODE -> RD_GROUP_CODE
-* READING_GROUP_NAME -> RD_GROUP_NAME
+* READING_GROUP_CODE is copied to RD_GROUP_CODE
+* READING_GROUP_NAME is copied to RD_GROUP_NAME
 
 ***S_CONSTANT***
 
@@ -895,7 +895,1094 @@ This replaces W_GENERAL_SCREEN and will be automatically populated.
 
 ##### Tables Present in the Old Database Schema
 
+***D_AREA_GEOM***
 
+Moved to R_AREA_CODE.
 
+***D_BOREHOLE***
+
+Moved to D_LOC_BOREHOLE.
+
+***D_BOREHOLE_CONSTRUCTION***
+
+Moved to D_LOC_BOREHOLE_CONS.
+
+***D_CLIMATE*** 
+
+Dropped.
+
+***D_CRITERIA*** 
+
+Dropped.
+
+***D_DATA_INFO*** 
+
+Dropped.
+
+***D_DATA_SOURCE*** 
+
+Copied.
+
+***D_DATABASE_NOTE***
+
+Dropped.
+
+***D_DOCUMENT***
+
+Moved to D_LOC_DOCUMENT.  The DOC_YN\* and DOC_KEYWORD\* fields are moved
+D_LOC_ATTR.
+
+***D_DOCUMENT_ASSOCIATION***
+
+Moved to D_LOC_RELATED.
+
+***D_DOCUMENT_ASSOCIATION_INTERVAL***
+
+Dropped.
+
+***D_GEOLOGY_FEATURE***
+
+Moved to D_LOC_ATTR.
+
+***D_GEOLOGY_LAYER***
+
+Moved to D_LOC_GEOL_LAYER.
+
+***D_GEOPHYSICAL_LOG_DATABIN***
+
+An empty table.  Capability moved to D_LOG_GEOPHYS_DATA.
+
+***D_GEOPHYSICAL_LOG_FIELD_DETAILS***
+
+An empty table.  Capability moved to D_LOG_GEOPHYS_DETAILS.
+
+***D_GEOPHYSICAL_LOG_LITHO_DESCRIPTIONS***
+
+Dropped.
+
+***D_GEOPHYSICAL_LOG_LOCATION_DETAILS***
+
+An empty table.  Capability moved to D_LOG_GEOPHYS_TYPE.
+
+***D_GROUP_INTERVAL***
+
+Moved to D_GRP_INT.
+
+***D_GROUP_LOCATION***
+
+Moved to D_GRP_LOC.
+
+***D_GROUP_READING***
+
+Dropped.  Capability moved to D_GRP_OTH.
+
+***D_INTERVAL***
+
+Moved to D_INT.
+
+***D_INTERVAL_ADVERSE_EVENT*** 
+
+Dropped.
+
+***D_INTERVAL_ALIAS***
+
+Moved to D_INT_ALIAS.
+
+***D_INTERVAL_ATTR***
+
+Dropped.
+
+***D_INTERVAL_ATTRIBUTE***
+
+Moved to D_INT_ATTR.
+
+***D_INTERVAL_ATTRIBUTE_LOOKUP*** 
+
+Dropped.
+
+***D_INTERVAL_ATTRIBUTE_VALUE**
+
+Moved to D_INT_ATTR_RD.
+
+***D_INTERVAL_FORM_ASSIGN***
+
+Moved to D_INT_FORM_ASSIGN.
+
+***D_INTERVAL_FORM_ASSIGN_FINAL***
+
+Moved to D_INT_FORM_ASSIGN_FINAL.
+
+***D_INTERVAL_INFO**
+
+Dropped.
+
+***D_INTERVAL_INFO_DETAIL***
+
+Dropped.
+
+***D_INTERVAL_MONITOR***
+
+Moved to D_INT_DEPTH.
+
+***D_INTERVAL_PROPERTY***
+
+Dropped.
+
+***D_INTERVAL_QC_DATA***
+
+New table to be reviewed.
+
+***D_INTERVAL_REF_ELEV***
+
+Moved to D_INT_OFFSET.
+
+***D_INTERVAL_SOIL***
+
+Moved to D_INT_DEPTH.
+
+***D_INTERVAL_SUMMARY***
+
+Moved to D_INT_SUMMARY.
+
+***D_INTERVAL_TEMPORAL_1A***
+
+Moved to D_INT_TEMPORAL_1A.
+
+***D_INTERVAL_TEMPORAL_1B***
+
+Moved to D_INT_TEMPORAL_1B.
+
+***D_INTERVAL_TEMPORAL_2***
+
+Moved to D_INT_TEMPORAL_2.
+
+***D_INTERVAL_TEMPORAL_3***
+
+Moved to D_INT_TEMPORAL_3.
+
+***D_INTERVAL_TEMPORAL_4***
+
+Dropped.
+
+***D_INTERVAL_TEMPORAL_5***
+
+Dropped.
+
+***D_LOCATION***
+
+Moved to D_LOC and D_LOC_ADDRESS.
+
+***D_LOCATION_ACTIVITY***
+
+To be dropped.  Note that there is some detail here that may or may-not be
+useful.  The contents (if kept) could be moved to D_LOC_QC.
+
+***D_LOCATION_ALIAS***
+
+Moved to D_LOC_ALIAS.
+
+***D_LOCATION_ATTR***
+
+Moved to D_LOC_ATTR.
+
+***D_LOCATION_ATTRIBUTE***
+
+Dropped (currenty empty).  Capability moved to D_LOC_ATTR.
+
+***D_LOCATION_ATTRIBUTE_LOOKUP***
+
+Dropped.
+
+***D_LOCATION_ATTRIBUTE_VALUE***
+
+Dropped (currently empty).  Capability moved to D_LOC_ATTR_RD.
+
+***D_LOCATION_DEPTH_DATA***
+
+Dropped (currently empty).  Capability moved to D_LOC_ATTR and D_LOC_ATTR_RD.
+
+**D_LOCATION_GEOM***
+
+Dropped.  Capability moved to D_LOC_SPATIAL_HIST.
+
+***D_LOCATION_GEOPHYS_LOG_DATA***
+
+Moved to D_LOC_GEOPHYS_LOG_DATA.
+
+***D_LOCATION_GEOPHYS_LOG_DETAILS***
+
+Moved to D_LOC_GEOPHYS_LOG_DETAILS.
+
+***D_LOCATION_GEOPHYS_LOG_TYPE***
+
+Moved to D_LOC_GEOPHYS_LOG_TYPE.
+
+***D_LOCATION_INFO***
+
+Dropped.
+
+***D_LOCATION_INFO_DETAIL***
+
+Dropped
+
+***D_LOCATION_PURPOSE***
+
+Moved to D_LOC_PURPOSE and D_LOC_PURPOSE_HIST.
+
+***D_LOCATION_QA***
+
+Dropped.  Capability moved to D_LOC_SPATIAL_HIST.
+
+***D_LOCATION_QC***
+
+Moved to D_LOC_QC.
+
+***D_LOCATION_RELATED***
+
+Moved to D_LOC_RELATED.
+
+***D_LOCATION_SPATIAL***
+
+Moved to D_LOC_SPATIAL.
+
+***D_LOCATION_SPATIAL_HIST***
+
+Moved to D_LOC_SPATIAL_HIST.
+
+***D_LOCATION_SUMMARY***
+
+Moved to D_LOC_SUMMARY.  
+
+***D_LOCATION_VULNERABILITY***
+
+To be dropped.  The detail here is copied to D_LOC_ATTR.
+
+***D_LOGGER_BARO_COMPENSATION***
+
+Dropped.
+
+***D_LOGGER_CALIBRATION***
+
+Dropped.
+
+***D_LOGGER_CALIBRATION_READINGS***
+
+Dropped.
+
+***D_LOGGER_CORRECTION***
+
+Dropped.
+
+***D_LOGGER_INSTALLATION***
+
+Dropped.
+
+***D_LOGGER_INVENTORY***
+
+Dropped.
+
+***D_LOGGER_INVENTORY_MODULE***
+
+Dropped.
+
+***D_LOGGER_INVENTORY_MODULE_ATTRIBUTE***
+
+Dropped.
+
+***D_LOGGER_INVENTORY_SENSOR***
+
+Dropped.
+
+***D_LOGGER_INVENTORY_SIM***
+
+Dropped.
+
+***D_LOGGER_NAME***
+
+Dropped.
+
+***D_LOGGER_QC***
+
+Moved to D_INT_LOGGER_QC.
+
+***D_LOGGER_QC_DDS***
+
+Moved to D_INT_LOGGER_QC_DDS.
+
+***D_OWNER***
+
+Copied.
+
+***D_PICK***
+
+Moved to D_LOC_PICK.
+
+***D_PICK_EXTERNAL***
+
+Copied.
+
+***D_PROJECT_LOCATION***
+
+Dropped.
+
+***D_PROJECT_USER_GROUP*** 
+
+Dropped.
+
+***D_PTTW***
+
+Moved to D_LOC_PTTW.
+
+***D_PTTW_RELATED***
+
+Dropped.  This capability can be calculated on-the-fly using a view.
+
+***D_PTTW_RELATED_SRC***
+
+Moved to D_LOC_RELATED.
+
+***D_PUMPTEST***
+
+Moved to D_INT_PUMPTEST.
+
+***D_PUMPTEST_STEP***
+
+Moved to D_INT_PUMPTEST_STEP.
+
+***D_SITE***
+
+Dropped.
+
+***D_SURFACEWATER***
+
+Dropped.
+
+***D_USER_GROUP***
+
+Dropped.
+
+***D_VERSION***
+
+Dropped.
+
+***D_VERSION_CURRENT***
+
+Moved to D_VERSION.
+
+***D_VERSION_CURRENT_HIST***
+
+Moved to D_VERSION_HIST.
+
+***D_VERSION_STATUS***
+
+Copied.
+
+***R_ACTIVITY_CODE***
+
+Dropped.
+
+***R_ADVERSE_COMMENT_CODE***
+
+Dropped.
+
+***R_ADVERSE_TYPE_CODE***
+
+Dropped.
+
+***R_ATTR_CODE***
+
+Copied.
+
+***R_BH_DRILL_METHOD_CODE***
+
+Moved to R_DRILL_METHOD_CODE.
+
+***R_BH_DRILLER_CODE***
+
+Moved to R_DRILLER_CODE.
+
+***R_BH_STATUS_CODE***
+
+Copied.
+
+***R_CHECK_CODE***
+
+Copied.
+
+***R_CHECK_PROCESS_CODE***
+
+Copied.
+
+***R_CHECK_TYPE_CODE***
+
+Copied.
+
+***R_CON_SUBTYPE_CODE***
+
+Moved to R_CON_TYPE_CODE.
+
+***R_CON_TYPE_CODE***
+
+Moved to R_CON_TYPE_CODE (ALT_CODE).
+
+***R_CONFIDENTIALITY_CODE***
+
+Moved to R_ACCESS_CODE.
+
+***R_CONFIGURATION_CODE***
+
+Dropped.
+
+***R_CONV_CLASS_CODE***
+
+Dropped.
+
+***R_CRIT_GROUP_CODE***
+
+Dropped.
+
+***R_CRIT_TYPE_CODE***
+
+Dropped.
+
+***R_DOC_AUTHOR_AGENCY_CODE***
+
+Copied.
+
+***R_DOC_CLIENT_AGENCY_CODE***
+
+Copied.
+
+***R_DOC_FORMAT_CODE***
+
+Dropped.
+
+***R_DOC_JOURNAL_CODE***
+
+Copied.
+
+***R_DOC_LANGUAGE_CODE***
+
+Dropped.
+
+***R_DOC_LOCATION_CODE***
+
+Copied.
+
+***R_DOC_TOPIC_CODE***
+
+Copied.
+
+***R_DOC_TYPE_CODE***
+
+Copied.
+
+***R_EQ_GROUP_CODE***
+
+Dropped.
+
+***R_EQ_TYPE_CODE***
+
+Dropped.
+
+***R_FEATURE_CODE***
+
+Dropped.  Capability moved to R_ATTR_CODE.
+
+***R_FORM_MODEL_CODE***
+
+Copied.
+
+***R_GEOL_CLASS_CODE***
+
+Dropped.
+
+***R_GEOL_CONSISTENCY_CODE***
+
+Dropped. Capability moved to R_GEOL_MAT_CODE.
+
+***R_GEOL_LAYERTYPE_CODE***
+
+Dropped.  Text descriptions moved to GEOL_DESCRIPTION.
+
+***R_GEOL_MAT1_CODE***
+
+Moved to R_GEOL_MAT_CODE.
+
+***R_GEOL_MAT2_CODE***
+
+Consolidated with R_GEOL_MAT_CODE.
+
+***R_GEOL_MAT3_CODE***
+
+Consolidated with R_GEOL_MAT_CODE.
+
+***R_GEOL_MAT4_CODE***
+
+Consolidated with R_GEOL_MAT_CODE.
+
+***R_GEOL_MAT_COLOUR_CODE***
+
+Moved to R_GEOL_MATC_CODE.
+
+***R_GEOL_MAT_GSC_CODE***
+
+Moved to R_GEOL_MATGSC_CODE.
+
+***R_GEOL_MOISTURE_CODE***
+
+Moved to R_GEOL_MAT_CODE.
+
+***R_GEOL_ORGANIC_CODE***
+
+Moved to R_GEOL_MAT_CODE.
+
+***R_GEOL_SUBCLASS_CODE***
+
+Moved to R_REC_STATUS_CODE.
+
+***R_GEOL_TEXTURE_CODE***
+
+Moved to R_GEOL_MAT_CODE.
+
+***R_GEOL_UNIT_CODE***
+
+Copied.
+
+***R_GEOPHYS_LOG_TYPE_CODE***
+
+Copied.
+
+***R_GROUP_INT_CODE***
+
+Moved to R_GRP_INT_CODE.
+
+***R_GROUP_INT_TYPE_CODE***
+
+Moved to R_GRP_INT_TYPE_CODE.
+
+***R_GROUP_LOC_CODE***
+
+Moved to R_GRP_LOC_CODE.
+
+***R_GROUP_LOC_TYPE_CODE***
+
+Moved to R_GRP_LOC_TYPE_CODE.
+
+***R_GROUP_PICK_CODE***
+
+Moved to R_GRP_PICK_CODE.
+
+***R_GROUP_READING_CODE***
+
+Dropped.  Capability moved to R_GRP_OTH_CODE.
+
+***R_GROUP_READING_TYPE_CODE***
+
+Dropped.  Capability moved to R_GRP_OTH_TYPE_CODE.
+
+***R_INT_ALIAS_TYPE_CODE***
+
+Copied.
+
+***R_INT_REGULATORY_CODE***
+
+Dropped.
+
+***R_INT_SAMPLE_MATRIX_DESC***
+
+Dropped.
+
+***R_INT_SAMPLE_TYPE_DESC***
+
+Dropped.
+
+***R_INT_SAMPLE_USER_FILTER_DESC***
+
+Dropped.
+
+***R_INT_TYPE_CODE***
+
+Copied.
+
+***R_LI_BATTERY_CODE***
+
+Dropped.
+
+***R_LMD_STATUS_CODE***
+
+Dropped.
+
+***R_LMD_TYPE_CODE***
+
+Dropped.
+
+***R_LMD_TYPE_CODE_ATTRIBUTE***
+
+Dropped.
+
+***R_LOC_ALIAS_TYPE_CODE***
+
+Copied.
+
+***R_LOC_COORD_CODE***
+
+Dropped.
+
+***R_LOC_COORD_HIST_CODE***
+
+Moved to R_LOC_COORD_CODE.
+
+***R_LOC_COORD_OUOM_ALIAS***
+
+Dropped.
+
+***R_LOC_COORD_OUOM_CODE***
+
+Dropped.  Capability captured in D_LOC_SPATIAL_HIST.
+
+***R_LOC_CORR_WATER_CODE***
+
+Dropped.
+
+***R_LOC_COUNTY_CODE***
+
+Moved to R_COUNTY_CODE.
+
+***R_LOC_DATA_SOURCE_CODE***
+
+Moved to R_DATA_SRC_CODE.
+
+***R_LOC_ELEV_CODE***
+
+Copied.
+
+***R_LOC_INFO_CODE***
+
+Dropped.
+
+***R_LOC_INFO_GROUP_CODE***
+
+Dropped.
+
+***R_LOC_INFO_TYPE_CODE***
+
+Dropped.
+
+***R_LOC_MOE_USE_PRIMARY_CODE***
+
+Dropped.  Moved to D_LOC_PURPOSE_HIST.
+
+***R_LOC_MOE_USE_SECONDARY_CODE***
+
+Dropped.  Moved to D_LOC_PURPOSE_HIST.
+
+***R_LOC_STATUS_CODE***
+
+Moved to R_STATUS_CODE.
+
+***R_LOC_TIER1_CODE***
+
+Dropped.
+
+***R_LOC_TIER2_CODE***
+
+Dropped.
+
+***R_LOC_TIER3_CODE***
+
+Dropped.
+
+***R_LOC_TOWNSHIP_CODE***
+
+Moved to R_TOWNSHIP_CODE.
+
+***R_LOC_TYPE_CODE***
+
+Copied.
+
+***R_LOC_WATERSHED1_CODE***
+
+Dropped. Capability moved to D_LOC_ATTR.
+
+***R_LOC_WATERSHED2_CODE***
+
+Dropped. Capability moved to D_LOC_ATTR.
+
+***R_LOC_WATERSHED3_CODE***
+
+Dropped.
+
+***R_LOGGER_TYPE_CODE***
+
+Dropped.
+
+***R_LOGGER_TYPE_READING***
+
+Dropped.
+
+***R_LSR_TYPE_CODE***
+
+Dropped.
+
+***R_LSR_TYPE_READING***
+
+Dropped.
+
+***R_OWN_TYPE_CODE***
+
+Copied.
+
+***R_PROJECT_AGENCY_CODE***
+
+Dropped.
+
+***R_PROJECT_CODE***
+
+Copied.
+
+***R_PROJECT_TIER1_CODE***
+
+Dropped.
+
+***R_PROJECT_TIER2_CODE***
+
+Dropped.
+
+***R_PROJECT_TYPE_CODE***
+
+Dropped.
+
+***R_PTTW_SOURCEID_CODE***
+
+Moved to R_PTTW_SRCID_CODE.
+
+***R_PTTW_WATER_SOURCE_CODE***
+
+Moved to R_PTTW_WATERSRC_CODE.
+
+***R_PUMPTEST_METHOD_CODE***
+
+Copied.
+
+***R_PUMPTEST_TYPE_CODE***
+
+Copied.
+
+***R_PURPOSE_PRIMARY_CODE***
+
+Moved to R_PURPOSE_PRI_CODE.
+
+***R_PURPOSE_SECONDARY_CODE***
+
+Moved to R_PURPOSE_SEC_CODE.
+
+***R_QA_COORD_CONFIDENCE_CODE***
+
+Moved to R_QA_COORD_CODE.
+
+***R_QA_ELEV_CONFIDENCE_CODE***
+
+Moved to R_QA_ELEV_CODE.
+
+***R_RD_FILTER_CODE***
+
+Dropped.
+
+***R_RD_LOOKUP_CODE***
+
+Dropped.
+
+***R_RD_NAME_CODE***
+
+Copied.
+
+***R_RD_NAME_GROUPS***
+
+Dropped.  Capability moved to R_GRP_OTHER.
+
+***R_RD_NAME_LOOKUP***
+
+Dropped.
+
+***R_RD_TYPE_CODE***
+
+Copied.
+
+***R_READING_GROUP_CODE***
+
+Moved to R_RD_GROUP_CODE.
+
+***R_READING_NAME_ALIAS***
+
+Moved to R_RD_NAME_ALIAS.
+
+***R_REC_STATUS_CODE***
+
+Copied.
+
+***R_REL_TYPE_CODE***
+
+Copied.
+
+***R_SAM_TYPE_CODE***
+
+Copied.
+
+***R_SAM_TYPE_KEYWORD***
+
+Dropped.
+
+***R_SW_SUBTYPE_CODE***
+
+Dropped.
+
+***R_SYS_GROUP_SEARCH_CODE***
+
+Not handled currently and should be examined.
+
+***R_SYS_GROUP_TYPE_CODE***
+
+Dropped.
+
+***R_SYS_INT_DETAIL_CODE***
+
+Dropped.
+
+***R_SYS_REF_TYPE_CODE***
+
+Dropped.
+
+***R_SYS_VALUE_QUALIFIER***
+
+Dropped.
+
+***R_UNIT_CODE***
+
+Copied.
+
+***R_UNIT_CONV***
+
+Dropped.
+
+***R_USER_CODE***
+
+Dropped.
+
+***R_USER_GROUP_CODE***
+
+Dropped.
+
+***R_USER_GROUP_TYPE_CODE***
+
+Dropped.
+
+***R_WATER_CLARITY_CODE***
+
+Copied.
+
+***R_WQ_STANDARD***
+
+Copied.
+
+***R_WQ_STANDARD_SOURCE***
+
+Copied.
+
+***S_ARCHIVE***
+
+Dropped.
+
+***S_CHANGE_HISTORY***
+
+Dropped.
+
+***S_CONSTANT***
+
+Copied.
+
+***S_DATA_SEARCH_INTERVALS***
+
+Dropped.
+
+***S_DESC_FIELD***
+
+Empty.
+
+***S_DESC_TABLE***
+
+Copied.
+
+***S_DESC_VIEW***
+
+Copied.
+
+***S_GLOBALSAVED_SITEANALYSISGROUP***
+
+Dropped.
+
+***S_GLOBALSAVED_SITEANALYSISHEADER***
+
+Dropped.
+
+***S_GROUP_SEARCH***
+
+Dropped.
+
+***S_IMPORT_MAPPINGS***
+
+Dropped.
+
+***S_SAM_D_Analysis***
+
+Dropped.
+
+***S_SAM_D_Analysis_Group***
+
+Dropped.
+
+***S_SAM_D_Field_Identifier***
+
+Dropped.
+
+***S_SAM_D_Reconcile_Details***
+
+Dropped.
+
+***S_SAM_D_Reconcile_Details_Manual***
+
+Dropped.
+
+***S_SAM_D_Sam_Chain***
+
+Dropped.
+
+***S_SAM_D_Sam_Chain_Details***
+
+Dropped.
+
+***S_SAM_D_Sample***
+
+Dropped.
+
+***S_SAM_D_SampleFieldData***
+
+Dropped.
+
+***S_SAM_D_SampleProgramNotes***
+
+Dropped.
+
+***S_SAM_R_Analysis***
+
+Dropped.
+
+***S_SAM_R_Analysis_Bottle***
+
+Dropped.
+
+***S_SAM_R_Analysis_Group***
+
+Dropped.
+
+***S_SAM_R_Bottle***
+
+Dropped.
+
+***S_SAM_R_Chain_Number***
+
+Dropped.
+
+***S_SAM_R_Lab***
+
+Dropped.
+
+***S_SAM_R_ParaAnalysisGroup***
+
+Dropped.
+
+***S_SAM_R_ProjectNumber***
+
+Dropped.
+
+***S_SAM_R_SamplingGroupIntervals***
+
+Dropped.
+
+***S_SAM_R_SamplingGroups***
+
+Dropped.
+
+***S_SAM_R_SamplingGroupsFreq***
+
+Dropped.
+
+***S_SAM_R_SamplingIntervalFreq***
+
+Dropped.
+
+***S_SAM_R_Staff***
+
+Dropped.
+
+***S_SiteDataSummaryCache***
+
+Dropped.
+
+***S_SiteDataSummaryCacheInterval***
+
+Dropped.
+
+***S_SPEED_TEST***
+
+Dropped.
+
+***S_USER***
+
+Dropped.
+
+***S_USER_SETDB***
+
+Dropped.
+
+***W_GENERAL***
+
+Moved to W_GEN.
+
+***W_GENERAL_DOCUMENT***
+
+Moved to W_GEN_DOCUMENT.
+
+***W_GENERAL_GROUP***
+
+Moved to W_GEN_GROUP.
+
+***W_GENERAL_GW_LEVEL***
+
+Moved to W_GEN_GW_LEVEL.
+
+***W_GENERAL_LOC_MET***
+
+Moved to W_GEN_LOC_MET.
+
+***W_GENERAL_LOC_SW***
+
+Moved to W_GEN_LOC_SW.
+
+***W_GENERAL_OTHER***
+
+Moved to W_GEN_OTHER.
+
+***W_GENERAL_PICK***
+
+Moved to W_GEN_PICK.
+
+***W_GENERAL_SCREEN***
+
+Moved to W_GEN_SCREEN.
+
+***W_GEOLOGY_LAYER***
+
+Moved to W_GEN_GEOL_LAYER.
 
 *Last Modified: 2025-05-22*
