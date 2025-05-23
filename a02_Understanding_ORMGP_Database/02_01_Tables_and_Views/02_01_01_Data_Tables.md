@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.1"
 author: "ormgpmd"
-date:   "20250521"
+date:   "20250523"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -333,17 +333,175 @@ identified.
 
 #### D_LOC_BOREHOLE 
 
+This table is used to store the main details related to a well installation
+including such attributes as borehole start and end dates (DRILL_START_DATE
+and DRILL_END_DATE), bottom depth (BOTD), the drilling method
+(DRILL_METHOD_CODE) and associated details (e.g. DRILLER_CODE, LOGGED_BY and
+CHECKED_BY).  If the location intersects bedrock, a depth to bedrock is also
+stored here (BEDROCKD).  This value is automatically populated based upon the
+geologic layers found in D_LOC_GEOL_LAYER.
+
+In addition to wells or boreholes, other geologic-related locations can be
+found here.  For example, details extracted from cross-sections.  In these
+cases, a psuedo-borehole record is created that captures the information at
+certain locations upon the geologic section.
+
+Example location types that can be found in this table include:
+
+* Well or Borehole
+* Archive
+* Surface Water
+* Outcrop
+* Oil and Gas Well
+* Geological Section
+* Bedrock Outcrop
+* Testpit
+
+Note that location types are found in the R_LOC_TYPE_CODE table.
+
 #### D_LOC_BOREHOLE_CONS 
+
+Construction details including depths (TOPD and BOTD , diameter (DIAM) and
+type (CON_TYPE_CODE) are specified here.  This includes information on any
+casing (and its material), sand packs or seals (further construction types are
+listed in R_CON_TYPE_CODE).  Note that there may be many records associated
+with a single borehole, each record describing a particular construction type.
 
 #### D_LOC_DOCUMENT 
 
+This table holds general bibliographic details (e.g. author, date published,
+client, etc...) concerning documents found within the ORMGP document library.
+The title of the document is stored in LOC_NAME_ALT1 (in the D_LOC table).
+Each document found herein is optimally stored in the ORMGP Report Library
+(refer to **Section 2.6** for details) and identified by its document folder
+number (DFID).  This identifier is also found in the LOC_NAME field (in the
+D_LOC table).
+
+Documents have been tagged as a location type (refer to R_LOC_TYPE_CODE for
+details) and each document has coordinates associated with it (if available
+and appropriate).  This allows documents to be plotted along with other
+locations, providing a spatial coverage indication.
+
+Many documents have a variety of information that would be useful with regard
+to the ORMGP database.  These are tagged as being present (e.g. does the
+document have boreholes or chemistry data) and whether they have been entered
+in the D_LOC_ATTR table.
+
+Other fields of note include:
+
+* DOC_AUTHOR_AGENCY\* - the agency at which the author is found here; multiple
+  fields are available with one a free-form text field
+* DOC_CLIENT_AGENCY\* - the agency for which the document was prepared; a
+  free-form text field is available here as well
+* DOC_LOCATION_CODE - this is provided as an indication of the area covered in
+  the document; this could be local (i.e. site specific), regional or national
+  (for example)
+* DOC_TOPIC\* - allows the type of general topics covered by the document to
+  be listed
+* DOC_JOURNAL_CODE - along with DOC_JOURNAL_VOLUME and DOC_VOLUME_OTHER,
+  specifies the source of an academic paper
+* DOC_ORG_NUMBER - along with DOC_ORG_PROJECT, captures any information
+  associated with other organizational schemes (for example, documents sourced
+  from a regional municipality may have its own reference numbers) or part of
+  a particular large scale project
+* DOC_DRAFT - an indicator that this is a draft version of the document
+* DOC_MISSING - a tag to indicate that the document is missing from the ORMGP
+  Report Library
+* DOC_PARTIAL - an tag to indicate that the document is incomplete
+
+Note that many of these will have an associated reference (i.e. a R_\*) table.
+
 #### D_LOC_GEOL_LAYER 
+
+This is a key table that holds the geologic record related to a particular
+location (e.g. boreholes, outcrop, trenches, etc...) describing the sequential
+stratigraphic layers encountered and capturing their top and bottom depths
+(i.e. TOPD and BOTD).  The lowermost depth for each location should
+approximate the bottom depth stored in D_LOC_BOREHOLE.
+
+In general, four material types can be assigned for each geological layer
+(MAT1_CODE through MAT4_CODE; e.g. sand, silt, gravel, till, etc...).  In
+addition, particular characterstics can be specified separately, including:
+
+* MATD_CODE - the layer's consistency (e.g. compact, very stiff, firm)
+* MATM_CODE - the layer's moisture level (e.g. dry, moist)
+* MATO_CODE - the presence of organics (e.g. trace)
+* MATT_CODE - the layer's general texture (e.g. fine to coarse, fibrous)
+
+These material types and characteristics are referenced in the R_GEOL_MAT_CODE
+table.  Many of these were originally sourced from the MOE.  Others, though,
+have been included through inclusion of data from other geotechnical sources
+(e.g. the Geological Survey of Canada or the Ontario Geological Survey).
+Where available, the complete geologic description of a particular layer is
+found in GEOL_DESC.
+
+Refer to **Section 3.3.4** for details-by-example regarding the assignment of
+geologic information to this table.
+
+Additional geologic details could formerly be found in D_GEOLOGY_FEATURE in
+previous versions of the database schema.  This capability has been shifted to
+the D_LOC_ATTR table (refer to R_ATTR_CODE for details).
+
+Each record can (automatically) be assigned to a particular geologic unit
+(GEOL_ASSIGNED_UNIT).  In addition, the geologic unit at the top (GEOL_TLAYER)
+and the bottom of the layer (GEOL_BLAYER) is also stored and used to populate
+the GEOL_ASSIGNED_UNIT.  The means for doing so match that of the records in
+D_INT_FORM_ASSIGN (where a geologic unit as assigned on an interval basis).
+The MATGSC_CODE is populated using the methodology developed by the Geological
+Survey of Canada (GSC) in the late 1990's (while MATGSC_UNIT references the
+grouped material units on the relevant GSC mapping).
+
+In some cases, records are tagged to indicate the reliability of any
+particular geologic layer or its usage.  This was formerly accomplished using the
+GEOL_SUBCLASS_CODE field.  That particular field has been dropped and the
+capability has been moved to the REC_STATUS_CODE field (refer to the
+R_REC_STATUS_CODE table for details).  Examples of this include:
+
+* Geology - Do not use for populating D_LOC_PICK
+* Geology - Do not use for pushdown characterization
+* Geology - Alternate layers (to be incorporated)
 
 #### D_LOC_GEOPHYS_LOG_DATA 
 
+This is the third of three tables by which geophysical down-hole logger
+information is captured.  Each record here indicates the value (RD_VALUE) and
+depth (RD_DEPTH_M) recorded by a particular logging tool run (LOG_RUN_ID).  As
+an aid, if available, the original record number of the data collection run is
+captured (LOG_RUN_NUM).  Invalid data is tagged using the REC_STATUS_CODE
+field.
+
 #### D_LOC_GEOPHYS_LOG_DETAILS 
 
+This is the primary table by which geophysical down-hole logger information is
+captured.  Each record here will be linked to a particular location through
+its LOC_ID.  The subsequent tables (i.e. D_LOC_GEOPHYS_LOG_TYPE and
+D_LOC_GEOPHYS_LOG_DATA) will be linked by the LOG_ID, specified here.
+
+Basic information concerning the logging details (at the particular location)
+are found here.  These include:
+
+* LOG_START_DATE - the starting date of the logging project
+* LOG_END_DATE
+* LOG_LOC_NAME - the reference name used during logging (which should
+  approximate the location name, ideally)
+* LOG_JOB_NAME
+* LOG_COMPANY - the geophysical logging company name
+* LOG_OPERATOR
+* LOG_EQUIPMENT
+* LOG_MAX_DEPTH_M - the maximum depth logged (from all downhole tools)
+* LOC_CASING_TYPE
+* LOC_CASING_DIAM_CM
+
 #### D_LOC_GEOPHYS_LOG_TYPE 
+
+This is the second (of three) tables by which geophysical down-hold logger
+information is captured.  Each record here (by LOG_RUN_ID) describes the type
+of logging tool that was used (LOG_TYPE_CODE), its starting depth
+(LOG_RD_START_DEPTH_M) and sampling step (LOG_RD_STEP_M) as well as the units
+(UNIT_CODE) of the values captured.  In addition, an indicator is used to
+determine whether the data was collected when the tool was moving up or down
+the particular borhole (LOG_DIR_UP).  Note that there may be multiple
+LOG_RUN_ID records associated with a single LOG_ID.
 
 #### D_LOC_PICK 
 
@@ -365,54 +523,201 @@ the value within TOPD.  This multiple unit declaration is now disparaged.
 
 #### D_LOC_PROJECT 
 
+This table is used to link locations (by LOC_ID) within the ORMGP database to
+particular projects identified through the PROJ_CODE field.  The latter
+references projects listed in R_PROJECT_CODE.  Note that LOC_ID is the primary
+key for this table so there will be a one-to-one relationship with the D_LOC
+table.  The PROJ_CODE, then, is exclusively used to determine whether a
+particular location is within the ORMGP study area, associated with a
+particular project (e.g. the City of Ottawa) or both.
+
 #### D_LOC_PTTW 
+
+This table incorporates information from the *Permit to Take Water*
+dataset available through the MOE.  The methodology for doing so is
+described in **Appendix G**.  Note that when possible, the particular permit (a
+location type) has been linked to a source location (e.g. a well) through the
+D_LOC_RELATED table.
+
+The source type (PTTW_SRCID_CODE) and water source (PTTW_WATERSRC_CODE) is
+identified.  The latter can include groundwater or surface water sources (or
+both).  Where available, the original source text is included (in
+PTTW_SRCID_OUOM).
+
+Note that a single PTTW_PERMIT number can encompass multiple database
+locations (i.e.  have multiple LOC_ID's).  This occurs when the source
+records, tagged to a permit number, have differing values within the available
+fields (e.g. multiple sets of coordinates indicate multiple sources for a
+particular permit).
 
 #### D_LOC_PURPOSE 
 
+This table records the *current* primary and secondary purposes assigned to a
+particular location.  It does not hold the purpose codes itself but, rather,
+contains a reference (PURP_ID) to the D_LOC_PURPOSE_HIST table.  This table
+should have a one-to-one LOC_ID relationship with D_LOC.
+
 #### D_LOC_PURPOSE_HIST 
+
+This table records the primary and secondary purpose codes for each location.
+There may be multiple purpose records (by location) which may reflect
+a change in use over time (and can be delimited by PURPOSE_DATE_START and
+PURPOSE_DATE_END) or the necessity of specifying more than two purposes.  Note
+that only a single primary and secondary purpose record is available through
+the D_LOC_PURPOSE table and should reflect the *current* (or most important)
+purpose set.
+
+For locations sourced from the MOE Water Well Database, the original MOE
+purposes are captured as separate entries within this table.  Note that, for
+the original MOE wells, many of the purpose classifications were based upon
+the well owner's name (e.g. wells drilled for a church could reasonably be
+coded with with a PURPOSE_PRI_CODE of *1* and a PURPOSE_SEC_CODE of *52*; this
+corresponds to *Water Supply* and *Church*, respectively).  The process for
+assigning purpose codes in more recent version of this database is described
+in **Appendix G** which uses a combination of the MOE first and second use as
+well as the borehole status source fields as part of the assignment process.
 
 #### D_LOC_QC 
 
+Records are added to this table in order to track the checks or changes to
+locations (and any associated intervals) within the database).  This is used to
+prevent unnecessary re-examination of locations having possibly problematic
+data.  Corrections can be general in nature, affecting multiple tables (e.g.
+pumptest and pumping rates), or table and field specified (e.g. screen top and
+bottom depths).  These checks are indicated by the CHECK_CODE (indicating the
+actual check performed) and CHECK_PROCESS_CODE (indicating the success or
+failure - in a variety of ways - of the check or correction).  These fields
+refernce the R_CHECK_CODE and R_CHECK_PROCESS_CODE tables.  The date at which
+the check was made is captured in PROCESS_DATE; a DATA_ID should be
+specified if the checks are part of an organized search for errors.  The
+INT_ID should only be populated when the check is performed against an
+interval linked to a location.  An additional COMMENT can be included to more
+fully describe the information being evaluated.
+
+Note that there will likely be multiple records per location as each could
+describe a separate check undertaken at a (possibly) another PROCESS_DATE (or
+another DATA_ID).  This table should be used instead of making check and
+correction notes in the comment fields of the various tables.
+
 #### D_LOC_RELATED 
+
+This table allows a relation to be created that links locations together.
+This replaces the use of LOC_MASTER_LOC_ID, D_DOCUMENT_ASSOCIATION and
+D_PTTW_RELATED from previous versions of the database schema.
+
+Here, both the LOC_ID and a LOC_ID_REL fields are populated; these values
+should be present in the D_LOC table and cannot be equivalent.  The
+REL_TYPE_CODE indicates the type of relation between the locations (e.g. a
+document containing a borehole record; a *Permit to Take Water* record that
+links to a particular source location).  These relation types are specified in
+R_REL_TYPE_CODE.
 
 #### D_LOC_SPATIAL 
 
+This table links to the D_LOC_SPATIAL_HIST table through SPAT_ID.  These are
+considered the active coordinates (and associated information) for a
+particular location.  The COORD_CHECK field is used, here, to indicate that
+some change in coordinates (or elevation or offset) has taken place and that
+the records need to be reviewed.  This was originally located in the (now
+defunct) D_LOCATION_GEOM table found in the previous database schema.
+
 #### D_LOC_SPATIAL_HIST 
 
-WORKING ON THIS
+This table tracks changes in the coordinates, elevations and measured offsets
+(if applicable) for a particular location.  All coordinates that have been
+assigned or used by a location should be stored here; the current coordinates
+(and other values) will be indicated through D_LOC_SPATIAL using SPAT_ID to
+reference a particular record in this table.  The quality assurance codes
+(QA_COORD_CODE for coordinates and QA_ELEV_CODE for elevations) are also
+represented here.  Any change in any of these values should be captured as a
+new record (and the new SPAT_ID referenced).
 
-This table tracks changes in the coordinates for a particular location.  All
-coordinates that have been assigned/used by a location should be stored here;
-the current coordinates will be indicated through the
-LOC_ID/SPAT_ID values in D_LOCATION_SPATIAL.  The QA codes for both coordinate
-and elevation data will also be represented here.
+The X and Y fields should be populated, in general, with coordinates projected
+into the default coordinate system of the program.  This system, a *European
+Petroluem Survey Group* (EPSG) number, should be stored in EPSG_CODE.  For the
+ORMGP database (as of *2025-05-23*), the default coordinate system is
+*Universal Transverse Mercator, Zone 17, NAD83* (i.e. EPSG *26917*).  These
+coordinates are also converted to latitude (LAT) and longitude (LONG) for ease
+of transference to external groups.  The EPSG code for these fields are stored
+in EPSG_CODE_LL (as of *2025-05-23*, this is EPSG *4269* which conforms to
+*NAD83 Latitude and Longitude*).  The source coordinates for each location are
+stored in the X_OUOM and Y_OUOM fields along with their original projection
+system (stored in EPSG_CODE_OUOM).
 
-The X and Y fields are the default coordinates for the program and should
-match LOC_COORD_EASTING and LOC_COORD_NORTHING (respectively) in D_LOCATION
-(i.e. they are all UTM Zone 17, NAD83 datum coordinates; this will be matched
-with a '26917' value in EPSG_CODE).  Their equivalent latitude and longitude
-values (also with a datum of NAD83) are also stored here (and accessed by
-applications whose default coordinates are latitude/longitude).  Additional
-EPSG codes may be specifed for the LAT and LONG fields as well as the _OUOM
-fields.
+As the EPSG *26917* projection is limited in scope to the defined *UTM Zone
+17* (i.e. some of the ORMGP study area, as of *2025-05-23*, is outside of this
+designated zone) an alternate projection system can be used that is cartesian
+in nature.  These coordinates are stored in X_ALT and Y_ALT with their EPSG
+projection code found in EPSG_CODE_ALT.  As of *2025-05-23*, this is
+*NAD83/Ontario MNR Lambert* (i.e. EPSG *3161* along with the CGVD28 vertical
+reference, EPSG *5713*).
 
-The LOC_COORD_HIST_CODE and LOC_ELEV_CODE field are used to track the source
-of the possible changes in the coordinate and elevation values.  Comments
-concerning the coordinate source and method(s) used can be found in
-LOC_COORD_METHOD, LOC_ELEV_METHOD, LOC_COORD_COMMENT and LOC_ELEV_COMMENT.
-The LOC_COORD_DATE and LOC_ELEV_DATE will match if the source of each set of
-values was the same; they will otherwise pertain to their souce data (for
-example in the case where an elevation is from a specified DEM - the
-LOC_ELEV_DATE should match the this data source).
+Each of these three sets of coordinates are stored as SQL Server native
+geometries within the table (i.e. fields GEOM, GEOM_LL and GEOM_ALT).  The
+default coordinates are also represented as *Well Known Binary* format in
+GEOM_WKB.
+
+Additional coordinate information includes the COORD_CODE (designating the
+source of the coordinates), the COORD_DATE (generally the date at which the
+coordinate set was entered), and QA_COORD_CODE (the coordinate accuracy as
+estimated from the original sources).  The latter field references entries
+within the R_QA_COORD_CODE table.  The text fields COORD_METHOD and
+COORD_COMMENT allow additional coordinate descriptions to be included as
+free-form text.  A data source for the coordinates, if necessary, can be
+specified using COORD_DATA_ID (which links to the D_DATA_SOURCE table).  Note
+that COORD_CODE references the R_COORD_CODE table.
+
+The ground elevation that is related to the record's coordinates is found in
+ELEV.  Its units should be in *metres-above-sea-level* (i.e. *masl*) which
+corresponds to a UNIT_CODE of *6*.  The original elevation and units (if
+available) would be stored in ELEV_OUOM and ELEV_UNIT_OUOM, respectively.  The
+additional fields used to characterize the elevations include:
+
+* ELEV_DATE - the date at which the elevation was assigned
+* ELEV_CODE - the source of the elevation value (this references R_ELEV_CODE)
+* QA_ELEV_CODE - the vertical accuracy of the elevation value (this references
+  R_QA_ELEV_CODE)
+
+The text fields ELEV_METHOD and ELEV_COMMENT can be used to specify additional
+information concerning the elevation value.  A data source for the elevation,
+if necessary, can be specified using ELEV_DATA_ID (which links to the
+D_DATA_SOURCE table).
+
+Related to the elevation value, an offset may be specified here (using OFFS)
+which provides a point of reference to which certain measurements are made.  A
+prime example of this are water levels which tend to use the *top-of-pipe*
+instead of the ground surface as the reference point when measurements are
+taken.  The offset refers to the distance between the reference point and the
+ground surface (i.e. the ELEV value).  A negative value indicates the
+reference point is below the ground surface (in the case of ground-level
+casing tops).
+
+The various offset fields are similar to the elevation fields available within
+this table and include:
+
+* OFFS_DATE - that date at which the offset was assigned
+* OFFS - the offset value 
+* OFFS_UNIT_CODE - generally a unit code of *6* (i.e. *metres*)
+* OFFS_OUOM - the original offset value
+* OFFS_UNIT_OUOM - the original unit of measure
+* OFFS_COMMENT - additional offset description information as  free-form text
+* OFFS_DATA_ID - the associated data source, if necessary, linked to
+  D_DATA_SOURCe
+
+On those occasions when an offset is necessary but has an unknown value, a
+false-value if *0.75* is assigned and a note made in OFFS_COMMENT.  Note that
+records in D_INT_OFFSET reference this table through SPAT_ID.  This allows
+date ranges in which a particular offset is to be used for recorded
+measurements.
 
 #### D_LOC_SUMMARY 
 
 This table stores weekly-calculated or -updated information for each location
 found in D_LOC and is used to speed up the general views available to users of
 the database (i.e. V_GEN\*).  Some of these data assemblies take some time to
-calculate and impacts the usability of the database when accessing this
-information on-demand.  Note that some of the data found here are normally
-available at the interval level; this information is summarized for all
+calculate and impacts the usability of the database when determining this
+information on-the-fly.  Note that some of the data found here are normally
+available at the interval level and is (generally) summarized for all
 intervals found at the particular location.
 
 #### D_OWNER 
@@ -477,4 +782,4 @@ number of records for each location type, each interval type and each reading
 group code type.  Additional records, capturing the current status of the
 database, are usually added on a monthly basis.
 
-*Last Modified: 2025-05-21*
+*Last Modified: 2025-05-23*
