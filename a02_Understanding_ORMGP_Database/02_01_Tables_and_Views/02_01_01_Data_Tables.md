@@ -307,7 +307,34 @@ identified.
 
 #### D_INT_PUMPTEST 
 
+Much of the data held in this table is sourced from the MOE Water Well
+Database.  This includes the recommended pumping depth (REC_PUMP_DEPTH_M), the
+recommended pumping rate (REC_PUMP_RATE_IGPM) as well as the pump test date
+(PT_DATE).  Note that for the latter, these pump tests are assumed to start at
+twelve midnight (this is reflected in the datetimes of the measured water
+levels, during pumping, in D_INT_TEMPORAL_2).  Additional fields include:
+
+* PT_NAME - usually, if provided, the MOE WELL_ID
+* FLOWING_RATE_IGPM
+* PT_METHOD_CODE - the pumptest method (linking to R_PUMPTEST_METHOD_CODE)
+* PT_TYPE_CODE - the pumptest type (linking to R_PUMPTEST_TYPE_CODE)
+* WATER_CLARITY_CODE - the water clarity (linking to R_WATER_CLARITY_CODE)
+
+For non-MOE pumping tests, some of these fields will remain empty.  The
+pumping rates during the pumping test are found in D_INT_PUMPTEST_STEP (and
+are linked by PT_ID).
+
+When there are monitoring wells for a particular pump test (i.e. more than the
+single well is measured), these will be grouped together (for the period of
+pumping) in D_GRP_INT.
+
 #### D_INT_PUMPTEST_STEP 
+
+This table lists the pump rate (and units) of each step for each pump test
+(along with the duration).  Note that all pumping values (and times) are found
+in the D_INTERVAL_TEMPORAL_2 table.  There may be more than a single record
+tied to each PT_ID, especially for non-MOE pumptests, when the pumping rate
+was changed over the pumping period.
 
 #### D_INT_SUMMARY 
 
@@ -727,7 +754,7 @@ locations will have an owner associated with them.  Owner availability is
 dependent upon the original data source (e.g. the MOE no longer lists owner
 information within their Water Well Database distribution).  When present,
 these records can be used to determine the locations primary and secondary
-purposes.
+purposes.  The OWN_ID field is also found in D_LOC_PTTW.
 
 #### D_PICK_EXTERNAL 
 
