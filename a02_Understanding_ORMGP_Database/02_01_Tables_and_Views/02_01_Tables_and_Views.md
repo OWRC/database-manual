@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1"
 author: "ormgpmd"
-date:   "20250520"
+date:   "20250526"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -49,6 +49,10 @@ integer (i.e. a whole number; e.g. LOC_ID and INT_ID) that allows
 characteristics or attributes for the entity to be linked across multiple
 tables (i.e. the relation or related field).  Once assigned, these unique
 identifiers do not change and should not (in general) be modified.
+
+Note that the data tables are named such that the major key that links them
+are indicated (e.g. D_INT\* indicates that the INT_ID key is present; D_LOC\*
+indicates that the LOC_ID is present).
 
 #### *Data Fields*
 
@@ -106,4 +110,4 @@ Most lookup (i.e. reference or *R_\**) tables also include:
 * ABBR_DESC - an abbreviated description field (shorter than *\*_DESC*)
 * ALT_CODE - an alternative code that may be used (in place of the primary key)
 
-*Last Modified: 2025-05-20*
+*Last Modified: 2025-05-26*

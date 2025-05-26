@@ -734,11 +734,9 @@ the value within TOPD.  This multiple unit declaration is now disparaged.
 
 This table is used to link locations (by LOC_ID) within the ORMGP database to
 particular projects identified through the PROJ_CODE field.  The latter
-references projects listed in R_PROJECT_CODE.  Note that LOC_ID is the primary
-key for this table so there will be a one-to-one relationship with the D_LOC
-table.  The PROJ_CODE, then, is exclusively used to determine whether a
-particular location is within the ORMGP study area, associated with a
-particular project (e.g. the City of Ottawa) or both.  The ORMGP area is
+references projects listed in R_PROJECT_CODE.  A single LOC_ID can be linked,
+as necessary, to multiple projects; the location, then, can be associated with
+a particular project, within the ORMGP study area or both.  The ORMGP area is
 defined by set polygons found with R_AREA_CODE.
 
 Note that a similar table, D_LOC_AREA, is used to tie locations to a spatial
