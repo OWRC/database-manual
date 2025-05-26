@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.1"
 author: "ormgpmd"
-date:   "20250523"
+date:   "20250526"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -56,22 +56,35 @@ The primary fields of interest within this table include:
 
 #### D_GRP_INT
 
-This table allows intervals (using INT_ID) to be associated
-together based upon a GRP_INT_CODE.  For example, all of the screens
-(intervals) that have been sampled for isotopes form a group; intervals that
-are measured during a pumping test could also be grouped.  The current
-groupings can be found in R_GRP_INT_CODE.
+This table allows intervals (using INT_ID) to be associated together based
+upon a GRP_INT_CODE.  For example, all of the screens (intervals) that have
+been sampled for isotopes form a group; intervals that are measured during a
+pumping test could also be grouped.  The current groupings (along with the
+names of the groups) can be found in R_GRP_INT_CODE.  An optional
+GROUP_INT_ORDER can be specified which would list the order in which the
+intervals are to be accessed or considered.
 
 #### D_GRP_LOC 
 
-Allows locations (usingr LOC_ID) to be associated together based
+This table allows locations (using LOC_ID) to be associated together based
 upon a GRP_LOC_CODE.  As an example, all of the PGMN wells have been grouped
-together (GRP_LOC_CODE '99').  The current groupings are found
-in R_GRP_LOC_CODE.
+together (GRP_LOC_CODE *99*).  The current groupings are found in
+R_GRP_LOC_CODE.  An optional GROUP_LOC_ORDER can be specified which would list
+the order in which the locations are to be accessed or considered.
 
 #### D_GRP_OTH 
 
-NO DESCRIPTION
+Unlike D_GRP_INT and D_GRP_LOC, this table allows arbitrary groups to be
+created.  Any identifier can be stored in the OTH_ID field and the grouping
+(and grouping type) will control how the group is to be handled by the
+database.  As an example, the R_RD_NAME_CODE table records a group code
+(linked to R_RD_GROUP_CODE) for each parameter allowing grouping by the
+chemistry analysis type (any of *Water - Major Ions*, *Chemistry - Metals*,
+etc...).  This allows only a single parameter-to-group specification.  Adding
+RD_NAME_CODE values to this table (i.e. D_GRP_OTH) allows a single parameter
+to be part of any number of chemsitry groups (as required).  An optionl
+GROUP_OTH_ORDER can be specified which would list the order in which the
+records are to be accessed or considered.
 
 #### D_INT 
 
@@ -270,18 +283,18 @@ ground surface at a particular location.  In particular, water levels measured
 in a well are generally taken either from the *Top of Pipe* or the *Top of
 Casing* (i.e. a reference point) instead of from the ground surface.  As such,
 a means by which to correct the measured value against the ground surface
-must be available.  
+must be available.  If the offset distance is recorded, i.e. the distance
+between the reference location and the ground surface, this can be used to
+correct the measured value.  
 
-If the offset distance is recorded, i.e. the distance between the reference
-location and the ground surface, this can be used to correct the measured
-value.  The actual value of the offset is located in the D_LOC_SPATIAL_HIST
+The actual value of the offset is located in the D_LOC_SPATIAL_HIST
 (DLSH) table.  This ties the offset value closely to the coordinates and
 ground elevation of the particular location.  As such, each record in this
-this table now references a record in DLSH.  Here, though, the valid start and
-end date for the particular offset (and elevation/coordinate combination) are
-stored.  This allows the offset value to change with that change (and its
-affected time period) captured through the use of these two tables (i.e. this
-one and DLSH).
+this table (i.e. D_INT_OFFSET) now references a record in DLSH.  Here, though,
+the valid start and end date for the particular offset (and
+elevation/coordinate combination) are stored.  This allows the offset value to
+change with that change (and its affected time period) captured through the
+use of these two tables (i.e. this one and DLSH).
 
 A change in the offset can result from damage to the monitoring pipe or from a
 more accurate survey of the reference point.  If no offset is specified for a
@@ -338,25 +351,194 @@ was changed over the pumping period.
 
 #### D_INT_SUMMARY 
 
-#### D_INT_TEMPORAL_1A 
+This table stores weekly-calculated or -updated information for each interval
+found in D_INT and is used to speed up the general views available to users of
+the database (i.e. V_GEN\*).  Some of these data assemblies take some time to
+calculate and impacts the usability of the database when determining this
+information on-the-fly.  An example would be the averaging of water levels in
+D_INT_TEMPORAL_2 (where there may be many thousands of records, over time, per
+interval).
 
-#### D_INT_TEMPORAL_1B 
+#### D_INT_TEMPORAL_1A and D_INT_TEMPORAL_1B 
+
+These tables record the results from samples that have been taken from a
+specific interval (usually a well screen) and sent to a laboratory for
+analyses.  Laboratory and sample information are recorded in table *1A* and
+the results of the sample analysis (i.e. individual parameters such as Mg, Na,
+etc...) are recorded in table *1B*.  The testing of one sample for many
+parameters results in multiple records (one row for each parameter) in *1B*
+but only a single record (one row for the sample) in *1A*.  Valid parameter
+names and their matching codes are found in the R_RD_NAME_CODE table.
+
+Note that a particular parameter may have multiple real-world names associated
+with it due to different laboratory reporting terms (e.g.  *Zinc (total)*,
+*Zinc as Zn*, *Zn*, *Zinc by ICPMS*, *Zinc (ICPMS)*).  The table
+R_RD_NAME_CODE table should have only a single one of these names available,
+usually the one most commonly used (or chosen as most applicable by the
+ORMGP).  To avoid the use of duplicate parameter names, then, the
+R_RD_NAME_ALIAS table is used.  This contains those additional names that are
+then linked to a particular RD_NAME_CODE.  On import into the database, these
+*aliases* are converted to the appropriate reading name code.
+
+A COMMENT_LONG field is available for long sample and laboratory descriptions
+that do not fit into any of the other provided fields.  This is a free-form
+text field.  
 
 #### D_INT_TEMPORAL_2 
 
+This table records any *field* data for a particular interval for a particular
+date.  For these measurements there is no need to track a sample or
+laboratory, therefore the data is only be added to this single table (unlike
+chemistry records).  This results in one parameter per record/row.  Water
+levels (both logger and manual) and stream flow data would be prime examples
+of information stored herein.  However, the table also holds some field
+measured pH, conductivity and other similar data.  Parameter codes (and names)
+are found in the R_RD_NAME_CODE table.  Additional information (where
+available) regarding the instrumentation used for collecting the particular
+value can be recorded in RD_TYPE_CODE.  Refer to R_RD_TYPE_CODE for available
+types.
+
+Refer to the above discussion (under D_INTERVAL_TEMPORAL_1A) with regard to
+the reading name codes (RD_NAME_CODE) and the use of parameter aliases in the
+database.
+
+Note that meterological data, tied to climate stations, are stored in
+D_INTERVAL_TEMPORAL_3.
+
 #### D_INT_TEMPORAL_3 
+
+A similar description applies here as to that of D_INTERVAL_TEMPORAL_2.
+However, as of *Database Version 6*, this table contains information sourced
+from climate stations, alone.
 
 #### D_LOC 
 
+A location is a natural, constructed or artificial 
+object and is the primary means of representing real-world entities (e.g. a
+borehole, climate station, surface water gauge, documents, etc...) within the
+database.  Refer to R_LOC_TYPE_CODE for a list of available location types.
+This table should be considered central with regard to database queries by
+users where information is being sought on an object-by-object basis.
+
+Locations should not be deleted from the database.  For those locations that
+cease operation (for example), the location status should be changed (i.e.
+either from active to inactive, decommissioned or abandoned as appropriate).
+Exceptions would include if there are duplicate locations; these should be
+combined and one record deleted.  Erroneous locations can be *archived*,
+removing them from active consideration.
+
+Information within this table relate to its name, type and status.  This
+includes:
+
+* LOC_NAME\* - Multiple fields are available for naming of this location; of
+  special note are:
+    + LOC_NAME - The *main* name of the location (this field cannot be null)
+    + LOC_NAME_ALT1 - This is generally used (when populated) to convey
+      information about consultants, geography, location or ownership
+    + LOC_NAME_MAP - A *short* name used for map plotting purposes
+    + LOC_NAME_ORG - This holds the MOE WELL_ID (generally but not
+      exclusively)
+* LOC_AREA - An optional field, gives a general indication of the region in
+  which the location can be found
+* LOC_STUDY - This can list the original study in which the location was
+  created (e.g. a borehole drilled) or it can provide information concerning
+  the region which is responsible for it
+* STATUS_CODE - In general, lists its active or inactive status; this will, in
+  most cases, be location type specific (refer to R_STATUS_CODE for details)
+* ACCESS_CODE - Provides an indication of the level of access that should be
+  given for this location (and its associated data); in general, information
+  within the database is accessible to all partner agencies but it can be
+  limited to certain groups (refer to R_ACCESS_CODE for details).
+
+Details concerning naming conventions within the database is outlined in
+**Section 3.3.1**.  Note that any address information (including lot and
+concession data) for a particular location is now found in the D_LOC_ADDRESS
+table.  Any coordinate information is found in the D_LOC_SPATIAL_HIST table.
+
+Though LOC_STUDY can be used to group locations together (using free-form
+text), the D_GRP_LOC table should be used to explicitly tie these
+locations together (instead).  In addition, the D_LOC_RELATED table is used to
+link related locations (replacing the use of LOC_MASTER_LOC_ID from
+the previous database schema).  This occurs when, for example, multiple MOE
+well identifiers are used to describe one particular borehole, one for shallow
+depths other other for the remainder of the drilled record.
+
 #### D_LOC_ADDRESS 
+
+The information contained herein were previously found in the D_LOCATION table
+in the previous database schema.  There will be a one-to-one relationship
+between this table and the D_LOC table.
+
+Here can be found the various address-related information tied to a particular
+location.  This includes both lot and concession data as well as the county
+and township in which the location is placed.  Fields containing contact
+information are also available.  Note that most locations will not have a
+record within this table.
 
 #### D_LOC_ALIAS 
 
+Any names associated with a location can be stored here.  This is in addition
+to the name fields available in D_LOC and allows the capture of multiple
+references across agencies that are relevant to one location.  In addition,
+particular alias types are found here.  For MOE wells, for example, this
+includes a locations *Audit Number* and *Tag Number* along with its original
+*WELL_ID* and *BORE_HOLE_ID* (as found within the MOE *Water Well Database*).
+These available types are found in R_LOC_ALIAS_TYPE_CODE.  Duplicate names, in
+conjunction with the LOC_ALIAS_TYPE_CODE, cannot be specified.
+
+Special consideration is given for locations that have alternate borehole logs
+available. In these cases, the name of the PDF is listed here instead.  This
+originally defaulted to the actual LOC_ID for the location in the previous
+version of the database schema.  As there is a possibility of overlapping
+numbers with this database, any added alias of this type should prepend a *B*
+character to the LOC_ID (the PDF extension is assumed).
+
 #### D_LOC_AREA 
+
+This table allows any particular location to be associated with a variety of
+spatial areas using a *contained-within* analysis.  The areas/polygons
+available are found in R_AREA_CODE table and include the conservation areas,
+regions and source water protection areas that touch on the ORMGP study area.
+Further examples could include geologic and hydrogeologic model extents (as
+needed).  
+
+Note that a similar table, D_LOC_PROJECT, is used to delimit locations that
+are tied to a particular project rather than a particular area.
 
 #### D_LOC_ATTR 
 
+Attributes for a particular location that do not fit into the various fields
+available in the location-based data tables (i.e. those tables that contain a
+LOC_ID column) can be stored here.  These attributes are defined using the
+ATTR_CODE field (which links to the R_ATTR_CODE table).  Similar in structure
+to the S_CONSTANT table, the attributes can be integer (VALI), floating point
+(VALF) or character values (VAL_DEF).  Ranges of values can be specified using
+the secondary field available for each the previous types.  In addition,
+depths can be specified for the attribute (at the particular location).  
+
+As an example, for surface water stations, the stream segment identifier along
+which a location occurs is stored here.  Further attribute types can be found
+in R_ATTR_CODE.  For locations, this includes the various *Water Found - \**
+(along with their depths) from the geologic features in the MOE WWDB (and
+formerly found in D_GEOLOGY_FEATURE from the previous database schema).
+
+A set of readings, through the D_LOC_ATTR_RD table, can also be associated
+with a record in this table (through the ATTR_ID).  This can be used in place
+of a new interval record in D_INT in the case where there would likely be only
+a single set of linked parameters.
+
+Note that there is a matching attribute table linked by intervals
+(D_INT_ATTR).
+
 #### D_LOC_ATTR_RD 
+
+In combination with D_LOC_ATTR, a set of parameters and their readings can be
+stored here linked through their ATTR_ID.  This is an alternative to having an
+interval in D_INT and with sample records in D_INT_TEMPORAL_1A and
+D_INT_TEMPORAL_1B (which adds complexity and, possibly, psuedo-lab records).
+
+Note that there is a matching attribute readings table linked by intervals
+(D_INT_ATTR_RD).
 
 #### D_LOC_BOREHOLE 
 
@@ -556,7 +738,11 @@ references projects listed in R_PROJECT_CODE.  Note that LOC_ID is the primary
 key for this table so there will be a one-to-one relationship with the D_LOC
 table.  The PROJ_CODE, then, is exclusively used to determine whether a
 particular location is within the ORMGP study area, associated with a
-particular project (e.g. the City of Ottawa) or both.
+particular project (e.g. the City of Ottawa) or both.  The ORMGP area is
+defined by set polygons found with R_AREA_CODE.
+
+Note that a similar table, D_LOC_AREA, is used to tie locations to a spatial
+area instead of a particlar project.
 
 #### D_LOC_PTTW 
 
@@ -809,4 +995,4 @@ number of records for each location type, each interval type and each reading
 group code type.  Additional records, capturing the current status of the
 database, are usually added on a monthly basis.
 
-*Last Modified: 2025-05-23*
+*Last Modified: 2025-05-26*
