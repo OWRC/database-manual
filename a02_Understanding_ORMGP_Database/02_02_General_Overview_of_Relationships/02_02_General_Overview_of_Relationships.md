@@ -33,16 +33,15 @@ using LOC_ID and INT_ID keys](t02_02_01_locns.png)*Table 2.2.1 Table
 relationships between the data (D_) and web (W_) tables using LOC_ID and
 INT_ID keys. Stand alone tables and their keys are listed*
 
-![Table 2.2.2 Table relationships and associated keys for all data tables]
-(t02_02_02_data.png)*Table 2.2.2 Table relationships and associated keys for
-all data tables*
+![Table 2.2.2 Table relationships and associated keys for all data tables](t02_02_02_data.png)
+*Table 2.2.2 Table relationships and associated keys for all data tables*
 
 ![Table 2.2.3 Table relationships and associated keys for all reference
-tables] (t02_02_03_ref.png)*Table 2.2.3 Table relationships and associated
+tables](t02_02_03_ref.png)*Table 2.2.3 Table relationships and associated
 keys for all reference tables*
 
 ![Table 2.2.4 Table relationships and associated keys for all system and web
-tables] (t02_02_04_sw.png)*Table 2.2.4 Table relationships and associated keys
+tables](t02_02_04_sw.png)*Table 2.2.4 Table relationships and associated keys
 for all system and web tables*
 
 *Last Modified: 2025-05-27*
