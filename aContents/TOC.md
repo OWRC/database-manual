@@ -42,7 +42,11 @@ knit:   (
     + **[2.1.5 Main Views (V_\*)](/database-manual/02_Understanding_ORMGP_Database/02_01_Tables_and_Views/02_01_05_Main_Views.html)**
     + **[2.1.6 System Views (V_SYS_\*)](/database-manual/02_Understanding_ORMGP_Database/02_01_Tables_and_Views/02_01_06_System_Views.html)**
 
-* **[2.2 General Overview of Relationships](/database-manual/02_Understanding_ORMGP_Database/02_02_General_Overview_of_Relationships/02_02_General_Overview_of_Relationships.html)**
+-->
+
+* **[2.2 General Overview of Relationships](/database-manual/a02_Understanding_ORMGP_Database/02_02_General_Overview_of_Relationships/02_02_General_Overview_of_Relationships.html)**
+
+<!--
 
 * **2.3 Primary Data Relationships**
 
