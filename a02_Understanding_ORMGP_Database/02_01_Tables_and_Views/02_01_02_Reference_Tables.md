@@ -16,11 +16,11 @@ knit:   (
         )
 ---
 
-## Section 2.1.2 Look-Up/Reference Tables (R_\*)
+## Section 2.1.2 Reference Tables (R_\*)
 
-Prefixed with an 'R_', these tables are populated with data that is used to 
-code information within the 'D_' data tables (listed above).  Only those 
-used by the ORMGP are included. 
+Prefixed with an *R_*, these tables are populated with data that is used to
+code information within the data (i.e. *D_*) tables within the ORMGP database
+(refer to **Section 2.1.1**).
 
 #### R_ACCESS_CODE
 
@@ -69,6 +69,13 @@ geologic features (formerly found in D_GEOLOGY_FEATURE in earlier versions of
 the database schema); etc...
 
 #### R_BH_STATUS_CODE
+
+This table was adapted from the original MOE database codes and is referenced
+through BH_STATUS_CODE in D_LOC_BOREHOLE.  The codes are a mix of well
+use and status and are generally not used directly within the database.  When
+primary and secondary uses are being determined for an MOE Water Well Database
+location, this field is used as an indicator (refer to D_LOC_PURPOSE as well
+as **Appendix G** for details).
 
 #### R_CHECK_CODE
 
