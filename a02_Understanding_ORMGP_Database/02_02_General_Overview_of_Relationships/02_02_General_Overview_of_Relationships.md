@@ -23,10 +23,14 @@ The following tables provide the general relationship between the data tables
 *R_*) within the database (Table 2.2.1).  Additional web tables (prepended
 with a *W_*) contain a weekly summary of information as found within the
 database by location.  These are used as the source for all web-based mapping.
+The system tables (prepended with a *S_*) contain information controlling
+internal operations of the database or text descriptions of the tables and
+fields within the database schema.
 
 Note that, for the subsequent tables (i.e. Tables 2.2.2 through 2.2.4), any
 listed key in the second *Key* column implies a change in the name of the
-field between the related tables.
+field between the related tables.  All **bold** fields are primary keys for
+the associated table (the remainder are foreign keys).
 
 ![Table 2.2.1 Table relationships between the data (D_) and web (W_) tables
 using LOC_ID and INT_ID keys](t02_02_01_locns.png)*Table 2.2.1 Table
