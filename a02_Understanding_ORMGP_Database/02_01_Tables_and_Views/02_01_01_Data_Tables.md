@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.1"
 author: "ormgpmd"
-date:   "20250526"
+date:   "20250528"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -122,6 +122,8 @@ available for the naming of intervals.  Specific alias types are assigned
 through the INT_ALIAS_TYPE_CODE field (linking to the R_INT_ALIAS_TYPE_CODE
 table).  This has been used, for example, to match intervals between disparate
 databases that correspond to the same general schema as the ORMGP database.
+If the name used is entirely numeric (and a whole number), it is converted and
+used to populate INT_NAME_ALIAS_ID.
 
 Refer also to D_LOC_ALIAS (which performs a similar function for locations).
 
@@ -493,6 +495,9 @@ version of the database schema.  As there is a possibility of overlapping
 numbers with this database, any added alias of this type should prepend a *B*
 character to the LOC_ID (the PDF extension is assumed).
 
+If the name used is entirely numeric (and a whole number), it is converted and
+used to populate LOC_NAME_ALIAS_ID.
+
 #### D_LOC_AREA 
 
 This table allows any particular location to be associated with a variety of
@@ -740,7 +745,7 @@ a particular project, within the ORMGP study area or both.  The ORMGP area is
 defined by set polygons found with R_AREA_CODE.
 
 Note that a similar table, D_LOC_AREA, is used to tie locations to a spatial
-area instead of a particlar project.
+area instead of a particular project.
 
 #### D_LOC_PTTW 
 
@@ -993,4 +998,4 @@ number of records for each location type, each interval type and each reading
 group code type.  Additional records, capturing the current status of the
 database, are usually added on a monthly basis.
 
-*Last Modified: 2025-05-26*
+*Last Modified: 2025-05-28*
