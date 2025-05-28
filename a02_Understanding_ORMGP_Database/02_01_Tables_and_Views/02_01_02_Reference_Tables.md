@@ -508,11 +508,12 @@ particular parameter by the ORMGP.
 
 #### R_RD_NAME_CODE
 
-The table contains standardized names used in the D_INT_TEMPORAL\* tables
-and is referenced through the RD_NAME_CODE field.  A single name has been chosen
-to represent a parameter out of all possible names available (e.g. *Na* is to
-be used instead of *Sodium* though each is equivalent).  The R_RD_NAME_ALIAS
-table is used to capture the various names of a particular parameter.
+The table contains standardized names of parameters used within the
+D_INT_TEMPORAL\* tables, referenced through the RD_NAME_CODE field.  A single
+name has been chosen to represent a parameter out of all possible names
+available (e.g. *Na* is to be used instead of *Sodium* though each is
+equivalent).  The R_RD_NAME_ALIAS table is used to capture the various names
+of a particular parameter.
 
 Fields of particular note within this table include:
 
@@ -523,8 +524,8 @@ Fields of particular note within this table include:
   substance described in the open scientific literature
 * DEF_UNIT_CODE - the is the default unit that should be used for this
   parameter throughout the temporal tables; this links to R_UNIT_CODE
-* DEF_MDL - this is the default mean-detection-limit (set in the default
-  units) for the particular parameter (if provided)
+* DEF_MDL - this is the default mean-detection-limit (in  default units)
+  for the particular parameter (if provided)
 * DATA_ID - when new parameters are added to this table, the source of the
   parameter (i.e. where it was first used) should be indicated as an error
   checking mechanism
@@ -534,25 +535,128 @@ details concerning the *Chemical Abstracts Service*.
 
 #### R_RD_TYPE_CODE
 
+This table allows additional information to be included for any particular
+reading in the D_INT_TEMPORAL\* tables (using the RD_TYPE_CODE field).  For
+example a water level reading with a code of *628* (i.e. *Water Level - Manual
+- Static*) can be further tagged with an RD_TYPE_CODE of *0* (i.e. *WL - MOE
+Well Record - Static*) indicating that the static reading came from the MOE
+Water Well database as opposed to some alternate source.  Data loggers of
+varying make can also be identified using the RD_TYPE_CODE (e.g. code *59*
+is used to identify *Troll - Logger*).  Additional codes could be used to
+refer to specific data loggers by type and serial number.  This can be
+applied against any type of recording or measuring equipment.  Climate data
+recording notes (e.g. *Climate - estimated, with snow cover*) and surface
+water notes also have specific records.  
+
 #### R_REC_STATUS_CODE
+
+Allows any reading (or record) in a variety of tables to be tagged with
+additional information, mainly related to its review status or level of
+accuracy determination.  These were originally applied to the D_INT_TEMPORAL\*
+tables but have been expanded to include other types of records including
+geology (D_LOC_GEOL_LAYER) and geologic picks (D_LOC_PICK).  The contents of
+this table reflect this expansion of use.  In general, a value of *100* or
+greater indicates an issue with a particular record that removes it from use.
+This is linked to all tables having a REC_STATUS_CODE field.
 
 #### R_REL_TYPE_CODE
 
+This table lists the various types of relations that can be specified between
+locations.  This includes linking multiple borehole records to a *master*
+location (as applied, for example, to cluster wells from the MOE Water Well
+database), the association of documents and locations (where a borehole
+record, for example, would be contained within a report) as well as the
+linking of Permit to Take Water locations to their source (e.g. borehole)
+locations.
+
+This replaces the use of LOC_MASTER_LOC_ID in D_LOCATION as well as the
+D_PTTW_RELATED_SRC and D_DOCUMENT_ASSOCIATION tables.  Each of these tables
+(and fields) were used in the previous version of the ORMGP database schema
+for linking locations and have now been dropped.
+
+This table is linked to D_LOC_RELATED through the REL_TYPE_CODE field.
+
 #### R_SAM_TYPE_CODE
+
+This table allows samples in D_INT_TEMPORAL_1A to be flagged with
+designations such as *Duplicate*, *Field Blank*, etc...   A SAM_TYPE_CODE of
+*12* indicates a regular sample.  This is related through SAM_TYPE_CODE in the
+D_INTERVAL_TEMPORAL 1A table.
 
 #### R_STATUS_CODE
 
+This table allows specification of the status of a location (or an interval).
+The codes herein were originally related to the MOE Water Well database status
+codes but these have been supplemented by records that clarify the location
+(or interval) status.  In particular, specific active and inactive tags have
+been added for most location types found within the ORMGP database.  This is
+linked to the D_LOC and D_INT tables through the STATUS_CODE field.
+
 #### R_TOWNSHIP_CODE
+
+Originally adapted from the MOE Water Well database, this table allows the
+linking of a location to a specific township found within the Province of
+Ontario.  Note that this is generally only recorded for those locations using
+the MOE Water Well database as a source.  In addition, township boundaries have
+changed over time and a spatial analysis would be more appropriate to
+determine the particular (current) township in which a location is found
+rather than making use of the values from this table.  This is related through
+TOWNSHIP_CODE to D_LOC_ADDRESS.
 
 #### R_UNIT_ALIAS
 
+Though not as prevalent as having multiple parameter names for a single
+parameter, a single unit can also be referenced by multiple names.  One name,
+however, should be used within the main database table (in this case,
+R_UNIT_CODE) to reduce errors associated with combining data from a variety of
+sources.
+
+Alternate unit names, then, have been stored within this table that link,
+through UNIT_CODE, to the representative unit name found in R_UNIT_CODE.  The
+latter has been chosen to be the default name for the particular unit by the
+ORMGP.
+
 #### R_UNIT_CODE
+
+This table allows specification of all allowed *system* units within the ORMGP
+database.  Only a single record corresponding to a particular unit (e.g.
+*mg/L*) should be present within this table (i.e. there should be no
+equivalent *milligram per litre* record).  Similar to the R_RD_NAME_CODE and
+R_RD_NAME_ALIAS tables, an alias table (R_UNIT_ALIAS) for units is available
+to capture all variations (or descriptions) of a unit and indicate the default
+unit (and UNIT_CODE) to be used within the ORMGP database.
+
+This is linked to all tables where a UNIT_CODE field is present.  This is
+mainly found in the D_INT_TEMPORAL\* tables.
 
 #### R_WATER_CLARITY_CODE
 
+This is adapted from the MOE Water Well database and indicates the state of
+the water extracted from a well during a pumping test.  This is related to
+D_INT_PUMPTEST through the WATER_CLARITY_CODE field.
+
 #### R_WQ_STANDARD
+
+These are the Water Quality Standards as specified by various documents (see
+R_WQ_STANDARD_SOURCE for details).  Each corresponds to a specifc RD_NAME_CODE
+(whhere it exists in R_RD_NAME_CODE) or a parameter description and is defined
+through values of: 
+
+* MAC - Maximum Acceptable Concentration
+* IMAC - Interim Maximum Acceptable Concentration
+* AO - Aesthetic Objective
+* OG - Operational Guideline
+
+Units and unit codes are associated with each group.  Note that the *DWS* in
+the field names refers to *drinking water standard*.
+
+Most field definitions are sourced from: Ontario Ministry of the Environment
+(2003) Technical Support Document for Ontario Drinking Water Standards,
+Objectives and Guidelines.  June, 2003.
 
 #### R_WQ_STANDARD_SOURCE
 
+This contains the references from which the entries in R_WQ_STANDARD were
+taken.  It is linked to the latter table through the DWS_SRC_CODE field.
 
 *Last Modified: 2025-05-28*
