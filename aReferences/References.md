@@ -18,6 +18,8 @@ knit:   (
 
 ## References
 
+ArcGIS and Geocortext (????) [with regards to backend website software]
+
 EarthFX (2003)  Data Management System, 2002 Report.  Conservation Authority
 Moraine Coalition and York-Peel-Durham-Toronto Groundwater Management Group.
 November, 2003.
