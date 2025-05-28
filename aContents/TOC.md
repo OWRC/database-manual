@@ -44,11 +44,11 @@ knit:   (
 
 * **[2.2 General Overview of Relationships](/database-manual/a02_Understanding_ORMGP_Database/02_02_General_Overview_of_Relationships/02_02_General_Overview_of_Relationships.html)**
 
-<!--
-
 * **2.3 Primary Data Relationships**
 
-    + **[2.3.1 MOE Records](/database-manual/02_Understanding_ORMGP_Database/02_03_Primary_Data_Relationships/02_03_01_MOE_Records.html)**
+    + **[2.3.1 MOE Records](/database-manual/a02_Understanding_ORMGP_Database/02_03_Primary_Data_Relationships/02_03_01_MOE_Records.html)**
+
+<!--
     + **[2.3.2 Consultant Report Data](/database-manual/02_Understanding_ORMGP_Database/02_03_Primary_Data_Relationships/02_03_02_Consultant_Report.html)**
     + **[2.3.3 Grain Size Data](/database-manual/02_Understanding_ORMGP_Database/02_03_Primary_Data_Relationships/02_03_03_Grain_Size.html)**
     + **[2.3.4 Chemistry Data](/database-manual/02_Understanding_ORMGP_Database/02_03_Primary_Data_Relationships/02_03_04_Chemistry.html)**
