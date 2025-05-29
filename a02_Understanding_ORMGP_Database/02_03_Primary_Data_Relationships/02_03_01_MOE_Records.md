@@ -72,6 +72,8 @@ table (along with the record which is being used, both text description and
 * TOWNSHIP_CODE - 69006
     + R_TOWNSHIP_CODE - *MARKHAM TOWN [69006]*
 
+The D_LOC_ADDRESS table links to the D_LOC table through the LOC_ID field.
+
 ##### D_LOC_PURPOSE_HIST
 
 * PURPOSE_PRI_CODE - 10
@@ -81,6 +83,8 @@ table (along with the record which is being used, both text description and
     (D_LOC_PURPOSE) for further details
 * PURPOSE_SEC_CODE - 22
     + R_PURPOSE_SEC_CODE - *Municipal Supply [22]*
+
+The D_LOC_PURPOSE_HIST table links to the D_LOC table through the LOC_ID field.
 
 ##### D_LOC_SPATIAL_HIST
 
@@ -119,6 +123,9 @@ NAD27 at the time) and elevation of the well.  Accuracy would be based on the
 scale of topographic map.  By default, recent MOE records currently use the
 NAD83 geodetic datum.
 
+The D_LOC_SPATIAL_HIST table links to the D_LOC table through the LOC_ID
+field.
+
 #### B - Borehole Information
 
 ##### D_LOC_BOREHOLE
@@ -130,6 +137,8 @@ NAD83 geodetic datum.
 * DRILL_METHOD_CODE - 3
     + R_DRILL_METHOD_CODE - *Rotary (reverse) [3]*
 * DRILL_START_DATE - 1973-09-27
+
+The D_LOC_BOREHOLE table links to D_LOC through the LOC_ID field.
 
 ##### D_LOC_BOREHOLE_CONS
 
@@ -162,8 +171,7 @@ used, if the information was available, albeit with modified codes.  Note that
 screen information is found at the interval level (i.e. starting with D_INT)
 rather than the location level (i.e. starting with D_LOC).
 
-Note that D_LOC_BOREHOLE and D_LOC_BOREHOLE_CONS is linked to a location
-(D_LOC) through the LOC_ID field.
+The D_LOC_BOREHOLE_CONS is linked to D_LOC through the LOC_ID field.
 
 #### C - Geologic Information
 
@@ -197,6 +205,17 @@ fourth stratigraphic layer.
 The D_LOC_GEOL_LAYER table is linked to a location (D_LOC) through the LOC_ID
 field.
 
+##### D_LOC_ATTR
+
+This table is used in place of the original D_GEOLOGY_FEATURE table from the
+previous ORMGP database schema.
+
+* D_GEOLOGY_FEATURE
+    + FEATURE_CODE (1; REF, see below) + FEATURE_TOP_OUOM (83) +
+    FEATURE_UNIT_OUOM (fbgs; refer to 'A - General Information, above)
+* R_FEATURE_CODE
+    + FEATURE_CODE (1) + FEATURE_DESCRIPTION (WATER_FOUND - FRESH)
+
 #### D - Water Levels And Water Description
 
 Water levels are tied to intervals in the form of screened intervals.  
@@ -209,14 +228,16 @@ Water levels are tied to intervals in the form of screened intervals.
     + R_INT_TYPE_CODE - *Reported Screen [18]*
 * INT_START_DATE - 1973-09-27
 
+The D_INT table links to D_LOC through the LOC_ID field.
+
 ##### D_INT_DEPTH
 
-* TOPD
-* BOTD
+* TOPD - 47.244
+* BOTD - 64.6176
     + The depth fields are converted from TOP_OUOM and BOT_OUOM converted to
     mbgs
-* TOP_OUOM
-* BOT_OUOM
+* TOP_OUOM - 155
+* BOT_OUOM - 212
 * UNIT_OUOM - fbgs
     + This applies to TOP_OUOM and BOT_OUOM
 * SCR_SLOT - 20
@@ -226,69 +247,84 @@ Water levels are tied to intervals in the form of screened intervals.
 * DIAM_UNIT_OUOM - inch
     + This applies to the DIAM_OUOM value
 
+The D_INT_DEPTH table is linked to D_INT through the INT_ID field.
 
-* D_INTERVAL_MONITOR
-    + MON_TOP_OUOM (155) + MON_BOT_OUOM (212) + MON_UNIT_OUOM (fbgs; see
-    below) + MON_SCREEN_SLOT (20) + MON_DIAMETER_OUOM (10) +
-    MON_DIAMETER_UNIT_OUOM (inch)
-* D_INTERVAL_TEMPORAL_2
-    + RD_TYPE_CODE (0; REF, see below) + RD_DATE (1973-09-27) + RD_NAME_CODE
-    (628) + RD_NAME_OUOM (Water Level - Manual - Static) + RD_VALUE_OUOM (83)
-    + RD_UNIT_OUOM (fbgs; see below)
-* D_GEOLOGY_FEATURE
-    + FEATURE_CODE (1; REF, see below) + FEATURE_TOP_OUOM (83) +
-    FEATURE_UNIT_OUOM (fbgs; refer to 'A - General Information, above)
-* R_FEATURE_CODE
-    + FEATURE_CODE (1) + FEATURE_DESCRIPTION (WATER_FOUND - FRESH)
-* R_INT_TYPE_CODE
-    + INT_TYPE_CODE (18) + INT_TYPE_DESCRIPTION (Reported Screen)
-* R_RD_NAME_CODE
-    + RD_NAME_CODE (628 for the static water level, 70899 for the additional
-    four 'pumping' water levels) + RD_NAME_DESCRIPTION ('Water Level - Manual
-    - Static' for 628,  'Water Level - Manual - Other' for 70899)
-* R_RD_TYPE_CODE
-    + RD_TYPE_CODE (0 for the static water level; 65 for the levels during
-    pumping) + RD_TYPE_DESCRIPTION ('WL - MOE Well Record - Static' for 0,
-    'WL_MOE Well Record - Pumping' for 65)
-* R_UNIT_CODE (Interval and Water Level)
-    + UNIT_DESCRIPTION (fbgs; refer to 'A - General Information', above)
+##### D_INT_TEMPORAL_2
 
-D_INTERVAL contains the LOC_ID necessary to tie back to the D_LOCATION table.
-All intervals, though, are accessed through an INT_ID also found in
-D_INTERVAL.  'Water Found' information (i.e. Water Description - Kind Of
-Water) is stored in the D_GEOLOGY_FEATURE table.
+This is the measured static water level.  Additional water levels are measured
+during pumping.
+
+* RD_TPE_CODE - 0
+    + R_RD_TYPE_CODE - *WL - MOE Well Record - Static [0]*
+* RD_DATE - 1973-09-27
+* RD_NAME_CODE - 628
+    + R_RD_NAME_CODE - *Water Level - Manual - Static [628]* 
+* RD_VALUE - 25.2984
+* UNIT_CODE - 18
+    + R_UNIT_CODE - *mbgs [18]*
+    + This applies to the RD_VALUE value
+* RD_NAME_OUOM - Water Level - Manual - Static
+* RD_VALUE_OUOM - 83
+* RD_UNIT_OUOM - fbgs
+    + This applies to RD_VALUE_OUOM
+
+The D_INT_TEMPORAL_2 field is linked to D_INT through the INT_ID field.
 
 #### E - Pumping Information
 
-The primary table and fields for dealing with geologic information (values are
-taken from the 1973 example), and the look-up tables referenced, include:
+The information concerning the pumping test are found in D_INT_PUMPTEST and
+D_INT_PUMPTEST_STEP.  The water levels associated with the pumping test are
+found in D_INT_TEMPORAL_2.
 
-* D_PUMPTEST
-    + PUMPTEST_DATE (1973-09-27) + PUMPTEST_NAME (MOE Record Number: 6911752)
-    + REC_PUMP_RATE_IGPM (1055)
-* D_PUMPTEST_STEP
-    + PUMP_RATE_OUOM (1055) + PUMP_RATE_UNITS_OUOM (igpm) + PUMP_START
-    (1973-09-27 00:00 OR 12:00) + PUMP_END (1973-09-28; i.e. 24 hours)
+##### D_INT_PUMPTEST
 
-Note that D_PUMPTEST is tied to D_INTERVAL using INT_ID.  D_PUMPTEST_STEP
-uses, instead, the PUMP_TEST_ID which links to D_PUMPTEST.  D_PUMPTEST_STEP
-records any changes in the pump rate over the entire pumping interval (e.g.
-for step tests).  The water levels recorded during pumping are stored in the
-D_INTERVAL_TEMPORAL_2 table as follows
+* PT_DATE - 1973-09-27
+* PT_NAME - 6911752
+    + This is the MOE Record Number
+* REC_PUMP_RATE_IGPM - 1055
 
-* D_INTERVAL_TEMPORAL_2
-    + RD_DATE (1973-09-27 + Time Steps) + RD_TYPE_CODE (65; REF, see below +
-    RD_NAME_CODE (70899) + RD_NAME_OUOM ('Water Level - Manual - Other') +
-    RD_VALUE_OUOM (each of 84,85,97,88,89) + RD_UNIT_OUOM (fbgs; see below)
-* R_RD_NAME_CODE
-    + RD_NAME_CODE (70899) + RD_NAME_DESCRIPTION ('Water Level - Manual -
-    Other')
-* R_RD_TYPE_CODE
-    + RD_TYPE_CODE (65) + RD_TYPE_DESCRIPTION (WL - MOE Well Record - Pumping)
+The D_INT_PUMPTEST table is linked to D_INT through the INT_ID field.
 
-Note that there will be multiple recorded water levels, one for each 15 minute
-period and a final reading after 24 hours (making five records in total).
-These are in addition to the Static Water level which is also reported.
+##### D_INT_PUMPTEST_STEP
+
+* PUMP_RATE - 1055
+    + This is converted from PUMP_RATE_OUOM
+* UNIT_CODE - 104
+    + R_UNIT_CODE - *igpm [104]*
+* PUMP_RATE_OUOM - 1055
+* PUMP_RATE_UNITS_OUOM - gpm
+    + The record rate on the MOE report is stated as gpm; this is assumed to
+    be igpm and applies to PUMP_RATE_OUOM
+* PUMP_START - 1973-09-27 00:00
+* PUMP_END - 1973-09-28 00:00
+    + This was a twenty-four hour pump test
+
+The D_INT_PUMPTEST_STEP table is linked to D_INT_PUMPTEST through the PT_ID
+field.
+
+##### D_INT_TEMPORAL_2
+
+The water levels measured during the pumping test appear, in general, at
+fifteen minute intervals (other intervals are possible, though).  In addition,
+there can be a water level measured at the completion of the pumping test (at
+the twenty-four hour mark).  In this case, then, five pumping water levels
+would be recorded.  Here is shown the levels measured at the thirty minute
+mark.  Note that the starting time is generally unknown.  As such, a midnight
+starting hour is imposed.
+
+* RD_TYPE_CODE - 65
+    + R_RD_TYPE_CODE - *WL - MOE Well Record - Pumping [65]*
+* RD_DATE - 1973-09-27 00:30
+* RD_NAME_CODE - 70899
+    + R_RD_NAME_CODE - *Water Level - Manual - Other [70899]*
+* RD_VALUE - 25.908
+* UNIT_CODE - 18
+    + R_UNIT_CODE - *mbgs [18]*
+    + This applies to the RD_VALUE field
+* RD_NAME_OUOM - Water Level - Manual - Other
+* RD_VALUE_OUOM - 85
+* RD_UNIT_OUOM - fbgs
+    + This applies to the RD_VALUE_OUOM field
 
 ![Figure 2.3.1.1 Example MOE Water Well Record - 1954](f02_03_01_01_1954.jpg)
 *Figure 2.3.1.1 Example MOE Water Well Record - 1954*
