@@ -26,10 +26,16 @@ grouped into the following sections:
 * **B** - Geologic Information
 * **C** - Soil Intervals (blow count data)
 * **D** - Water Levels
-* **E** - Water Content (laboratory analysis)
-* **F** - Grain Size (laboratory analysis)
+* **E** - Water Content 
+* **F** - Grain Size 
 
-Note that the example borehole sheet has been pulled from a geotechnical foundation report.
+Note that the example borehole sheet has been pulled from a geotechnical
+foundation report.
+
+Affected tables are listed within each alphabetic section along with their
+related reference tables and fields.  A short description and/or the reference
+table (along with the record which is being used, both text description and
+[coded value]) is provided with each field used.
 
 ![Figure 2.3.2.1 Borehole Record - example with sections indicated](f02_03_02_01.jpg)
 *Figure 2.3.2.1 Borehole Record - example with sections indicated*
@@ -144,109 +150,197 @@ D_LOC_ATTR table.
 
 #### C - Soil Intervals (Blow Count Data)
 
-This type of information is actually related to a (field-collected) soil sample with a specific top and bottom.  In some cases (two here) these samples are further analyzed in a laboratory for additional parameters that would be stored elsewhere (for example, grain size; see 'F - Lab Analysis' and Section 2.3.3).  The primary table and fields for dealing with the soil sample and blow count values, as well as their associated look-up/reference tables include:
+This type of information is actually related to a (field-collected) soil
+sample with a specific top and bottom.  As such, this is considered an
+interval.  The example here is the sixth soil (split spoon) sample.
 
-* D_INTERVAL
-    + INT_NAME
-    + INT_NAME_ALT1
-    + INT_TYPE_CODE (118; REF, see below)
-    + INT_START_DATE (1983-07-29)
-* D_INTERVAL_SOIL
-    + SOIL_TOP_OUOM
-    + SOIL_BOT_OUOM
-    + SOIL_UNIT_OUOM (mbgs; see below)
-    + SOIL_BLOW_COUNT (per 6" of penetration)
-* R_INT_TYPE_CODE
-    + INT_TYPE_CODE (118)
-    + INT_TYPE_DESCRIPTION (Soil)
-* R_UNIT_CODE
-    + UNIT_DESCRIPTION (mbgs; refer to 'A - General Information', above)
+##### D_INT
 
-The D_INTERVAL table contains two keys - a LOC_ID and an INT_ID (this is also an randomly assigned integer serving as a primary key).  All subsequent interval tables are related based upon this INT_ID (as found in, for this example, D_INTERVAL_SOIL).
+* INT_NAME - GO-ALRT - 6 (SS 6)
+    + The name is equivalent to LOC_NAME (in D_LOC) with the addition of the
+    sample type (i.e. split spoon - SS) and the sample number (6) within the
+    borehole record
+* INT_TYPE_CODE - 29
+    + R_INT_TYPE_CODE - *Soil or Rock [29]*
+* INT_START_DATE - 1983-07-29
+
+##### D_INT_ATTR
+
+* ATTR_CODE - 7
+    + R_ATTR_CODE - *Soil - Blow Count [7]*
+* VALI - 100
+    + A blow count should be a whole (integer) number; it is generally
+    considered to be the number of blows to drive the split spoon six inches
+* VAL_DEF - 100
+* COMMENT - 100 blows for 15cm penetration
+
+##### D_INT_DEPTH
+
+* TOPD - 4.65
+* BOTD - 4.8
+* TOP_OUOM - 4.65
+* BOT_OUOM - 4.8
+    + Not that the top and bottom depths are estimated from the borehole
+    record
+* UNIT_OUOM - mbgs
+
+The D_INT table contains the keys LOC_ID and INT_ID; only the latter is a
+primary key.  This table allows a single location to be linked to multiple
+(types of) intervals.  All other interval tables are accessed, and linked,
+through the INT_ID field.  Note that there is grain size data associated with
+this particular sample.  The means to capture this information is found in *F
+- Lab Analysis*, following.
 
 #### D - Water Levels
 
-Water levels are also tied to intervals, as was the case with the 'Soil Intervals' discussed above, but, they are associated with 'screen' intervals.  The primary table and fields for dealing with water levels, as well as the look-up tables referenced, include:
+Water levels are also tied to intervals, as was the case with the *C - Soil
+Intervals* discussed previously.  These, however are associated with screened
+rather than soil intervals.
 
-* D_INTERVAL
-    + INT_NAME
-    + INT_NAME_ALT1
-    + INT_TYPE_CODE (27; REF, see below)
-    + INT_START_DATE (1983-08-05)
-* D_INTERVAL_MONITOR
-    + MON_TOP_OUOM (0)
-    + MON_BOT_OUOM (10)
-    + MON_UNIT_OUOM (mbgs; see below)
-* D_INTERVAL_TEMPORAL_2
-    + RD_DATE (1983-08-05)
-    + RD_NAME_CODE (628)
-    + RD_NAME_OUOM (Water Level - Manual - Static)
-    + RD_VALUE_OUOM (2.8)
-    + RD_UNIT_OUOM (mbgs; see below)
-* R_INT_TYPE_CODE
-    + INT_TYPE_CODE (18)
-    + INT_TYPE_DESCRIPTION (Reported Screen)
-* R_RD_NAME_CODE
-    + RD_NAME_CODE (628)
-    + RD_NAME_DESCRIPTION (Water Level - Manual - Static)
-* R_RD_TYPE_CODE
-    + RD_TYPE_CODE (74)
-    + RD_TYPE_DESCRIPTION (Static)
-* R_UNIT_CODE (Interval and Water Level)
-    + UNIT_DESCRIPTION (mbgs; refer to 'A - General Information', above)
+##### D_INT
 
-Any information measured in the field is to be stored in the D_INTERVAL_TEMPORAL_2 table.  In this case, if more water levels were taken at this location, such information would be added to the temporal table tied back to the same interval as tracked by the INT_ID.
+* INT_NAME - GO-ALRT
+    + This name is equivalent to LOC_NAME (in D_LOC) 
+* INT_TYPE_CODE - 18
+    + R_INT_TYPE_CODE - *Reported Screen [18]*
+* INT_START_DATE - 1983-07-29
 
-#### E - Laboratory Analysis - Water Content
+##### D_INT_DEPTH
 
-Information or data produced or determined in a laboratory is stored in the D_INTERVAL_TEMPORAL_1A/1B tables.  As was the case for blow counts and water levels, the Water Content information is also tied back to an interval, in this case a "Soil" Interval (described in 'C - Soil Intervals', above).  The primary table and fields for dealing with sample water content (not including the interval, as previously described), as well as the look-up tables referenced, include:
+* TOPD - 9
+* BOTD - 9.3
+* TOP_OUOM - 9
+* BOT_OUOM - 9.3
+    + Not that the top and bottom depths are estimated from the borehole
+    record
+* UNIT_OUOM - mbgs
 
-* D_INTERVAL_TEMPORAL_1A
-    + SAM_SAMPLE_NAME
-    + SAM_SAMPLE_NAME_OUOM
-    + SAM_SAMPLE_DATE (1983-07-29)
-    + SAM_SAMPLE_DATE_OUOM (1983-07-29)
-    + SAM_TYPE_CODE (12)
-* D_INTERVAL_TEMPORAL_1B
-    + RD_NAME_CODE (289)
-    + RD_NAME_OUOM (Moisture Content)
-    + RD_VALUE_OUOM
-    + RD_UNIT_OUOM (%)
-* R_RD_NAME_CODE
-    + RD_NAME_CODE (289)
-    + RD_NAME_DESCRIPTION (Moisture Content)
-* R_SAM_TYPE_CODE
-    + SAM_TYPE_CODE (12)
-    + SAM_TYPE_DESCRIPTION (Regular Sample)
-* R_UNIT_CODE
-    + UNIT_DESCRIPTION (%)
+There is little information concerning the screened interval.  The values here
+are estimated from the borehole record.  In most cases, a diameter would also
+be available.
 
-The INT_ID for the particular reading ties the D_INTERVAL and D_INTERVAL_TEMPORAL_1A tables together.  At this point, though, a new identifier (SAM_ID) relates the two temporal tables (1A & 1B).  In this way a particular sample (stored in 1A) can have a number of parameters (stored in 1B).  Note that each of the different soil samples would have a water content value associated with it.
+##### D_INT_TEMPORAL_2
 
-#### F - Laboratory Analysis - Grain Size
+* RD_TYPE_CODE - 74
+    + R_RD_TYPE_CODE - *WL - Static (Not MOE) [74]*
+* RD_NAME_CODE - 628
+    + R_RD_NAME_CODE - *Water Level - Manual - Static [628]*
+* RD_DATE - 1983-08-05
+* RD_VALUE - 2.8
+* UNIT_CODE - 18
+    + R_UNIT_CODE - *mbgs [18]*
+* RD_NAME_OUOM - Water Level - Manual - Static
+* RD_VALUE_OUOM - 2.8
+    + In this case, the original ground elevation is used to calculate the
+    depth to the static water level
+* RD_UNIT_OUOM - mbgs
 
-Again, as this information is a laboratory determined measurement, it is also held in the D_INTERVAL_TEMPORAL_1A/1B tables.  This information is also tied back to an interval, in this case a 'soil' interval (described in 'C - Soil Intervals', above).  Refer also to Section 2.3.3.  The primary table and fields for dealing with sample grain size distribution (not including the interval, as previously described), as well as the look-up tables referenced, include:
+Both D_INT_DEPTH and D_INT_TEMPORAL_2 are linked to D_INT through the INT_ID
+field.
 
-* D_INTERVAL_TEMPORAL_1A
-    + SAM_SAMPLE_NAME
-    + SAM_SAMPLE_NAME_OUOM
-    + SAM_SAMPLE_DATE (1983-07-29)
-    + SAM_SAMPLE_DATE_OUOM (1983-07-29)
-    + SAM_TYPE_CODE (12)
-* D_INTERVAL_TEMPORAL_1B
-    + RD_NAME_CODE (each of 70756, 70757,70758,70759)
-    + RD_NAME_OUOM (each of %Clay, %Silt, %Sand, %Gravel)
-    + RD_VALUE_OUOM (each of 7, 68, 25, 0 for the first sample)
-    + RD_UNIT_OUOM (%)
-* R_RD_NAME_CODE
-    + RD_NAME_CODE (each of 70756, 70757,70758,70759)
-    + RD_NAME_DESCRIPTION (each of %Clay, %Silt, %Sand, %Gravel)
-* R_SAM_TYPE_CODE
-    + SAM_TYPE_CODE (12)
-    + SAM_TYPE_DESCRIPTION (Regular Sample)
-* R_UNIT_CODE
-    + UNIT_DESCRIPTION (%)
+#### E - Water Content
 
-The grain size analysis only applies to the sixth and seventh soil sample.  Within the D_INTERVAL_TEMPORAL_1B table, each sample would have four rows associated with it based on the clay, silt, sand and gravel breakdown (eight rows in total).  These would be converted (in this case, through a straight copy procedure, from the OUOM fields to the actual 'value' fields during a SiteFX conversion of 'new' information).  Also note that if the moisture content and the grain size analysis were undertaken on the same sample at the same laboratory, then they could possibly share a sample identifier (i.e. SAM_ID) in the D_INTERVAL_TEMPORAL_1A table.  Since no lab sheets were provided in this report, the data would be split into two different samples.
+Information or data produced or determined in a laboratory is generally found
+in the D_INT_TEMPORAL_1A/1B tables.  However, in many cases, the information
+concerning the laboratory analysis is not available.  When this occurs,
+pseudo-lab records can be created or the D_INT_ATTR table can be used in its
+stead.  This is similar to *C - Soil Intervals (Blow Count)*, as described
+previously.  There is usually a water content measurement for each soil sample
+taken.  The example here is the sixth soil (split spoon) sample and it is
+evaluated for both storage methodologies.
+
+##### D_INT_ATTR
+
+* ATTR_CODE - 9
+    + R_ATTR_CODE - *Soil - Moisture [9]*
+* VALF - 17
+    + A soil moisture reading should be stored as a floating point number
+    (expressed as a percentage)
+* VAL_DEF - 17
+
+The D_INT_ATTR table is linked through INT_ID to D_INT.
+
+Alternatively, if we are using the temporal tables, the setup would consist of
+the following.
+
+##### D_INT_TEMPORAL_1A
+
+* SAM_NAME - GO-ALRT
+* SAM_DATE - 1983-07-29
+* SAM_TYPE_CODE - 12
+    + R_SAM_TYPE_CODE - *Regular Sample [12]*
+
+##### D_INT_TEMPORAL_1B
+
+* RD_NAME_CODE - 289
+    + R_RD_NAME_CODE - *Moisture Content [289]*
+* RD_VALUE - 17
+* UNIT_CODE - 1
+    + R_UNIT_CODE - *% [1]*
+* RD_NAME_OUOM - Moisture Content
+* RD_VALUE_OUOM - 17
+* RD_UNIT_OUOM - %
+
+The D_INT_TEMPORAL_1A table is linked through INT_ID to D_INT.  The
+D_INT_TEMPORAL_1B table is linked to D_INT_TEMPORAL_1A through SAM_ID.  Note
+that for this methodology, any number of parameters can be associated with a
+particular sample (i.e. SAM_ID).
+
+#### F - Grain Size
+
+Similarly to *E - Water Content*, grain size analysis information can be
+stored in either the temporal or attribute tables tied to a particular
+interval.  For the latter, the D_INT_ATTR_RD table is also used.  From this
+borehole record, only two grain size analyses were performed.  The example
+here is the sixth soil (split spoon) sample and it is evaluated for both
+storage methodologies.
+
+##### D_INT_ATTR
+
+* ATTR_CODE - 23
+    + R_ATTR_CODE - *Soil - Grainsize [23]*
+
+##### D_INT_ATTR_RD
+
+Four grain size percentages are available here.  Namely: gravel (0%); sand
+(25%); Silt (68%); and Clay (7%).  This would result in four records tied to
+the interval in this table.  The example shown here is only for sand.
+
+* RD_NAME_CODE - 70578
+    + R_RD_NAME_CODE - *%Sand [70578]*
+* RD_VALUE - 25
+* UNIT_CODE - 1
+    + R_RD_NAME_CODE - *% [1]*
+* RD_NAME_OUOM - %Sand
+* RD_VALUE_OUOM - 25
+* RD_UNIT_OUOM - %
+
+The D_INT_ATTR table is linked through INT_ID to D_INT while the D_INT_ATTR_RD
+table is linked to D_INT_ATTR through IATTR_ID.
+
+Alternatively, if we are using the temporal tables, the setup would consist of
+the following.  Note that this dataset could piggy-back on tope of that
+describe in *E - Water Content*.  
+
+##### D_INT_TEMPORAL_1A
+
+* SAM_NAME - GO-ALRT
+* SAM_DATE - 1983-07-29
+* SAM_TYPE_CODE - 12
+    + R_SAM_TYPE_CODE - *Regular Sample [12]*
+
+##### D_INT_TEMPORAL_1B
+
+As described in D_INT_ATTR_RD, previously, only the example of sand is provided
+(four records would actually be recorded).
+
+* RD_NAME_CODE - 70578
+    + R_RD_NAME_CODE - *%Sand [70578]*
+* RD_VALUE - 25
+* UNIT_CODE - 1
+    + R_UNIT_CODE - *% [1]*
+* RD_NAME_OUOM - %Sand
+* RD_VALUE_OUOM - 25
+* RD_UNIT_OUOM - %
 
 *Last Modified: 2025-05-30*
