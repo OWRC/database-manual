@@ -20,15 +20,14 @@ knit:   (
 
 When grain size data is available, it may be indicated as part of the borehole
 log (refer to **Section 2.3.2** for details) or as a separate analysis.  An
-example of the latter is found here.  A number of tables are utilized to store
-these results.
+example of the latter is found here.  
 
 ![Figure 2.3.3.1 Grain Size Analysis - source data](f02_03_03_01.png)
 *Figure 2.3.3.1 Grain Size Analysis - source data*
 
-Here, the results of three sample analyses are shown.  If the values related
+The results of three sample analyses are shown.  If the values related
 to *Borehole 1, Sample 7* are examined (which has a number of data points), we
-can see that the components break down into:
+can see that the components can be broken down into:
 
 * 3% Clay
 * 21% Silt
@@ -45,8 +44,12 @@ This analysis is found in a report held within the ORMGP Report Library
 This borehole location has the distinct LOC_ID of *341102* (note that this
 is a *Version 8* database location identifier; the *Version 7* identifier is
 *1125539377*) but no soil samples are currently identified; a screened
-interval, for water levels, does exist.  As such, a new soil interval needs to
-be created.  The affected tables would be:
+interval, for water levels, does exist.  
+
+#### A New Interval
+
+As there is currently no soil interval entered into the database, a new one
+needs to be created.  The affected tables would be:
 
 ##### D_INT
 
@@ -61,11 +64,16 @@ be created.  The affected tables would be:
     means by which the particular sample can be identified;  in this case, it
     is the original elevation of the sample-top as identified up the borehole
     record
+* INT_NAME_ALT1 - Sample 7
+    + Adding the sample number allows any user, reviewing the source report,
+    to determine the original data associated with the interval
 * INT_TYPE_CODE - 29
     + R_INT_TYPE_CODE - *Soil or Rock [29]*
 * INT_START_DATE - 1967-09-07
     + As no sample analysis date is provided, the date of the borehole
     construction (from the report) is used instead
+
+This table would be linked to D_LOC through the LOC_ID field.
 
 ##### D_INT_DEPTH
 
@@ -79,47 +87,94 @@ be created.  The affected tables would be:
     + These values, extracted from the original borehole record, have units
     specified through UNIT_OUOM; note that the values have been converted from
     elevations (as presented on the borehole record) to depths using the
-    specified ground elevation
+    ground elevation listed on the borehole record
 * UNIT_OUOM - fbgs
 
+Note that this table is linked to D_INT through the INT_ID field.
 
+#### Grain Size Data
 
+Grain size data can be found in either the temporal or attribute tables tied
+to a particular interval.  The former is generally used when there is 
+information available concerning the laboratory and the type of analysis that
+was carried out.  The temporal tables should be used if multiple sets of
+records (over time) are to be linked to an interval.  If information
+concerning the laboratory is absent or there will likely only be a single
+record associated with the interval, the attribute tables can be used.  Both
+examples are presented.
 
+##### D_INT_ATTR
 
-The following information needs to be captured in the data entry:
+* INT_ID - 363068
+* IATTR_ID
+    + This field is the primary key of the D_INT_ATTR table; the value here is
+    automatically generated when a record is added
+* ATTR_CODE - 23
+    + R_ATTR_CODE - *Soil - Grainsize [23]*
 
-* The LOC_ID from D_LOCATION (i.e. from what location is the sample from)
-* The INT_ID from D_INTERVAL associated with this sample at this location; if this is a new interval/soil sample, a new INT_ID must be created that is tied back or related to the LOC_ID; the depths from which the sample was taken must also be known and they would be entered into D_INTERVAL_SOIL linked by the INT_ID to the LOC_ID
-* If this is a new interval, the interval type needs to be specified in D_INTERVAL (this is from R_INT_TYPE_CODE with an INT_TYPE_CODE of 118 - Soil)
-* The names and name codes for the attributes (the fields RD_NAME_CODE and RD_NAME_OUOM from the R_RD_NAME_CODE table:
-    + %Clay (70756)
-    + %Silt (70757)
-    + %Sand (70758)
-    + %Gravel (70759)
-* The units and unit codes for the attribute values (the fields UNIT_CODE and RD_UNIT_OUOM from the R_UNIT_CODE table):
-    + % (107; i.e. percent)
-* The date the information was collected (for SAM_SAMPLE_DATE)
-* As this is lab data, the sample name (for SAM_SAMPLE_NAME in D_INTERVAL_TEMPORAL_1A)
+The D_INT_ATTR table is linked through INT_ID to D_INT.
 
-Combining the information that would reside in D_INTERVAL_TEMPORAL 1A/1B, the
-input data, then, would have the following approximate form.
+##### D_INT_ATTR_RD
 
-Note that there are four rows of data, dependent upon the reading name code,
-and they are all tied back to a single soil sample.  This information, upon
-entry into the database, would then populate one record in the
-D_INTERVAL_TEMPORAL_1A table (including the sample name and sample date) and
-four records in the D_INTERVAL_TEMPORAL_1B table (the actual parameter data).
-The two tables would be linked based upon an imposed (randomly assigned) key
-(SAM_ID).  Refer to Section 2.3.4 for a breakdown of fields affected in
-D_INTERVAL_TEMPORAL_1A and D_INTERVAL_TEMPORAL_1B upon data import.
+Four grain size percentages are available, as listed above.  This would result
+in four records to be tied (through IATTR_ID and the D_INT_ATTR table) to the
+soil interval specified in D_INT.  The example shown here is only for gravel.
 
-Note also, that in the D_INTERVAL_TEMPORAL_1A table, there are additional
-fields that can be used to track information regarding the laboratory that
-performed the analyses including the laboratories sample numbering (through
-SAM_LAB_SAMPLE_ID), its internal job number (through SAM_LAB_JOB_NUMBER) and
-analysis date (through SAM_ANALYSIS_DATE).  This allows one to go back to the
-original laboratory report or the laboratory itself to check the data entry
-(or possible analysis error) should a problem with the data be discovered in
-the future.
+* RD_NAME_CODE - 70759
+    + R_RD_NAME_CODE - *%Gravel [70759]*
+* RD_VALUE - 26
+* UNIT_CODE - 1
+    + R_UNIT_CODE = *% [1]*
+* RD_NAME_OUOM - %Gravel
+* RD_VALUE_OUOM - 26
+* RD_UNIT_OUOM - %
+
+The D_INT_ATTR_RD table is linked to D_INT_ATTR through IATTR_ID.
+
+Alternatively, if the temporal tables are being used, some of the populated
+fields would be made-up of pseudo-values (i.e. they would be functioning as
+placeholds).  A prime example is the SAM_NAME - this field cannot be empty in
+the D_INT_TEMPORAL_1A table.  The setup would then be:
+
+##### D_INT_TEMPORAL_1A
+
+* INT_ID - 363068
+* SAM_ID
+    + This field is the primary key of the D_INT_TEMPORAL_1A table; the value
+    here is automatically generated when a record is added
+* SAM_NAME - MTO-30M14-66-1 Soil-549
+    + We are assigning the interval name to the sample name as a placeholder
+* SAM_DATE - 1967-09-07
+    + This matches the starting interval date
+* SAM_TYPE_CODE
+    + R_SAMP_TYPE_CODE - *Regular Sample [12]*
+
+The D_INT_TEMPORAL_1A table is linked to D_INT through INT_ID.
+
+There are additional fields within this table that can be used to track
+information regarding the laboratory that performed the analyses.  This could
+include the laboratory sampling number (LAB_SAMPLE_ID), its internal job
+number (LAB_JOB_NUMBER) and analysis date (LAB_ANALYSIS_DATE).  This would
+allow the user to (hopefully) revisit the original report or contact the
+laboratory itself to check the data entry in case of a possible error (should
+a problem with the data be discovered in the future).
+
+However, none of this information is available for this analysis.
+
+##### D_INT_TEMPORAL_1B
+
+There would be four records in this case.  We will only use the gravel value
+for the example.
+
+* RD_NAME_CODE - 70759
+    + R_RD_NAME_CODE - *%Gravel [70759]*
+* RD_VALUE - 26
+* UNIT_CODE - 1
+    * R_UNIT_CODE - *% [1]*
+* RD_NAME_OUOM - %Gravel
+* RD_VALUE_OUOM - 26
+* RD_UNIT_OUOM - %
+
+The SAM_ID field links D_INT_TEMPORAL_1B and D_INT_TEMPORAL_1A.
 
 *Last Modified: 2026-06-03*

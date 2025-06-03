@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.3.2"
 author: "ormgpmd"
-date:   "20250530"
+date:   "20250603"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -238,7 +238,7 @@ be available.
 Both D_INT_DEPTH and D_INT_TEMPORAL_2 are linked to D_INT through the INT_ID
 field.
 
-#### E - Water Content
+#### E - Water Content 
 
 Information or data produced or determined in a laboratory is generally found
 in the D_INT_TEMPORAL_1A/1B tables.  However, in many cases, the information
@@ -286,7 +286,7 @@ D_INT_TEMPORAL_1B table is linked to D_INT_TEMPORAL_1A through SAM_ID.  Note
 that for this methodology, any number of parameters can be associated with a
 particular sample (i.e. SAM_ID).
 
-#### F - Grain Size
+#### F - Grain Size 
 
 Similarly to *E - Water Content*, grain size analysis information can be
 stored in either the temporal or attribute tables tied to a particular
@@ -310,7 +310,7 @@ the interval in this table.  The example shown here is only for sand.
     + R_RD_NAME_CODE - *%Sand [70578]*
 * RD_VALUE - 25
 * UNIT_CODE - 1
-    + R_RD_NAME_CODE - *% [1]*
+    + R_UNIT_CODE - *% [1]*
 * RD_NAME_OUOM - %Sand
 * RD_VALUE_OUOM - 25
 * RD_UNIT_OUOM - %
@@ -319,7 +319,7 @@ The D_INT_ATTR table is linked through INT_ID to D_INT while the D_INT_ATTR_RD
 table is linked to D_INT_ATTR through IATTR_ID.
 
 Alternatively, if we are using the temporal tables, the setup would consist of
-the following.  Note that this dataset could piggy-back on tope of that
+the following.  Note that this dataset could piggy-back on top of that
 describe in *E - Water Content*.  
 
 ##### D_INT_TEMPORAL_1A
@@ -343,4 +343,4 @@ As described in D_INT_ATTR_RD, previously, only the example of sand is provided
 * RD_VALUE_OUOM - 25
 * RD_UNIT_OUOM - %
 
-*Last Modified: 2025-05-30*
+*Last Modified: 2025-06-03*
