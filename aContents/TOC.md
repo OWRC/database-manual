@@ -49,7 +49,7 @@ knit:   (
     + **[2.3.1 MOE Records](/database-manual/a02_Understanding_ORMGP_Database/02_03_Primary_Data_Relationships/02_03_01_MOE_Records.html)**
     + **[2.3.2 Consultant Borehole Records](/database-manual/a02_Understanding_ORMGP_Database/02_03_Primary_Data_Relationships/02_03_02_Consultant_Report.html)**
     + **[2.3.3 Grain Size Data](/database-manual/a02_Understanding_ORMGP_Database/02_03_Primary_Data_Relationships/02_03_03_Grain_Size.html)**
-    + **[2.3.7 Report Library (Documents)](/database-manual/02_Understanding_ORMGP_Database/02_03_Primary_Data_Relationships/02_03_07_Report_Library.html)**
+    + **[2.3.7 Report Library (Documents)](/database-manual/a02_Understanding_ORMGP_Database/02_03_Primary_Data_Relationships/02_03_07_Report_Library.html)**
 
 <!--
     + **[2.3.4 Chemistry Data](/database-manual/02_Understanding_ORMGP_Database/02_03_Primary_Data_Relationships/02_03_04_Chemistry.html)**
