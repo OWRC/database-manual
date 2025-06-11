@@ -68,11 +68,15 @@ knit:   (
 
 * **[2.5 Locations, Groups and Study Areas](/database-manual/02_Understanding_ORMGP_Database/02_05_Locations_Groups_and_Study_Areas/02_05_Locations_Groups_and_Study_Areas.html)**
 
-* **[2.6 Report Library](/database-manual/02_Understanding_ORMGP_Database/02_06_Report_Library/02_06_Report_Library.html)**
+-->
+
+* **[2.6 Report Library](/database-manual/a02_Understanding_ORMGP_Database/02_06_Report_Library/02_06_Report_Library.html)**
 
     + **2.6.1 Document Association**
     + **2.6.2 Directory and Files, Naming and Structure**
     + **2.6.3 Report Entry**
+
+<!--
 
 * **[2.7 Multi-Screen Installations](/database-manual/02_Understanding_ORMGP_Database/02_07_Multi-Screen_Installations/02_07_Multi-Screen_Installations.html)**
 
