@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.3.7"
 author: "ormgpmd"
-date:   "20250610"
+date:   "20250611"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -67,7 +67,7 @@ From these, the coordinates of the location can be determined.
 * X - 609424
 * Y - 4845361
 * EPSG_CODE - 26917
-    + Refer to **Section 2.3.1* for details concerning the assignment of the
+    + Refer to **Section 2.3.1** for details concerning the assignment of the
     EPSG_CODE
 * QA_COORD_CODE - 5
     + R_QA_COORD_CODE - *Margin of Error : 100 m - 300 m [5]*
@@ -170,7 +170,7 @@ within the D_LOC_ATTR table.
     + R_ATTR_CODE - *Document - Keywords [36]*
 * VAL_DEF - bridge underpass
     + The default fields (i.e. VAL_DEF and VAL_DEF2) within this table allow
-    free-form text to be entered;
+    free-form text to be entered
 
 ##### D_INT, D_INT_ATTR and D_INT_ATTR_RD
 
@@ -184,4 +184,4 @@ doing so is described in **Section 2.3.3**.
 ![Figure 2.3.7.6 Example document - grainsize analysis](f02_03_07_06_154_grainsize.jpg)
 *Figure 2.3.7.6 Example document - grainsize analysis*
 
-*Last Modified: 2025-06-10*
+*Last Modified: 2025-06-11*
