@@ -19,14 +19,15 @@ knit:   (
 ## Section 2.8 Multi-Borehole Wells (MOE)
 
 Since 2003 the MOE has allowed consultants to provide only one well record for
-a site upon which many boreholes may be drilled.  This option was provided so
-that the geology, which may be similar at different boreholes located at the
-same site, need only be submitted and entered into the Water Well Information
-System (WWIS) once.  For these cases, within the WWIS, each borehole is given
-a BORE_HOLE_ID (as found in the *tblBore_Hole* table) and they are all linked
-using a single WELL_ID.  The *tblBore_Hole* table provides limited information
-on each borehole including the UTM coordinates, the completion date and
-whether the borehole is a bedrock or overburden well.
+a site upon which many boreholes may be drilled.  These were commonly referred
+to as *clustered* wells.  This option was provided so that the geology, which
+may be similar at different boreholes located at the same site, need only be
+submitted and entered into the Water Well Information System (WWIS) once.  For
+these cases, within the WWIS, each borehole is given a BORE_HOLE_ID (as found
+in the *tblBore_Hole* table) and they are all linked using a single WELL_ID.
+The *tblBore_Hole* table provides limited information on each borehole
+including the UTM coordinates, the completion date and whether the borehole is
+a bedrock or overburden well.
 
 When transferred to the ORMGP database, each of these boreholes is given a
 unique LOC_ID and are linked to the original MOE borehole WELL_ID through an
