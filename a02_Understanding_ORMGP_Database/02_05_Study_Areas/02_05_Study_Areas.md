@@ -27,19 +27,58 @@ the viewing or analysis of particular datasets.
 
 ## Section 2.5.1 ORMGP Study Area
 
+The spatial geometry of the ORMGP Study Area can be found in the R_AREA_CODE
+table.  This is used, in comparison with the point geometry of each
+location (held in the D_LOC_SPATIAL table), to determine those locations
+that fall within the ORMGP Study Area.  This is especially important with regard to
+population of the various W_\* tables (that contain a subset of the locations held
+within the ORMGP database).  As this is distinct from other areas (e.g. the
+extents of a conservation area), this relation is stored within the
+D_LOC_PROJECT table.  Refer to **Section 2.5.4** for additional details.
 
 ## Section 2.5.2 Study Areas
 
-The free-format (i.e. text) columns LOC_AREA and LOC_STUDY, found in
-D_LOCATION, allows a single study area (LOC_AREA) and single project
+#### D_LOC - LOC_AREA and LOC_STUDY
+
+The free-form text columns LOC_AREA and LOC_STUDY, found in
+D_LOC, allow a single study area (LOC_AREA) and single project
 (LOC_STUDY) to be specified for each location.  LOC_AREA, when populated,
 indicates the general spatial area in which the location lies.  LOC_STUDY
 generally indicates the initial (or, if known, regional) study from which the
-location information was gleaned.  If present in multiple studies either of
-the 'Group' (Section 2.5.2) or - for reports/documents - 'Document
-Association' (Section 2.6.1) should be used.
+location information was gleaned.  These particular fields are relied upon by
+some of the ORMGP staff and are generally up-to-date.  
+
+If a particular location is associated with multiple studies, they should be
+included as part of a *group* as outlined in **Section 2.5.3**.
+
+#### D_LOC_AREA and R_AREA_CODE
+
+The D_LOC_AREA table is configured to allow locations to be tagged with the
+area in which they are located where a single location can be related to
+multiple areas (a one-to-many relationsip).  This is related to the
+R_AREA_CODE table through AREA_CODE.  This replaces the the CA_AREA_ID
+(conservation area), SWP_AREA_ID (source water protection area) and
+REG_AREA_ID (region extent) fields formerly present in the the
+D_LOCATION_SUMMARY table from Version 7 of the ORMGP database.
+
+The R_AREA_CODE table contains the polygonal geometry for each of the ORMGP
+conservation authorities and regions extents (with and without buffers) as
+well as a variety of geologic and hydrogeologic model extents used within the
+program.  The point geometry of a location can then be compared against
+specified areas to determine whether they fall within particular areas extent.
+If so, that relation can be stored within the D_LOC_AREA table.  As an aside,
+these relations are used when extracting data from the ORMGP database for
+distribution to the partner agencies.
+
+In general, for a number of specified spatial areas, this is an automatic
+comparison with the D_LOC_AREA updated on a weekly basis (refer to **Appendix
+G.32** for details).  This allows correction of a location if its coordinates
+have been changed for any reason.
 
 ## Section 2.5.3 Groups
+
+TO REVIEW
+
 
 Groups allow locations or intervals to be tagged as being associated - whether
 this be related to a particular project or study, spatial area, monitoring
@@ -81,6 +120,6 @@ feature.
 
 ## Section 2.5.4 Projects
 
-
+TO POPULATE
 
 *Last Modified: 2025-06-12*
