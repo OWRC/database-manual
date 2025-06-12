@@ -1,7 +1,7 @@
 ---
 title:  "Cover and Table of Contents"
 author: "ormgpmd"
-date:   "20250611"
+date:   "20250612"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -73,8 +73,9 @@ knit:   (
 * **[2.6 Report Library](/database-manual/a02_Understanding_ORMGP_Database/02_06_Report_Library/02_06_Report_Library.html)**
 
     + **2.6.1 Document Association**
-    + **2.6.2 Directory and Files, Naming and Structure**
+    + **2.6.2 Directory and Files - Naming and Structure**
     + **2.6.3 Report Entry**
+    + **2.6.4 Data Availability**
 
 <!--
 
@@ -218,4 +219,4 @@ knit:   (
 
 -->
 
-*Last modified: 2025-06-11*
+*Last modified: 2025-06-12*
