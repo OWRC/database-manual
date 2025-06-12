@@ -66,9 +66,14 @@ knit:   (
     + **2.4.4 Baseflow Estimation**
     + **2.4.5 Specific Capacity, Transmissivity and Hydraulic Conductivity**
 
-* **[2.5 Locations, Groups and Study Areas](/database-manual/02_Understanding_ORMGP_Database/02_05_Locations_Groups_and_Study_Areas/02_05_Locations_Groups_and_Study_Areas.html)**
-
 -->
+
+* **[2.5 Study Areas, Groups and Projects](/database-manual/a02_Understanding_ORMGP_Database/02_05_Study_Areas/02_05_Study_Areas.html)**
+
+    + **2.5.1 ORMGP Study Area**
+    + **2.5.2 Study Areas**
+    + **2.5.3 Groups**
+    + **2.5.4 Projects**
 
 * **[2.6 Report Library](/database-manual/a02_Understanding_ORMGP_Database/02_06_Report_Library/02_06_Report_Library.html)**
 

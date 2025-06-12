@@ -134,7 +134,8 @@ which temporal data is associated.  As such, for example, all air temperature
 and rainfall recorded at a climate station would be found related to that
 interval.  It is possible that these could be separated into multiple
 intervals in order to capture additional information on the instrumentation
-used to capture data (then there would be one interval associated with the
-temperature data, a second interval associated with the rain gauge, etc...).
+used to collect the particular data (then there would be one interval
+associated with the temperature data, a second interval associated with the
+rain gauge, etc...).
 
 *Last Modified: 2025-06-12*
