@@ -81,7 +81,11 @@ knit:   (
 
 * **[2.7 Multi-Screen Installations](/database-manual/02_Understanding_ORMGP_Database/02_07_Multi-Screen_Installations/02_07_Multi-Screen_Installations.html)**
 
-* **[2.8 Multi-Borehole Records](/database-manual/02_Understanding_ORMGP_Database/02_08_Multi-Borehole_Records/02_08_Multi-Borehole_Records.html)**
+-->
+
+* **[2.8 Multi-Borehole Records (MOE)](/database-manual/a02_Understanding_ORMGP_Database/02_08_Multi-Borehole_Records/02_08_Multi-Borehole_Records.html)**
+
+<!--
 
 ### Section 3 - Practical Applications
 

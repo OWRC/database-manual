@@ -164,7 +164,7 @@ numeric names.  These names relate to the document folder identifier (DFID)
 found in D_LOC_DOCUMENT (and is also present in the LOC_NAME field in D_LOC).
 Each directory holds, generally, a single PDF document which is the actual
 report; an additional compressed file containing any data (or other
-information) related tot he report may be present.
+information) related to the report may be present.
 
 The DFID is not automatically defined.  Instead, assigned ranges of values are
 made available to specific users and organizations; these ranges do not
@@ -207,10 +207,12 @@ Form_ORMGP_20250601_blank.mdb*, contains the reference tables and values used
 in the ORMGP master database (Version 7) as well as a form that allows users
 to interactively add the characteristics of their reports into a readily
 imported format.  This includes an auto-increment function within the user's
-assigned range (of DFID's).  The report pdf and any associated files should be
-placed in a numbered directory (as outlined in **Section 2.6.2**).  The PDF
-should consist either of the original digital file, as made available through
-a consultant, or the scanned hard copy.  In both bases, the PDF will be
+assigned range (of DFID's).  
+
+The report PDF and any associated files should be placed in a numbered
+directory (as outlined in **Section 2.6.2**).  The PDF should consist either
+of the original digital file, as made available through a consultant, or a
+scanned version of the original hard copy.  In both bases, the PDF will be
 examined and optical character recognition (OCR) will be applied as necessary.
 The latter is to enable keyword searches upon the entire document, available
 through the ORMGP website.
@@ -229,11 +231,11 @@ were of the form (for example)
 * DOC_YN_DIGITAL_DATA
 * etc...
 
-The DOC_YN_ENTERED_\* field indicating whether the available data had been
-incorporated within the database.  As of Version 8 of the database, this
-information
-is now incorporated within the D_LOC_ATTR table.  This references the
-R_ATTR_CODE table (through ATTR_CODE) containing similar records:
+The populated DOC_YN_ENTERED_\* field would indicate whether the available
+data had been incorporated within the database.  As of Version 8 of the
+database, this information is now found within the D_LOC_ATTR table.  This
+references the R_ATTR_CODE table (through ATTR_CODE) containing similar
+records:
 
 * Document - Borehole Log YN (*23*)
 * Document - Chemistry Data YN (*24*)
