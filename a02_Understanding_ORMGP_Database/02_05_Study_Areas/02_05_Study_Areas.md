@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.5"
 author: "ORMGP"
-date:   "20250612"
+date:   "20250613"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -33,8 +33,9 @@ location (held in the D_LOC_SPATIAL table), to determine those locations
 that fall within the ORMGP Study Area.  This is especially important with regard to
 population of the various W_\* tables (that contain a subset of the locations held
 within the ORMGP database).  As this is distinct from other areas (e.g. the
-extents of a conservation area), this relation is stored within the
-D_LOC_PROJECT table.  Refer to **Section 2.5.4** for additional details.
+extents of a conservation area or the extents of a geologic model), this
+relation is stored within the D_LOC_PROJECT table instead.  Refer to **Section
+2.5.4** for additional details.
 
 ## Section 2.5.2 Study Areas
 
@@ -77,20 +78,18 @@ have been changed for any reason.
 
 ## Section 2.5.3 Groups
 
-TO REVIEW
-
-
 Groups allow locations or intervals to be tagged as being associated - whether
 this be related to a particular project or study, spatial area, monitoring
 personnel, etc...  Any individual location/interval can be associated with
-multiple groups (different from 'Study Areas' where only a single 'Study Area'
-can be defined).
+multiple groups.  In general, groups would apply to a smaller number of
+locations than would be assocated through the use of D_LOC_AREA as described
+in **Section 2.5.2**.
 
-Three data tables 
+Groups are defined through three data tables 
 
-* D_GROUP_INTERVAL
-* D_GROUP_LOCATION
-* D_GROUP_READING (currently unused)
+* D_GRP_INTERVAL
+* D_GRP_LOCATION
+* D_GRP_OTHER
 
 and six look-up tables
 
@@ -98,16 +97,33 @@ and six look-up tables
 * R_GROUP_INT_TYPE_CODE
 * R_GROUP_LOC_CODE
 * R_GROUP_LOC_TYPE_CODE
-* R_GROUP_READING_CODE (currently unused)
-* R_GROUP_READING_TYPE_CODE (currently unused)
+* R_GROUP_OTH_CODE
+* R_GROUP_OTH_TYPE_CODE
 
-are used.  The data tables associate a LOC_ID, INT_ID or RD_NAME_CODE with a
-particular GROUP_INT_CODE, GROUP_LOC_CODE or GROUP_READING_CODE.  The look-up
-(R_\*) tables associate the individual \*_CODE's with a particular
-user-defined group name.  Examine the view 'V_Groups_Wells_BHs' for examples
-of existing location-based (i.e. grouped by LOC_ID) groups.
+For the location tables,  these allow any set of location identfiers (i.e.
+LOC_ID) to be associated with any specified group with a well defined and
+meaningful name (as found in R_GROUP_LOC_CODE; e.g. *Simcoe - Wasaga Beach -
+All Municipal Wells (102)*).  Each group can correspond to a particular type
+which can include, for example:
 
-Refer to Section 3.2.2 for adding new groups to the database.
+* Well Nest (6)
+* Well Grouping - Pumping Well Influenced (7)
+
+In the first case, these are locations that would occur at the same site
+location but have differing coordinates (refer to **Section 2.7** as an
+example).  The latter case, these would be wells that appear to be responding
+to pumping at a pumping well.  Unless specified in this manner, these would
+not naturally be assocated within the ORMGP database.
+
+The interval tables are used in much the same way.  In this case, though, they
+are working at the interval (i.e. INT_ID) level as opposed to the location
+level.  Note that for Multi-Screen Installations (as described in **Section
+2.7**), multiple intervals found at a single location are considered to be
+grouped or nested without being present within any of the grouping tables.
+
+
+TO COMPLETE
+
 
 A special case of a group occurs with regard to D_PICK_EXTERNAL.  Here, the
 PGROUP field is used to associate (and name) points/picks that are part of a
@@ -120,6 +136,24 @@ feature.
 
 ## Section 2.5.4 Projects
 
-TO POPULATE
+The D_LOC_PROJECT table is used to tag locations (by LOC_ID) that are
+associated with particular *projects* within the ORMGP.  In particular, those
+locations that fall within the ORMGP Study Area are found here, assigned a
+PROJ_CODE of *Oakridges Moraine Groundwater Project - Study Area (1)*.  Note
+that a LOC_ID can be assigned to multiple projects within this table.  
 
-*Last Modified: 2025-06-12*
+Any additional specified project need not reside within the ORMGP Study Area.
+This allows multiple datasets to be stored within the ORMGP database without
+confusion with regard to area overlap or location duplication.  For example,
+a City of Ottawa series of locations were incorporated within the ORMGP
+database.  These are tagged as being assocated with that project (i.e. *City
+of Ottawa - Study Area (2)*).  Those locations are ignored through queries
+accessing the ORMGP locations.  This is especially important with regard to
+the population of the W_\* tables (various summary tables used for general
+website access).  Here, both sets of locations will be available; these will
+be treated differently, however, based upon their PROJ_CODE.  The primary
+reason for this being that the coordinates of the Ottawa dataset are projected
+differently (UTM Zone 18) than that of the regular ORMGP locations (UTM Zone
+17).
+
+*Last Modified: 2025-06-13*
