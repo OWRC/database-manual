@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.5"
 author: "ORMGP"
-date:   "20250613"
+date:   "20250616"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -23,7 +23,8 @@ ORMGP Study Area with a buffer of twenty-five kilometres.  However, locations
 are not limited to this area and data from beyond the study area extents do
 exist within the database (for a variety of reasons).  As such, there are a
 variety of ways by which locations can be grouped or tagged so as to delimit
-the viewing or analysis of particular datasets.
+the viewing or analysis of particular datasets.  In addition, groupings of
+non-locational (and non-interval) records are possible within the ORMGP database.
 
 ## Section 2.5.1 ORMGP Study Area
 
@@ -100,7 +101,7 @@ and six look-up tables
 * R_GROUP_OTH_CODE
 * R_GROUP_OTH_TYPE_CODE
 
-For the location tables,  these allow any set of location identfiers (i.e.
+For the location tables,  these allow any set of location identifiers (i.e.
 LOC_ID) to be associated with any specified group with a well defined and
 meaningful name (as found in R_GROUP_LOC_CODE; e.g. *Simcoe - Wasaga Beach -
 All Municipal Wells (102)*).  Each group can correspond to a particular type
@@ -121,18 +122,58 @@ level.  Note that for Multi-Screen Installations (as described in **Section
 2.7**), multiple intervals found at a single location are considered to be
 grouped or nested without being present within any of the grouping tables.
 
+The *other* grouping tables differ from the LOC_ID and INT_ID based tables.
+These are set to allow any set of keys to be grouped together.  As such, the
+R_GRP_OTH_TYPE_CODE table takes on greater importance as it will determine how
+the grouping of values is to be handled within the database (and to what
+tables the particular keys apply.  An example use would be to group together
+parameters from R_RD_NAME_CODE as an alternative to the default groupings
+available in R_RD_GROUP_CODE.
 
-TO COMPLETE
+#### R_RD_GROUP_CODE
 
+Most parameters within the R_RD_NAME_CODE are assigned a default grouping,
+commonly related to chemistry, through the RD_GROUP_CODE field.  This relates
+to the R_RD_GROUP_CODE table.  These include:
+
+* Chemistry - General (Water or Soil/Rock) (26)
+* Chemistry - Metals (Water or Soil/Rock) (2)
+* Chemistry - PAHs (Water or Soil/Rock) (20)
+* Chemistry - PFAS (Water or Soil/Rock) (40)
+* Chemistry - PHCs (Water or Soil/Rock) (33)
+* Chemistry - SVOCs (Water or Soil/Rock) (29)
+* Chemistry - VOCs (Water or Soil/Rock) (3)
+* Discharge/Production - From Wells (Municipal/Artesian/Other) (35)
+* Hydraulic Properties (30)
+* Meteorological (22)
+* Miscellaneous (Unassigned) (39)
+* Soil/Rock - Chemistry (31)
+* Soil/Rock - Geophysics (34)
+* Soil/Rock - Physical (37)
+* Soil/Rock - Physical - Grainsize (32)
+* Stream Flow Related (25)
+* Water - Bacteriological Related (36)
+* Water - Dissolved Gases (38)
+* Water - Extractables (5)
+* Water - Isotopes (15)
+* Water Level (23)
+* Water - Major Ions (1)
+* Water - Miscellaneous Organics (28)
+* Water - Pesticides & Herbicides (4)
+
+Only a single default group is available in this manner.  Multiple groupings
+of these parameters can be accomplished through the D_GRP_OTHER and related
+tables.
+
+#### D_PICK_EXTERNAL and R_GRP_PICK_CODE
 
 A special case of a group occurs with regard to D_PICK_EXTERNAL.  Here, the
-PGROUP field is used to associate (and name) points/picks that are part of a
-polyline or polygonal feature (for the latter, these points would delineate
-its edge).  This would allow, along with PORDER (which stores the order of the
-points/picks), the object to be recreated as necessary (e.g. to export to an
-external GIS package).  Each PGROUP must be specified in R_GROUP_PICK_CODE,
-allowing the object to be related to a particular (possibly real-world)
-feature.
+PGROUP field is used to associate (and name) points (i.e. picks) that are part
+of a polyline or polygonal feature (for the latter, these points would
+delineate its edge).  This allows, along with PORDER (which stores the order
+of the points), the object to be recreated as necessary (for example, to
+export to an external GIS package).  Each PGROUP must be specified in
+R_GRP_PICK_CODE, allowing the object to be related to a particular feature.
 
 ## Section 2.5.4 Projects
 
@@ -156,4 +197,4 @@ reason for this being that the coordinates of the Ottawa dataset are projected
 differently (UTM Zone 18) than that of the regular ORMGP locations (UTM Zone
 17).
 
-*Last Modified: 2025-06-13*
+*Last Modified: 2025-06-16*
