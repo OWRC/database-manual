@@ -1,7 +1,7 @@
 ---
 title:  "Cover and Table of Contents"
 author: "ormgpmd"
-date:   "20250612"
+date:   "20250616"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -141,9 +141,9 @@ knit:   (
 
 ### Appendices
 
-<!--
+* **[A - Basic Outline and Use of Structured Query Language (SQL)](/database-manual/aAppendices/A_SQL_Outline/A_SQL_Outline.html)**
 
-* **[A - Basic Outline and Use of Structured Query Language (SQL)](/database-manual/Appendices/A_SQL_Outline/A_SQL_Outline.html)**
+<!--
 
 * **[B - Soil Classification Systems and Translation of Geologic Layers](/database-manual/Appendices/B_Soil_Classification/B_Soil_Classification.html)**
 
@@ -226,4 +226,4 @@ knit:   (
 
 -->
 
-*Last modified: 2025-06-12*
+*Last modified: 2025-06-16*

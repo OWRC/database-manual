@@ -40,7 +40,7 @@ relation is stored within the D_LOC_PROJECT table instead.  Refer to **Section
 
 ## Section 2.5.2 Study Areas
 
-#### D_LOC - LOC_AREA and LOC_STUDY
+#### LOC_AREA and LOC_STUDY (D_LOC)
 
 The free-form text columns LOC_AREA and LOC_STUDY, found in
 D_LOC, allow a single study area (LOC_AREA) and single project
@@ -94,12 +94,12 @@ Groups are defined through three data tables
 
 and six look-up tables
 
-* R_GROUP_INT_CODE
-* R_GROUP_INT_TYPE_CODE
-* R_GROUP_LOC_CODE
-* R_GROUP_LOC_TYPE_CODE
-* R_GROUP_OTH_CODE
-* R_GROUP_OTH_TYPE_CODE
+* R_GRP_INT_CODE
+* R_GRP_INT_TYPE_CODE
+* R_GRP_LOC_CODE
+* R_GRP_LOC_TYPE_CODE
+* R_GRP_OTH_CODE
+* R_GRP_OTH_TYPE_CODE
 
 For the location tables,  these allow any set of location identifiers (i.e.
 LOC_ID) to be associated with any specified group with a well defined and
@@ -174,6 +174,7 @@ delineate its edge).  This allows, along with PORDER (which stores the order
 of the points), the object to be recreated as necessary (for example, to
 export to an external GIS package).  Each PGROUP must be specified in
 R_GRP_PICK_CODE, allowing the object to be related to a particular feature.
+Note that PGROUP is equivalent to GRP_PICK_CODE in the latter table.
 
 ## Section 2.5.4 Projects
 
