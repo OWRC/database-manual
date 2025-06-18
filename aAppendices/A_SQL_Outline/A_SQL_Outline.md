@@ -444,23 +444,23 @@ Standard arithmetic operations include
 
 The results of *'Modulo* (for those unfamiliar with the operation) would be the
 (integer) remainder after a division operation.  For example: *3 % 2* would
-return a value of *1*; *2 % 2% would return a value of *0*.
+return a value of *1*; *2 % 2* would return a value of *0*.
 
 In addition there are a number of mathematical functions that can be useful.
 Note that these may not necessarily available in all relational database
 software.  Examples include:
 
 * ABS(x) - Returns the absolute value of (x) 
-* SIGN(x) -  Returns the sign of (x) (i.e. one of -1, 0 or 1) 
+* CEILING(x) - Returns the smallest integer greater than or equal to (x); 
+  also CEIL(x)
+* FLOOR(x) - Returns the largest value less than or equal to (x)
 * MOD(x,y) - Modulo; returns the integer remainder of x divided by y (same as
   *x % y*
-* FLOOR(x) - Returns the largest value less than or equal to (x) 
-* CEILING(x) - Returns the smallest integer greater than or equal to (x); 
-  also CEIL(x) 
 * POWER(x,y) - Returns the value of x raised to the power of y 
 * ROUND(x) - Returns the value of x rounded to the nearest integer; users 
   must be careful when using this function as various ROUND(x) implementations 
   (across software platforms) may calculate this value differently 
+* SIGN(x) -  Returns the sign of (x) (i.e. one of -1, 0 or 1)
 * SQRT(x) - Returns the square-root value of (x)
 
 Other functions, including trigonometric functions, are also available but are
