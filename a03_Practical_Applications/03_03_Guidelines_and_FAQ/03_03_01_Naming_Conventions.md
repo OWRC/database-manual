@@ -1,7 +1,7 @@
 ---
 title:  "Section 3.3.1"
 author: "ORMGP"
-date:   "20250618"
+date:   "20250619"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -47,89 +47,78 @@ considered when naming locations in the database:
   well* as opposed to *CVC well* or *Grasshopper Road well* versus *CLOCA
   well*
 
-* For new municipal wells it is recommended that users follow the current
-  naming strategy of prefixing the well name with the community name in the
-  LOC_NAME field (e.g. *King City PW 1*); the LOC_NAME_ALT1 field for municipal
-  wells should also contain the Region (e.g. *York - King City - PW 1*); any future
-  user looking for a York Region well should have these locations; many municipal wells
-  also have a local name which can also be added to the name (e.g. a LOC_NAME
-  of *Aurora MW 7 (Henderson TW)*; a LOC_NAME_ALT1 of *York - Aurora MW 7 -
-  Henderson TW (GLL)*)
+* For new municipal wells it is recommended that users follow the
+  strategy of prefixing the well name with the community name in the LOC_NAME
+  field (e.g. *King City PW 1*); the LOC_NAME_ALT1 field for municipal wells
+  should also contain the Region (e.g. *York - King City - PW 1*); many
+  municipal wells also have a local name which can also be added to the name
+  (e.g. a LOC_NAME of *Aurora MW 7 (Henderson TW)*; a LOC_NAME_ALT1 of *York -
+  Aurora MW 7 - Henderson TW (GLL)*)
 
-UPTO HERE
+For municipal and consultant drilled wells, the following prefixes are
+recommended:
 
-* For municipal and consultant drilled wells, the following prefixes are recommended:
-   + PW (Pumping Well) - currently used, previously used, and backup pumping
-   wells should be designated with a PW (for wells in Durham the MW,
-   indicating 'Municipal Well', prefix is also incorporated - e.g. a LOC_NAME
-   of 'Blackstock MW 3 (PW 3)'; a LOC_NAME_ALT1 of 'Durham - Blackstock - MW
-   #3 (PW #3)') 
-   + TW (Test Well) or TH (Test Hole) - an exploration well that was
-   unsuccessful and has been abandoned is typically referred to as a test well
-   and should be given a TW prefix; it is worth noting that there are
-   exceptions since at times these exploration wells are not abandoned but,
-   rather, left in place as longer term monitoring wells - the TW moniker
-   remains with the well; note that the TW prefix is preferred over the TH
-   prefix
-   + BH (Borehole) - this prefix should be given to any borehole where a
-   screen is installed for monitoring purposes (water levels and/or water
-   quality); however, unlike longer term monitoring (MW) wells (see below),
-   these are generally intended for a short term life (e.g. those wells
-   drilled on proposed development sites that subsequently get abandoned)
-   + MW (Monitoring Well) - current or previously used monitoring wells from
-   which water levels or water quality data have been derived are typically
-   designated with an MW prefix
-   + EW (Early Warning Well) or SW (Sentry Well) - these prefixes can be used
-   for the subset of monitoring wells that are specifically used to look at
-   the water quality in wellhead protection areas; note that the LOC_TYPE_CODE
-   of '1' (i.e. 'Well or Borehole') would differentiate these wells from
-   surface water monitoring locations which have, instead, a LOC_TYPE_CODE of
-   '6' (i.e. 'Surface Water'), and (frequently) an SW prefix
-   + DP (Drive Point) or MP (Mini-Piezometer) - these prefixes are applied to
-   temporary drive points or mini-piezometers that are pounded by hand into
-   the shallow subsurface (often in stream beds or in wetlands or adjacent to
-   these features) to provide an indication of SW/GW interactions; typically
-   they are short-lived, however they can remain in place as active monitoring
-   locations for years; note that in the case of a mini-piezometer in a stream
-   where the water levels both inside and outside of the pipe are recorded, it
-   is recommended that the outside measurement be tied to a 'Staff Gauge'
-   station (i.e. SG, see below) as opposed to an MP station;  within the
-   database the two stations (e.g. an MP and SG) can be linked together
-   through the LOC_MASTER_LOC_ID field and can also be grouped using the
-   D_GROUP_LOCATION table
-   + SG (Staff Gauge) - the prefix is to be used where a staff gauge is placed
-   into a water body (e.g. a lake, stream or wetland) to measure the
-   elevation/depth of the water levels over time; the prefix should also be
-   used in the case of a mini-piezometer where the water level is measured on
-   the outside of a mini-piezometer pipe; generally these staff gauges are
-   temporary - however, when they are attached to a bridge (over/in a river)
-   or other infrastructure they can remain in place for years
-   + SW (Surface Water) - this prefix can be used for both spot flow as well
-   as gauged surface water stations
-   + CS (Climate Station) - this prefix can be used for any climate station
-   that is established for short or long term monitoring purposes
+* BH (Borehole) - usually any borehole in which a screen is installed for,
+  generally, monitoring purposes (i.e. water levels or sampling for water
+  quality); unlike Monitoring Wells (MW), listed below, these are usually
+  intended for short-term use only (e.g. wells that have been drilled on a
+  proposed development site that subsequently are abandoned)
+
+* CS (Climate Station) - added to locations for any climate station that is
+  established for short or long term monitoring purposes
+
+* DP (Drive Point) - these are temporary mini-piezometers that are installed
+  by hand (i.e. hammered into the ground) into the shallow subsurface often
+  in stream beds or wetlands to provide an indication of surfacewater and
+  groundwater interactions; normally these are short-lived but can remain in
+  place (as active monitoring loctions) for much longer periods; when
+  installed in a stream, measurements both inside and outside the pipe can be
+  made (refer to *Staff Gauge (G)* below for additional details)
+
+* EW (Early Warning Well ) - also known as a *Sentry Well (SW)*; these are for
+  monitoring wells that are specifically used to look at the water quality in
+  Wellhead Protection Areas; note that these locations would have a
+  LOC_TYPE_CODE of *1* (i.e. *Well or Borehole*) to differentiate it from
+  *Surface Water (SW)* locations that would have a LOC_TYPE_CODE of *6*
+
+* MW (Monitoring Well) - current or previously used monitoring wells from
+  which water levels or water quality data have been recorded
+
+* PW (Pumping Well) - all those wells that are currently or previously have
+  been used for pumping should be designated with a *PW* tag; this would
+  include backup pumping wells; in some cases, for example in Durham Region,
+  the *MW* prefix is also used (indicating a Municipal Well); an example 
+  LOC_NAME would then be *Blackstock MW3 (PW 3)* while the matching
+  LOC_NAME_ALT1 would be *Durahm - Blackstock - MW 3 (PW 3)*
+
+* SG (Staff Gauge) - this prefix is used where a staff gauge is placed into a
+  water body (e.g. a lake, stream or wetland) to measure the depth of the
+  water (commonly with multiple readings over time at the same site); the
+  prefix can also apply where a mini-piezometer is installed inside a pipe
+  while the water level is being measured on the outside of the pipe; these
+  can also be attached to a bridge or other types of infrastructure 
+
+* SW (Surface Water) - this is commonly used as a prefix for both spotflow as
+  well as gauged surface water stations
+
+* TW (Test Well) or TH (Test Hole) - an exploration well that was unsuccessful
+  and has been abandoned is typically referred to as a test well; at times,
+  these exploration wells are not abandoned but are instead left in place as
+  a longer term monitoring well; the *TH* prefix is disparaged
 
 It is important to note that the status of municipal or consultant drilled
 wells can change over time.  For example, pumping wells can be abandoned or
-converted to monitoring wells or vice-versa.  In such cases the prefix should
-be changed and the former name (with the earlier prefix designation) can be
-stored in the D_LOCATION_ALIAS table.  Alternatively, to clearly identify that
-the well was converted, the former prefix can also be saved in parenthesis at
-the end of the current name.  Decommissioned pumping wells should retain the
-PW prefix indefinitely and the name should not be changed.  The
-LOC_STATUS_CODE (in D_LOCATION) should be changed from 'Active' (i.e. a value
-of '1') to 'Decommissioned' (i.e. a value of '7'; refer to R_LOC_STATUS_CODE
-for details).
+converted to monitoring wells or vice-versa.  In such cases the prefix (and
+name) should be changed with the former name (and earlier prefix designation)
+stored in the D_LOC_ALIAS table.  Alternatively, the former prefix can also be
+saved in parenthesis at the end of the current name.  Decommissioned pumping
+wells should retain the *PW* prefix indefinitely and that name should not be
+changed; this change would be noted through modificiation of the
+LOC_STATUS_CODE value (refer to R_STATUS_CODE for details).  
 
-Examples are provided in the following table (broken into two sections for
-readability).  Refer also to the D_LOCATION table outline in Section 2.1.1.  
+Example locations and associated names are listed in Table 3.3.1.1.
 
-![Table 3.3.1.1 D_LOCATION naming conventions (LOC_NAME and
-LOC_NAME_ALT1)](t03_03_01_01_conv.jpg)*Table 3.3.1.1 D_LOCATION naming
-conventions (LOC_NAME and LOC_NAME_ALT1).*
+![Table 3.3.1.1 D_LOC naming conventions](t03_03_01_01_names.png)
+*Table 3.3.1.1 D_LOC naming conventions*
 
-![Table 3.3.1.2 D_LOCATION naming conventions (LOC_ORIGINAL_NAME, LOC_NAME_MAP
-and LOC_STUDY)](t03_03_01_02_conv.jpg)*Table 3.3.1.2 D_LOCATION naming
-conventions (LOC_ORIGINAL_NAME, LOC_NAME_MAP and LOC_STUDY).*
-
-*Last Modified: 2025-06-18*
+*Last Modified: 2025-06-19*

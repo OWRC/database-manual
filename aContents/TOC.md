@@ -1,7 +1,7 @@
 ---
 title:  "Cover and Table of Contents"
 author: "ormgpmd"
-date:   "20250616"
+date:   "20250619"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -86,9 +86,9 @@ knit:   (
 
 * **[2.8 Multi-Borehole Records (MOE)](/database-manual/a02_Understanding_ORMGP_Database/02_08_Multi-Borehole_Records/02_08_Multi-Borehole_Records.html)**
 
-<!--
-
 ### Section 3 - Practical Applications
+
+<!--
 
 * **3.1 Working with the Database**
 
@@ -101,9 +101,14 @@ knit:   (
 
 * **[3.2 Training Exercises](/database-manual/03_Practical_Applications/03_02_Training_Exercises/03_02_Training_Exercises.html)**
 
+-->
+
 * **3.3 Guidelines and FAQ**
 
-    + **[3.3.1 Naming Conventions](/database-manual/03_Practical_Applications/03_03_Guidelines_and_FAQ/03_03_01_Naming_Conventions.html)**
+    + **[3.3.1 Naming Conventions](/database-manual/a03_Practical_Applications/03_03_Guidelines_and_FAQ/03_03_01_Naming_Conventions.html)**
+
+<!--
+
     + **[3.3.2 Quality Assurance (QA) and Quality Control (QC)](/database-manual/03_Practical_Applications/03_03_Guidelines_and_FAQ/03_03_02_QA-QC.html)**
     + **[3.3.3 Data Source Tracking](/database-manual/03_Practical_Applications/03_03_Guidelines_and_FAQ/03_03_03_Data_Source_Tracking.html)**
     + **[3.3.4 Frequently Asked Questions (FAQ)](/database-manual/03_Practical_Applications/03_03_Guidelines_and_FAQ/03_03_04_FAQ.html)**
@@ -226,4 +231,4 @@ knit:   (
 
 -->
 
-*Last modified: 2025-06-16*
+*Last modified: 2025-06-19*

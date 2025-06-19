@@ -1,7 +1,7 @@
 ---
 title:  "Glossary"
 author: "ORMGP"
-date:   "20250612"
+date:   "20250619"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -18,6 +18,11 @@ knit:   (
 
 # Glossary
 
+#### BH
+
+Borehole.  This can be used as a prefix when naming locations within the
+ORMGP database.  Refer to Section 3.3.1.
+
 #### CAMC
 
 Conservation Authorities Moraine Coalition.
@@ -26,13 +31,30 @@ Conservation Authorities Moraine Coalition.
 
 The Central Lake Ontario Conservation Authority.
 
+#### CS
+
+Climate Station.  This can be used as a prefix when naming locations within
+the ORMGP database.  Refer to Section 3.3.1.
+
 #### CVC
 
 The Credit Valley Conservation authority.
 
+#### DP
+
+Drive Point.  Also known as a *Mini-Piezometer (MP)*.  This can be used as a
+prefix when naming locations within the ORMGP database.  Refer to Section
+3.3.1.
+
 #### EASR
 
 The MOE Environmental Activity And Sector Registry.
+
+#### EW
+
+Early Warning Well.  Also referred to as a *Sentry Well (SW)*.  This can be
+used as a prefix when naming locations within the ORMGP database.  Refer to
+Section 3.3.1.
 
 #### GRCA
 
@@ -61,6 +83,17 @@ The Lower Thames Valley Conservation Authority.
 
 The Ontario Ministry of the Environment.  This may also be referenced as the
 Ministry of the Environment, Conservation and Parks.
+
+#### MP
+
+A Mini-Piezometer.  Also referred to as a *Drive Point (DP)*.  This can be
+used as a prefix when naming locations within the ORMGP database.  Refer to
+Section 3.3.1.
+
+#### MW
+
+Monitoring Well.  This can be used as a prefix when naming locations within
+the ORMGP database.  Refer to Section 3.3.1.
 
 #### NVCA
 
@@ -94,13 +127,40 @@ The Oak Ridges Moraine Groundwater Program.  Partners include:
 
 The MOE Permit to Take Water dataset.
 
+#### PW
+
+Pumping Well.  This can be used as a prefix when naming locations within the
+ORMGP database.  Refer to Section 3.3.1.
+
 #### PWQMN
 
 The Ontario Provinical (Stream) Water Quality Monitoring Network.
 
+#### SG
+
+Staff Gauge.  This can be used as a prefix when naming locations within the
+ORMGP database.  Refer to Section 3.3.1.
+
+#### SW
+
+Sentry Well.  Also referred to as an *Early Warning Well (EW)*.  This can be
+used as a prefix when naming locations within the ORMGP database.  Refer to
+Section 3.3.1.
+
+#### TH
+
+Test Hole.  This can be used as a prefix when naming locations within the
+ORMGP database but is disparage.  A Test Well (TW) designation should be used
+in its stead.  Refer to Section 3.3.1.
+
 #### TRCA
 
 The Toronto and Region Conservation Authority.
+
+#### TW
+
+Test Well.  This can be used as a prefix when naming locations within the
+ORMGP database.  Refer to Section 3.3.1.
 
 #### YPDT-CAMC
 
@@ -116,4 +176,4 @@ Well Information System (WWIS).
 
 The MOE Water Well Information System.
 
-*Last Modified: 2025-06-12*
+*Last Modified: 2025-06-19*
