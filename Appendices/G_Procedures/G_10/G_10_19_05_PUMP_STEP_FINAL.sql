@@ -19,6 +19,7 @@
 -- v20220328 504 rows
 -- v20230324 302 rows
 -- v20240326 415 rows
+-- v20250711 483 rows
 
 SELECT
 [PUMP_TEST_ID]
@@ -28,7 +29,7 @@ SELECT
 ,[PUMP_RATE_UNITS_OUOM]
 ,min([PUMP_START]) as [PUMP_START]
 ,max([PUMP_END]) as [PUMP_END]
-FROM MOE_20240326.[dbo].[YC_20240326_PUMP_STEP]
+FROM MOE_20250711.[dbo].[YC_20250711_PUMP_STEP]
 where 
 testtype='D'
 group by
@@ -51,7 +52,7 @@ t1.PUMP_TEST_ID
 ,t1.PUMP_RATE_UNITS_OUOM
 ,t1.PUMP_START
 ,t1.PUMP_END
-,cast(526 as int) as DATA_ID
+,cast(528 as int) as DATA_ID
 ,t1.SYS_RECORD_ID
 from 
 (
@@ -64,7 +65,7 @@ SELECT
 ,min([PUMP_START]) as [PUMP_START]
 ,max([PUMP_END]) as [PUMP_END]
 ,ROW_NUMBER() over (order by PUMP_TEST_ID) as SYS_RECORD_ID
-FROM MOE_20240326.[dbo].[YC_20240326_PUMP_STEP]
+FROM MOE_20250711.[dbo].[YC_20250711_PUMP_STEP]
 where 
 testtype='D'
 group by
@@ -80,9 +81,9 @@ t1.PUMP_TEST_ID
 ,t1.PUMP_RATE_UNITS_OUOM
 ,t1.PUMP_START
 ,t1.PUMP_END
-,cast(526 as int) as DATA_ID
+,cast(528 as int) as DATA_ID
 ,t1.SYS_RECORD_ID
-into MOE_20240326.dbo.M_D_PUMPTEST_STEP 
+into MOE_20250711.dbo.M_D_PUMPTEST_STEP 
 from 
 (
 SELECT
@@ -94,7 +95,7 @@ SELECT
 ,min([PUMP_START]) as [PUMP_START]
 ,max([PUMP_END]) as [PUMP_END]
 ,ROW_NUMBER() over (order by PUMP_TEST_ID) as SYS_RECORD_ID
-FROM MOE_20240326.[dbo].[YC_20240326_PUMP_STEP]
+FROM MOE_20250711.[dbo].[YC_20250711_PUMP_STEP]
 where 
 testtype='D'
 group by

@@ -14,6 +14,7 @@
 -- v20220328 313 rows
 -- v20230324 158 rows
 -- v20240326 252 rows
+-- v20250711 334 rows
 
 select
 bi.LOC_ID as tmp_LOC_ID
@@ -39,7 +40,7 @@ when fmdgl.GEOL_UNIT_OUOM='ft' then MAX(fmdgl.GEOL_BOT_OUOM)*0.3048
 else MAX(fmdgl.GEOL_BOT_OUOM)
 end as MON_BOT_OUOM
 from 
-MOE_20240326.dbo.M_D_GEOLOGY_LAYER as fmdgl
+MOE_20250711.dbo.M_D_GEOLOGY_LAYER as fmdgl
 inner join OAK_20160831_MASTER.dbo.R_GEOL_MAT1_CODE as rgmc
 on fmdgl.GEOL_MAT1_CODE=rgmc.GEOL_MAT1_CODE
 where 
@@ -49,21 +50,21 @@ in
 select
 ybc.BORE_HOLE_ID as LOC_ID
 from 
-MOE_20240326.dbo.YC_20240326_BH_ID as ybc
+MOE_20250711.dbo.YC_20250711_BH_ID as ybc
 where
 ybc.BORE_HOLE_ID 
 not in
-( select tmp_LOC_ID from MOE_20240326.dbo.YC_20240326_DINTMON )
+( select tmp_LOC_ID from MOE_20250711.dbo.YC_20250711_DINTMON )
 )
 and rgmc.GEOL_MAT1_ROCK=1
 group by
 fmdgl.LOC_ID,fmdgl.GEOL_UNIT_OUOM
 ) as bi
-inner join MOE_20240326.dbo.YC_20240326_BH_ID as ybc
+inner join MOE_20250711.dbo.YC_20250711_BH_ID as ybc
 on bi.LOC_ID=ybc.BORE_HOLE_ID   
 
 
-insert into MOE_20240326.dbo.YC_20240326_DINTMON
+insert into MOE_20250711.dbo.YC_20250711_DINTMON
 (tmp_LOC_ID,tmp_INT_TYPE_CODE,MON_TOP_OUOM,MON_BOT_OUOM,MON_UNIT_OUOM,MON_COMMENT)
 select
 bi.LOC_ID as tmp_LOC_ID
@@ -89,7 +90,7 @@ when fmdgl.GEOL_UNIT_OUOM='ft' then MAX(fmdgl.GEOL_BOT_OUOM)*0.3048
 else MAX(fmdgl.GEOL_BOT_OUOM)
 end as MON_BOT_OUOM
 from 
-MOE_20240326.dbo.M_D_GEOLOGY_LAYER as fmdgl
+MOE_20250711.dbo.M_D_GEOLOGY_LAYER as fmdgl
 inner join OAK_20160831_MASTER.dbo.R_GEOL_MAT1_CODE as rgmc
 on fmdgl.GEOL_MAT1_CODE=rgmc.GEOL_MAT1_CODE
 where 
@@ -99,17 +100,17 @@ in
 select
 ybc.BORE_HOLE_ID as LOC_ID
 from 
-MOE_20240326.dbo.YC_20240326_BH_ID as ybc
+MOE_20250711.dbo.YC_20250711_BH_ID as ybc
 where
 ybc.BORE_HOLE_ID 
 not in
-( select tmp_LOC_ID from MOE_20240326.dbo.YC_20240326_DINTMON )
+( select tmp_LOC_ID from MOE_20250711.dbo.YC_20250711_DINTMON )
 )
 and rgmc.GEOL_MAT1_ROCK=1
 group by
 fmdgl.LOC_ID,fmdgl.GEOL_UNIT_OUOM
 ) as bi
-inner join MOE_20240326.dbo.YC_20240326_BH_ID as ybc
+inner join MOE_20250711.dbo.YC_20250711_BH_ID as ybc
 on bi.LOC_ID=ybc.BORE_HOLE_ID
 
 

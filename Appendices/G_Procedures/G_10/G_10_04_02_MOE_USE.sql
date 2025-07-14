@@ -10,8 +10,9 @@
 -- v20220328 121175 rows
 -- v20230324 143706 rows
 -- v20240326 153211 rows
+-- v20250711 167109 rows
 
-update MOE_20240326.dbo.TblWWR
+update MOE_20250711.dbo.TblWWR
 set
 USE_1ST=0
 where
@@ -21,8 +22,9 @@ USE_1ST is null
 -- v20220328 510907 rows
 -- v20230324 543675 rows
 -- v20240326 579850 rows
+-- v20250711 608704 rows
 
-update MOE_20240326.dbo.TblWWR
+update MOE_20250711.dbo.TblWWR
 set
 USE_2ND=0
 where
@@ -42,7 +44,7 @@ select
  end
  as [MOE_USE]
 from 
-MOE_20240326.dbo.TblWWR as wwr
+MOE_20250711.dbo.TblWWR as wwr
 group by
 USE_1ST
 order by 
@@ -63,9 +65,9 @@ select
  end
  as [MOE_USE]
 into 
-MOE_20240326.dbo.YC_20240326_MOE_USE
+MOE_20250711.dbo.YC_20250711_MOE_USE
 from 
-MOE_20240326.dbo.TblWWR as wwr
+MOE_20250711.dbo.TblWWR as wwr
 group by
 USE_1ST
 order by 
@@ -87,7 +89,7 @@ select
  end
  as [MOE_USE]
 from 
-MOE_20240326.dbo.TblWWR as wwr
+MOE_20250711.dbo.TblWWR as wwr
 group by
 USE_2ND
 order by 

@@ -15,7 +15,7 @@ select
  end 
  as [LOC_COORD_OUOM_CODE]
 FROM 
-MOE_20240326.[dbo].[TblBore_Hole] as tbh
+MOE_20250711.[dbo].[TblBore_Hole] as tbh
 group by
 ZONE 
 
@@ -31,9 +31,9 @@ ZONE
  end 
  as [LOC_COORD_OUOM_CODE]
 into 
-MOE_20240326.dbo.YC_20240326_LOC_COORD_OUOM_CODE
+MOE_20250711.dbo.YC_20250711_LOC_COORD_OUOM_CODE
 FROM 
-MOE_20240326.[dbo].[TblBore_Hole] as tbh
+MOE_20250711.[dbo].[TblBore_Hole] as tbh
 group by
 ZONE 
 

@@ -14,10 +14,10 @@ moes.Slot as MOE_SLOT
 ,convert(varchar(50),moes.Slot) as YC_SLOT
 ,cast(null as float) as CONV_YC_SLOT
 from 
-MOE_20240326.dbo.YC_20240326_BH_ID as ycb
-inner join MOE_20240326.dbo.TblPipe as moep
+MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+inner join MOE_20250711.dbo.TblPipe as moep
 on ycb.BORE_HOLE_ID=moep.Bore_Hole_ID
-inner join MOE_20240326.dbo.TblScreen as moes
+inner join MOE_20250711.dbo.TblScreen as moes
 on moep.PIPE_ID=moes.PIPE_ID
 where 
 moes.SCRN_TOP_DEPTH is not null 
@@ -29,12 +29,12 @@ select
 moes.Slot as MOE_SLOT
 ,convert(varchar(50),moes.Slot) as YC_SLOT
 ,cast(null as float) as CONV_YC_SLOT
-into MOE_20240326.dbo.YC_20240326_MOE_SLOT
+into MOE_20250711.dbo.YC_20250711_MOE_SLOT
 from 
-MOE_20240326.dbo.YC_20240326_BH_ID as ycb
-inner join MOE_20240326.dbo.TblPipe as moep
+MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+inner join MOE_20250711.dbo.TblPipe as moep
 on ycb.BORE_HOLE_ID=moep.Bore_Hole_ID
-inner join MOE_20240326.dbo.TblScreen as moes
+inner join MOE_20250711.dbo.TblScreen as moes
 on moep.PIPE_ID=moes.PIPE_ID
 where 
 moes.SCRN_TOP_DEPTH is not null 
@@ -61,69 +61,69 @@ ycm.MOE_SLOT
 ,ycm.YC_SLOT
 ,cast(YC_SLOT as float) as CONV_YC_SLOT
 from 
-MOE_20240326.dbo.YC_20240326_MOE_SLOT as ycm
+MOE_20250711.dbo.YC_20250711_MOE_SLOT as ycm
 
-update [MOE_20240326].dbo.YC_20240326_MOE_SLOT
+update [MOE_20250711].dbo.YC_20250711_MOE_SLOT
 set
 CONV_YC_SLOT=cast(YC_SLOT as float)
 
 -- Modifications
 
-update MOE_20240326.dbo.YC_20240326_MOE_SLOT
+update MOE_20250711.dbo.YC_20250711_MOE_SLOT
 set
 yc_slot='6'
 where 
 moe_slot='# 6'
 
-update MOE_20240326.dbo.YC_20240326_MOE_SLOT
+update MOE_20250711.dbo.YC_20250711_MOE_SLOT
 set
 yc_slot='8'
 where 
 moe_slot='#8'
 
-update MOE_20240326.dbo.YC_20240326_MOE_SLOT
+update MOE_20250711.dbo.YC_20250711_MOE_SLOT
 set
 yc_slot='20'
 where 
 moe_slot='#20'
 
-update MOE_20240326.dbo.YC_20240326_MOE_SLOT
+update MOE_20250711.dbo.YC_20250711_MOE_SLOT
 set
 yc_slot='18'
 where 
 moe_slot='#18'
 
-update MOE_20240326.dbo.YC_20240326_MOE_SLOT
+update MOE_20250711.dbo.YC_20250711_MOE_SLOT
 set
 yc_slot='10'
 where 
 moe_slot='#10'
 
-update MOE_20240326.dbo.YC_20240326_MOE_SLOT
+update MOE_20250711.dbo.YC_20250711_MOE_SLOT
 set
 yc_slot='14'
 where 
 moe_slot='#14'
 
-update MOE_20240326.dbo.YC_20240326_MOE_SLOT
+update MOE_20250711.dbo.YC_20250711_MOE_SLOT
 set
 yc_slot='6'
 where 
 moe_slot='#6'
 
-update MOE_20240326.dbo.YC_20240326_MOE_SLOT
+update MOE_20250711.dbo.YC_20250711_MOE_SLOT
 set
 yc_slot='1'
 where 
 moe_slot='1-'
 
-update MOE_20240326.dbo.YC_20240326_MOE_SLOT
+update MOE_20250711.dbo.YC_20250711_MOE_SLOT
 set
 yc_slot=null
 where 
 moe_slot='S/N'
 
-update MOE_20240326.dbo.YC_20240326_MOE_SLOT
+update MOE_20250711.dbo.YC_20250711_MOE_SLOT
 set
 yc_slot='12'
 where 

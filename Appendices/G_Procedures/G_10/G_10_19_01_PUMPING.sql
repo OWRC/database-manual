@@ -50,11 +50,12 @@
 -- v20220328 10 rows
 -- v20230324 15 rows
 -- v20240326 14 rows
+-- v20250711 20 rows
 
 select
 COUNT(*) as rcount
 from 
-MOE_20240326.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20250711.dbo.M_D_INTERVAL_MONITOR as dim
 where
 dim.INT_ID
 in
@@ -62,21 +63,21 @@ in
 select 
 dint.INT_ID
 from 
-MOE_20240326.dbo.TblPipe as moetp
-inner join MOE_20240326.dbo.YC_20240326_BH_ID as ycb
+MOE_20250711.dbo.TblPipe as moetp
+inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycb
 on moetp.Bore_Hole_ID=ycb.BORE_HOLE_ID
-inner join MOE_20240326.dbo.TblPump_Test as moept
+inner join MOE_20250711.dbo.TblPump_Test as moept
 on moetp.PIPE_ID=moept.PIPE_ID
-inner join MOE_20240326.dbo.M_D_LOCATION as dloc
+inner join MOE_20250711.dbo.M_D_LOCATION as dloc
 on ycb.BORE_HOLE_ID=dloc.LOC_ID
-inner join MOE_20240326.dbo.M_D_INTERVAL as dint
+inner join MOE_20250711.dbo.M_D_INTERVAL as dint
 on dloc.LOC_ID=dint.LOC_ID
 where 
 moept.FLOWING like 'Y'
 )
 
 
-update MOE_20240326.dbo.M_D_INTERVAL_MONITOR
+update MOE_20250711.dbo.M_D_INTERVAL_MONITOR
 set
 MON_FLOWING=1
 where 
@@ -86,14 +87,14 @@ in
 select 
 dint.INT_ID
 from 
-MOE_20240326.dbo.TblPipe as moetp
-inner join MOE_20240326.dbo.YC_20240326_BH_ID as ycb
+MOE_20250711.dbo.TblPipe as moetp
+inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycb
 on moetp.Bore_Hole_ID=ycb.BORE_HOLE_ID
-inner join MOE_20240326.dbo.TblPump_Test as moept
+inner join MOE_20250711.dbo.TblPump_Test as moept
 on moetp.PIPE_ID=moept.PIPE_ID
-inner join MOE_20240326.dbo.M_D_LOCATION as dloc
+inner join MOE_20250711.dbo.M_D_LOCATION as dloc
 on ycb.BORE_HOLE_ID=dloc.LOC_ID
-inner join MOE_20240326.dbo.M_D_INTERVAL as dint
+inner join MOE_20250711.dbo.M_D_INTERVAL as dint
 on dloc.LOC_ID=dint.LOC_ID
 where 
 moept.FLOWING like 'Y'
@@ -116,6 +117,7 @@ moept.FLOWING like 'Y'
 -- v20220328 525 rows
 -- v20230324 
 -- v20240326 420 rows
+-- v20250711 488 rows 
 
 select 
 moept.PUMP_TEST_ID
@@ -137,7 +139,7 @@ case
 when moept.RATE_UOM='LPM' then moept.Flowing_rate/4.55
 else moept.Flowing_rate
 end as float) as [FLOWING_RATE_IGPM]
-,cast(526 as int) as [DATA_ID]
+,cast(528 as int) as [DATA_ID]
 ,cast(
 case 
 when moept.PUMPING_TEST_METHOD is null then null 
@@ -157,21 +159,21 @@ else moept.WATER_STATE_AFTER_TEST
 end as int) as [WATER_CLARITY_CODE]
 ,ROW_NUMBER() over (order by dint.INT_ID) as rnum
 from 
-MOE_20240326.dbo.TblPipe as moetp
-inner join MOE_20240326.dbo.YC_20240326_BH_ID as ycb
+MOE_20250711.dbo.TblPipe as moetp
+inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycb
 on moetp.Bore_Hole_ID=ycb.BORE_HOLE_ID
-inner join MOE_20240326.dbo.TblPump_Test as moept
+inner join MOE_20250711.dbo.TblPump_Test as moept
 on moetp.PIPE_ID=moept.PIPE_ID
-inner join MOE_20240326.dbo.M_D_LOCATION as dloc
+inner join MOE_20250711.dbo.M_D_LOCATION as dloc
 on ycb.BORE_HOLE_ID=dloc.LOC_ID
-inner join MOE_20240326.dbo.M_D_INTERVAL as dint
+inner join MOE_20250711.dbo.M_D_INTERVAL as dint
 on dloc.LOC_ID=dint.LOC_ID
 where
 (
 moept.Recom_depth is not null 
 or moept.Recom_rate is not null 
 or moept.Flowing_rate is not null 
-or moept.PUMP_TEST_ID in (select PUMP_TEST_ID from MOE_20240326.dbo.TblPump_Test_Detail)
+or moept.PUMP_TEST_ID in (select PUMP_TEST_ID from MOE_20250711.dbo.TblPump_Test_Detail)
 )
 
 
@@ -195,7 +197,7 @@ case
 when moept.RATE_UOM='LPM' then moept.Flowing_rate/4.55
 else moept.Flowing_rate
 end as float) as [FLOWING_RATE_IGPM]
-,cast(526 as int) as [DATA_ID]
+,cast(528 as int) as [DATA_ID]
 ,cast(
 case 
 when moept.PUMPING_TEST_METHOD is null then null 
@@ -214,23 +216,23 @@ when moept.WATER_STATE_AFTER_TEST is null then 0
 else moept.WATER_STATE_AFTER_TEST
 end as int) as [WATER_CLARITY_CODE]
 ,ROW_NUMBER() over (order by dint.INT_ID) as rnum
-into MOE_20240326.dbo.M_D_PUMPTEST
+into MOE_20250711.dbo.M_D_PUMPTEST
 from 
-MOE_20240326.dbo.TblPipe as moetp
-inner join MOE_20240326.dbo.YC_20240326_BH_ID as ycb
+MOE_20250711.dbo.TblPipe as moetp
+inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycb
 on moetp.Bore_Hole_ID=ycb.BORE_HOLE_ID
-inner join MOE_20240326.dbo.TblPump_Test as moept
+inner join MOE_20250711.dbo.TblPump_Test as moept
 on moetp.PIPE_ID=moept.PIPE_ID
-inner join MOE_20240326.dbo.M_D_LOCATION as dloc
+inner join MOE_20250711.dbo.M_D_LOCATION as dloc
 on ycb.BORE_HOLE_ID=dloc.LOC_ID
-inner join MOE_20240326.dbo.M_D_INTERVAL as dint
+inner join MOE_20250711.dbo.M_D_INTERVAL as dint
 on dloc.LOC_ID=dint.LOC_ID
 where
 (
 moept.Recom_depth is not null 
 or moept.Recom_rate is not null 
 or moept.Flowing_rate is not null 
-or moept.PUMP_TEST_ID in (select PUMP_TEST_ID from MOE_20240326.dbo.TblPump_Test_Detail)
+or moept.PUMP_TEST_ID in (select PUMP_TEST_ID from MOE_20250711.dbo.TblPump_Test_Detail)
 )
 
 
@@ -250,11 +252,12 @@ or moept.PUMP_TEST_ID in (select PUMP_TEST_ID from MOE_20240326.dbo.TblPump_Test
 -- v20220328 0 rows
 -- v20230324 0 rows
 -- v20240326 0 rows
+-- v20250711 0 rows
 
 select
 dpump.PUMP_TEST_ID
 from 
-MOE_20240326.dbo.M_D_PUMPTEST as dpump
+MOE_20250711.dbo.M_D_PUMPTEST as dpump
 where
 dpump.INT_ID
 not in
@@ -262,18 +265,18 @@ not in
 select
 dim.INT_ID
 from 
-MOE_20240326.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20250711.dbo.M_D_INTERVAL_MONITOR as dim
 where
 dim.MON_FLOWING is not null 
 )
 and dpump.REC_PUMP_RATE_IGPM=dpump.FLOWING_RATE_IGPM
 
 
-update MOE_20240326.dbo.M_D_PUMPTEST
+update MOE_20250711.dbo.M_D_PUMPTEST
 set
 FLOWING_RATE_IGPM=null 
 from 
-MOE_20240326.dbo.M_D_PUMPTEST as dpump
+MOE_20250711.dbo.M_D_PUMPTEST as dpump
 where
 dpump.INT_ID
 not in
@@ -281,7 +284,7 @@ not in
 select
 dim.INT_ID
 from 
-MOE_20240326.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20250711.dbo.M_D_INTERVAL_MONITOR as dim
 where
 dim.MON_FLOWING is not null 
 )
@@ -299,11 +302,12 @@ and dpump.REC_PUMP_RATE_IGPM=dpump.FLOWING_RATE_IGPM
 -- v20220328 3 rows
 -- v20230324 0 rows
 -- v20240326 0 rows
+-- v20250711 0 rows
 
 select
 dim.INT_ID
 from 
-MOE_20240326.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20250711.dbo.M_D_INTERVAL_MONITOR as dim
 where
 dim.INT_ID
 in
@@ -311,7 +315,7 @@ in
 select 
 dpump.INT_ID 
 from 
-MOE_20240326.dbo.M_D_PUMPTEST as dpump
+MOE_20250711.dbo.M_D_PUMPTEST as dpump
 where
 dpump.INT_ID
 in 
@@ -319,7 +323,7 @@ in
 select
 dim.INT_ID
 from 
-MOE_20240326.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20250711.dbo.M_D_INTERVAL_MONITOR as dim
 where
 dim.MON_FLOWING is null 
 )
@@ -328,11 +332,11 @@ and dpump.FLOWING_RATE_IGPM is not null
 )
 
 
-update MOE_20240326.dbo.M_D_INTERVAL_MONITOR
+update MOE_20250711.dbo.M_D_INTERVAL_MONITOR
 set
 MON_FLOWING=1
 from 
-MOE_20240326.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20250711.dbo.M_D_INTERVAL_MONITOR as dim
 where
 dim.INT_ID
 in
@@ -340,7 +344,7 @@ in
 select 
 dpump.INT_ID 
 from 
-MOE_20240326.dbo.M_D_PUMPTEST as dpump
+MOE_20250711.dbo.M_D_PUMPTEST as dpump
 where
 dpump.INT_ID
 in 
@@ -348,7 +352,7 @@ in
 select
 dim.INT_ID
 from 
-MOE_20240326.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20250711.dbo.M_D_INTERVAL_MONITOR as dim
 where
 dim.MON_FLOWING is null 
 )
@@ -368,11 +372,12 @@ and dpump.FLOWING_RATE_IGPM is not null
 -- v20220328 16 rows
 -- v20230324 5 rows
 -- v20240326 0 rows
+-- v20250711 0 rows
 
 select
 dim.INT_ID
 from 
-MOE_20240326.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20250711.dbo.M_D_INTERVAL_MONITOR as dim
 where
 dim.INT_ID
 in
@@ -380,7 +385,7 @@ in
 select 
 dpump.INT_ID 
 from 
-MOE_20240326.dbo.M_D_PUMPTEST as dpump
+MOE_20250711.dbo.M_D_PUMPTEST as dpump
 where
 dpump.INT_ID
 in 
@@ -388,7 +393,7 @@ in
 select
 dim.INT_ID
 from 
-MOE_20240326.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20250711.dbo.M_D_INTERVAL_MONITOR as dim
 where
 dim.MON_FLOWING is null 
 )
@@ -396,11 +401,11 @@ and dpump.FLOWING_RATE_IGPM<dpump.REC_PUMP_RATE_IGPM
 )
 
 
-update MOE_20240326.dbo.M_D_INTERVAL_MONITOR
+update MOE_20250711.dbo.M_D_INTERVAL_MONITOR
 set
 MON_FLOWING=1
 from 
-MOE_20240326.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20250711.dbo.M_D_INTERVAL_MONITOR as dim
 where
 dim.INT_ID
 in
@@ -408,7 +413,7 @@ in
 select 
 dpump.INT_ID 
 from 
-MOE_20240326.dbo.M_D_PUMPTEST as dpump
+MOE_20250711.dbo.M_D_PUMPTEST as dpump
 where
 dpump.INT_ID
 in 
@@ -416,7 +421,7 @@ in
 select
 dim.INT_ID
 from 
-MOE_20240326.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20250711.dbo.M_D_INTERVAL_MONITOR as dim
 where
 dim.MON_FLOWING is null 
 )
@@ -436,11 +441,12 @@ and dpump.FLOWING_RATE_IGPM<dpump.REC_PUMP_RATE_IGPM
 -- v20220328 0 rows
 -- v20230324 0 rows
 -- v20240326 0 rows
+-- v20250711 0 rows
 
 select
 dpump.INT_ID
 from 
-MOE_20240326.dbo.M_D_PUMPTEST as dpump
+MOE_20250711.dbo.M_D_PUMPTEST as dpump
 where
 dpump.INT_ID
 in
@@ -448,7 +454,7 @@ in
 select 
 dpump.INT_ID 
 from 
-MOE_20240326.dbo.M_D_PUMPTEST as dpump
+MOE_20250711.dbo.M_D_PUMPTEST as dpump
 where
 dpump.INT_ID
 in 
@@ -456,7 +462,7 @@ in
 select
 dim.INT_ID
 from 
-MOE_20240326.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20250711.dbo.M_D_INTERVAL_MONITOR as dim
 where
 dim.MON_FLOWING is null 
 )
@@ -464,11 +470,11 @@ and dpump.FLOWING_RATE_IGPM>dpump.REC_PUMP_RATE_IGPM
 )
 
 
-update MOE_20240326.dbo.M_D_PUMPTEST
+update MOE_20250711.dbo.M_D_PUMPTEST
 set
 FLOWING_RATE_IGPM=null 
 from 
-MOE_20240326.dbo.M_D_PUMPTEST as dpump
+MOE_20250711.dbo.M_D_PUMPTEST as dpump
 where
 dpump.INT_ID
 in
@@ -476,7 +482,7 @@ in
 select 
 dpump.INT_ID 
 from 
-MOE_20240326.dbo.M_D_PUMPTEST as dpump
+MOE_20250711.dbo.M_D_PUMPTEST as dpump
 where
 dpump.INT_ID
 in 
@@ -484,7 +490,7 @@ in
 select
 dim.INT_ID
 from 
-MOE_20240326.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20250711.dbo.M_D_INTERVAL_MONITOR as dim
 where
 dim.MON_FLOWING is null 
 )

@@ -20,7 +20,7 @@ select
 ,convert(float,null) as [MAX_DEPTH_M]
 ,cast(null as int) as NOFORMATION
 from 
-MOE_20240326.dbo.YC_20240326_BORE_HOLE_ID_COORDS_YC as y
+MOE_20250711.dbo.YC_20250711_BORE_HOLE_ID_COORDS_YC as y
 
 select
  y.BORE_HOLE_ID
@@ -37,20 +37,21 @@ select
 ,convert(varchar(50),null) as [CON_MAX_DEPTH_UNITS]
 ,convert(float,null) as [MAX_DEPTH_M]
 ,cast(null as int) as NOFORMATION
-into MOE_20240326.dbo.YC_20240326_BH_ID
+into MOE_20250711.dbo.YC_20250711_BH_ID
 from 
-MOE_20240326.dbo.YC_20240326_BORE_HOLE_ID_COORDS_YC as y
+MOE_20250711.dbo.YC_20250711_BORE_HOLE_ID_COORDS_YC as y
 
 -- v20200721 11760 rows
 -- v20210119 24619 rows
 -- v20220328 15235 rows
 -- v20230324 18826 rows
 -- v20240326 23131 rows
+-- v20250711 18379 rows
 
 select
 count(*)
 from 
-MOE_20240326.dbo.YC_20240326_BH_ID
+MOE_20250711.dbo.YC_20250711_BH_ID
 
 
 

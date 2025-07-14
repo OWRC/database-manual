@@ -27,7 +27,7 @@
 --selected_flag,
 --data_entry_status,
 --ABANDONMENT_REC
---FROM moe_20240326."dbo"."tblWWR"
+--FROM moe_20250711."dbo"."tblWWR"
 --where
 --abandonment_rec is not null
 
@@ -42,6 +42,7 @@
 -- v20220328 Y records 37146; not null records 37146; match is okay
 -- v20230324 Y records 42202; not null records 42204; match is off by one
 -- v20240326 Y records 45084; not null records 45084; match is okay
+-- v20250711 Y records 51299; not null records 51299; match is okay
 
 select
 count(*)
@@ -49,13 +50,13 @@ count(*)
 --,d.loc_type_code
 from 
 oak_20160831_master.dbo.v_sys_moe_locations as v
-inner join moe_20240326.dbo.tblwwr as m
+inner join moe_20250711.dbo.tblwwr as m
 on v.moe_well_id=cast(m.well_id as int)
 inner join oak_20160831_master.dbo.d_location as d
 on v.loc_id=d.loc_id
 where
-abandonment_rec is not null
---abandonment_rec = 'Y'
+--abandonment_rec is not null
+abandonment_rec = 'Y'
 
 -- 2017.09.05 only 'Y' or NULL 
 -- 2018.05.30 only 'Y' or NULL
@@ -65,11 +66,12 @@ abandonment_rec is not null
 -- v20220328 only Y or NULL present
 -- v20230324 only Y or NULL present
 -- v20240326 only Y or NULL present
+-- v20250711 only Y or null present
 
 select
 distinct(abandonment_rec)
 from 
-moe_20240326.dbo.tblwwr
+moe_20250711.dbo.tblwwr
 
 
 --***** Examine the supposed Abandonment/Decommissioned wells
@@ -94,29 +96,31 @@ moe_20240326.dbo.tblwwr
 
 select
 cast(well_id as int) as well_id
-into MOE_20240326.dbo.YC_20240326_ABANDON_ALL
+into MOE_20250711.dbo.YC_20250711_ABANDON_ALL
 from 
-MOE_20240326.dbo.tblWWR
+MOE_20250711.dbo.tblWWR
 where
 abandonment_rec is not null
 
---drop table YC_20240326_ABANDON_ALL
+--drop table YC_20250711_ABANDON_ALL
 
 -- v20200721 50574 rows
 -- v20210119 53632 rows
 -- v20220328 55451 rows
 -- v20230324 63051 rows
 -- v20240326 66884 rows
+-- v20250711 75913 rows
 
 select
 count(*) 
 from 
-MOE_20240326.dbo.YC_20240326_ABANDON_ALL
+MOE_20250711.dbo.YC_20250711_ABANDON_ALL
 
 -- v20210119 4554 tied to DATA_ID 523
 -- v20220328 1653 tied to DATA_ID 524 
 -- v20230324 3375 tied to DATA_ID 525
 -- v20240326 2304 tied to DATA_ID 526
+-- v20250711 3730 tied to DATA_ID 528
 
 select
 count(*)
@@ -126,11 +130,11 @@ from
 OAK_20160831_MASTER.dbo.D_LOCATION as d
 inner join OAK_20160831_MASTER.dbo.V_SYS_MOE_LOCATIONS as v
 on d.loc_id=v.loc_id
-inner join MOE_20240326.dbo.YC_20240326_ABANDON_ALL as m
+inner join MOE_20250711.dbo.YC_20250711_ABANDON_ALL as m
 on v.moe_well_id=m.well_id
 where 
 d.LOC_TYPE_CODE=1
-and d.DATA_ID=526
+and d.DATA_ID=528
 --and d.loc_status_code=22
 
 -- update the LOC_TYPE_CODE; change the current value of '1' (Borehole or Well) to '27' (Decommissioned)
@@ -151,7 +155,7 @@ and d.DATA_ID=526
 --OAK_20160831_MASTER.dbo.D_LOCATION as d
 --inner join OAK_20160831_MASTER.dbo.V_SYS_MOE_LOCATIONS as v
 --on d.loc_id=v.loc_id
---inner join MOE_20240326.dbo.YC_20240326_ABANDON_ALL as m
+--inner join MOE_20250711.dbo.YC_20250711_ABANDON_ALL as m
 --on v.moe_well_id=m.well_id
 --where 
 --d.LOC_TYPE_CODE=1
@@ -164,7 +168,7 @@ and d.DATA_ID=526
 --OAK_20160831_MASTER.dbo.D_LOCATION as d
 --inner join OAK_20160831_MASTER.dbo.V_SYS_MOE_LOCATIONS as v
 --on d.loc_id=v.loc_id
---inner join MOE_20240326.dbo.YC_20240326_ABANDON_ALL as m
+--inner join MOE_20250711.dbo.YC_20250711_ABANDON_ALL as m
 --on v.moe_well_id=m.well_id
 --where 
 --d.LOC_TYPE_CODE=1
@@ -187,9 +191,9 @@ and d.DATA_ID=526
 --OAK_20160831_MASTER.dbo.D_LOCATION as d
 --inner join OAK_20160831_MASTER.dbo.V_SYS_MOE_LOCATIONS as v
 --on d.loc_id=v.loc_id
---inner join MOE_20240326.dbo.tblWWR as m
+--inner join MOE_20250711.dbo.tblWWR as m
 --on v.MOE_WELL_ID=cast(m.WELL_ID as int)
---left outer join MOE_20240326.dbo.YC_20240326_FINAL_STATUS as y
+--left outer join MOE_20250711.dbo.YC_20250711_FINAL_STATUS as y
 --on m.final_sta=y.final_sta
 --where 
 --m.ABANDONMENT_REC is not null
@@ -215,6 +219,7 @@ and d.DATA_ID=526
 -- v20220328 1653 records
 -- v20230324 3375 records
 -- v20240326 2304 rows
+-- v20250711 3730 rows
 
 select
 count(*)
@@ -222,10 +227,10 @@ from
 OAK_20160831_MASTER.dbo.D_LOCATION as d
 inner join OAK_20160831_MASTER.dbo.V_SYS_MOE_LOCATIONS as v
 on d.loc_id=v.loc_id
-inner join MOE_20240326.dbo.YC_20240326_ABANDON_ALL as m
+inner join MOE_20250711.dbo.YC_20250711_ABANDON_ALL as m
 on v.moe_well_id=m.well_id
 where 
-d.DATA_ID=526
+d.DATA_ID=528
 
 
 update OAK_20160831_MASTER.dbo.D_LOCATION
@@ -235,10 +240,10 @@ from
 OAK_20160831_MASTER.dbo.D_LOCATION as d
 inner join OAK_20160831_MASTER.dbo.V_SYS_MOE_LOCATIONS as v
 on d.loc_id=v.loc_id
-inner join MOE_20240326.dbo.YC_20240326_ABANDON_ALL as m
+inner join MOE_20250711.dbo.YC_20250711_ABANDON_ALL as m
 on v.moe_well_id=m.well_id
 where 
-d.DATA_ID=526
+d.DATA_ID=528
 
 
 -- update the loc_type_code (moved here from above) 
@@ -258,7 +263,7 @@ OAK_20160831_MASTER.dbo.D_LOCATION as d
 where 
 d.LOC_TYPE_CODE=1
 and d.loc_status_code= 7
-and d.DATA_ID=526
+and d.DATA_ID=528
 
 update OAK_20160831_MASTER.dbo.D_LOCATION 
 set
@@ -268,7 +273,7 @@ OAK_20160831_MASTER.dbo.D_LOCATION as d
 where 
 d.LOC_TYPE_CODE=1
 and d.loc_status_code= 7
-and d.DATA_ID=526
+and d.DATA_ID=528
 
 
 
