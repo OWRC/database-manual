@@ -9,12 +9,13 @@
 -- v20220328 105 rows
 -- v20230324 1179 rows
 -- v20240326 7949 rows
+-- v20250711 4469 rows
 
 select
 t.*
 ,t2.rcount_moe
 --count(*) as rcount
-into moe_20240326.dbo.ORMGP_20240326_upd_DGL
+into moe_20250711.dbo.ORMGP_20250711_upd_DGL
 from 
 (
 select
@@ -29,7 +30,9 @@ inner join oak_20160831_master.dbo.d_location as dloc
 on dbore.loc_id=dloc.loc_id
 inner join oak_20160831_master.dbo.d_location_qa as dlqa
 on dbore.loc_id=dlqa.loc_id
-inner join oak_20160831_master.dbo.v_sys_agency_ypdt as yc
+--inner join oak_20160831_master.dbo.v_sys_agency_ypdt as yc
+--on dbore.loc_id=yc.loc_id
+inner join oak_20160831_master.dbo.d_location_summary as yc
 on dbore.loc_id=yc.loc_id
 left outer join 
 (
@@ -45,7 +48,8 @@ on dbore.loc_id=dgl.loc_id
 inner join oak_20160831_master.dbo.v_sys_moe_locations as v
 on dbore.loc_id=v.loc_id
 where 
-dgl.rcount is null
+yc.ormgp_area is not null
+and dgl.rcount is null
 and dloc.loc_type_code=1
 and dlqa.qa_coord_confidence_code<>117
 ) as t
@@ -55,7 +59,7 @@ select
 m.bore_hole_id
 ,count(*) as rcount_moe
 from 
-moe_20240326.dbo.tblformation as m
+moe_20250711.dbo.tblformation as m
 where 
 m.mat1 is not null
 and cast(m.mat1 as int)<>0
@@ -64,10 +68,33 @@ bore_hole_id
 ) as t2
 on t.moe_bore_hole_id=t2.bore_hole_id
 
+
+
 -- check count of records
 
 select
 count(*) 
 from
-moe_20240326.dbo.ORMGP_20240326_upd_DGL
+moe_20250711.dbo.ORMGP_20250711_upd_DGL
+
+
+
+
+--***** v20250711
+
+-- check against d_location_qc
+
+select
+m.*
+,dlqc.*
+from 
+moe_20250711.dbo.ORMGP_20250711_upd_DGL as m
+inner join oak_20160831_master.dbo.d_location_qc as dlqc
+on m.loc_id=dlqc.loc_id
+
+
+
+
+
+
 

@@ -13,6 +13,7 @@
 -- v20220328 180 rows
 -- v20230324 1515
 -- v20240326 9895
+-- v20250711 5592
 
 select
 d.int_name
@@ -24,7 +25,7 @@ d.int_name
 ,d.int_start_date
 ,dint.int_start_date
 from 
-moe_20240326.dbo.o_d_interval as d
+moe_20250711.dbo.o_d_interval as d
 inner join oak_20160831_master.dbo.d_interval as dint
 on d.int_id=dint.int_id
 where 
@@ -36,7 +37,7 @@ and
 or
 ( d.int_type_code <> dint.int_type_code )
 or
-( d.int_name_alt1 <> dint.int_name_alt1 )
+( d.int_name_alt1 collate database_default <> dint.int_name_alt1 collate database_default )
 )
 
 -- we'll now update these
@@ -54,7 +55,7 @@ int_name= d.int_name
 ,sys_temp2= d.sys_temp2
 from 
 oak_20160831_master.dbo.d_interval as dint
-inner join moe_20240326.dbo.o_d_interval as d
+inner join moe_20250711.dbo.o_d_interval as d
 on dint.int_id=d.int_id
 where 
 d.int_exists=1
@@ -64,7 +65,7 @@ and
 or
 ( d.int_type_code <> dint.int_type_code )
 or
-( d.int_name_alt1 <> dint.int_name_alt1 )
+( d.int_name_alt1 collate database_default <> dint.int_name_alt1 collate database_default )
 )
 
 -- v20200721 max id 2758
@@ -72,40 +73,42 @@ or
 -- v20220328 max rkey 182 
 -- v20230324 max rkey 1516
 -- v20240326 max rkey 9898
+-- v20250711 max rkey 5697 
 
 -- note that this is the highest number
 select
 max(rkey) as max_rkey
 from 
-moe_20240326.dbo.o_d_interval as dint
+moe_20250711.dbo.o_d_interval as dint
 
 -- v20200721 6 rows
 -- v20210119 38 rows
 -- v20220328 2
 -- v20230324 1 
 -- v20240326 3
+-- v20250711 102
 
 select
 count(*) 
 from 
-moe_20240326.dbo.o_d_interval as dint
+moe_20250711.dbo.o_d_interval as dint
 where 
 dint.int_exists is null
 
 select
 *
 from 
-moe_20240326.dbo.o_d_interval as dint
+moe_20250711.dbo.o_d_interval as dint
 where 
 dint.int_exists is null
 
 -- create the random INT_IDs, don't forget to change the count as necessary
 
-update moe_20240326.dbo.o_d_interval
+update moe_20250711.dbo.o_d_interval
 set
 int_id= t2.int_id
 from 
-moe_20240326.dbo.o_d_interval as dint
+moe_20250711.dbo.o_d_interval as dint
 inner join
 (
 select
@@ -114,7 +117,7 @@ t.int_id
 from 
 (
 select
-top 5000
+top 10000
 v.new_id as int_id
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -156,7 +159,7 @@ select
 [SYS_TEMP1], 
 [SYS_TEMP2]
 from 
-moe_20240326.dbo.o_d_interval as d
+moe_20250711.dbo.o_d_interval as d
 where
 d.int_exists is null
 
@@ -171,13 +174,14 @@ d.int_exists is null
 -- v20220328 189 ( 2 had null INT_IDs )
 -- v20230324 1 
 -- v20240326 3
+-- v20250711 105 
 
-update moe_20240326.dbo.o_d_interval_monitor
+update moe_20250711.dbo.o_d_interval_monitor
 set
 int_id= dint.int_id
 from 
-moe_20240326.dbo.o_d_interval_monitor as dim
-inner join moe_20240326.dbo.o_d_interval as dint
+moe_20250711.dbo.o_d_interval_monitor as dim
+inner join moe_20250711.dbo.o_d_interval as dint
 on dim.tmp_int_id=dint.tmp_int_id
 where
 dint.int_exists is null
@@ -185,24 +189,25 @@ dint.int_exists is null
 select
 *
 from 
-moe_20240326.dbo.o_d_interval_monitor
+moe_20250711.dbo.o_d_interval_monitor
 where
 int_id is null
 
 -- v20240326 10019
+-- v20250711 5772
 
 select
 count(*) 
 from 
-moe_20240326.dbo.o_d_interval_monitor
+moe_20250711.dbo.o_d_interval_monitor
 
 -- and add the random MON_IDs; don't forget to change the count
 
-update moe_20240326.dbo.o_d_interval_monitor
+update moe_20250711.dbo.o_d_interval_monitor
 set
 mon_id= t2.mon_id
 from 
-moe_20240326.dbo.o_d_interval_monitor as d
+moe_20250711.dbo.o_d_interval_monitor as d
 inner join
 (
 select
@@ -228,6 +233,7 @@ on d.rkey=t2.rkey
 -- v20220328 189 rows
 -- v20230324 1545
 -- v20240326 10017
+-- v20250711 5770
 
 select
 [INT_ID], 
@@ -245,7 +251,7 @@ select
 [SYS_TEMP1], 
 [SYS_TEMP2]
 from
-moe_20240326.dbo.o_d_interval_monitor as odim
+moe_20250711.dbo.o_d_interval_monitor as odim
 where
 odim.int_id not in
 ( select distinct(int_id) from oak_20160831_master.dbo.d_interval_monitor )
@@ -285,7 +291,7 @@ select
 [SYS_TEMP1], 
 [SYS_TEMP2]
 from
-moe_20240326.dbo.o_d_interval_monitor as odim
+moe_20250711.dbo.o_d_interval_monitor as odim
 where
 odim.int_id not in
 ( select distinct(int_id) from oak_20160831_master.dbo.d_interval_monitor )

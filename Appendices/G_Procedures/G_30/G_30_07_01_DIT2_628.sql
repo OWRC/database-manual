@@ -15,15 +15,23 @@
 -- v20220328 131 rows
 -- v20230324 589
 -- v20240326 1722
+-- v20250711 3548
+
+--***** 20250711 Note that there would be a disconnect here with regard to any intervals we
+--***** have just pulled in; need to have the whole of the MOE db on the same SQL server
+--***** to avoid this issue
 
 select
 dint.int_id
 ,v.moe_bore_hole_id
-into moe_20240326.dbo.ORMGP_20240326_upd_DIT2_628
+into moe_20250711.dbo.ORMGP_20250711_upd_DIT2_628
 from 
-oak_20160831_master.dbo.v_sys_moe_locations as v
-inner join oak_20160831_master.dbo.v_sys_agency_ypdt as y
-on v.loc_id=y.loc_id
+ORMGP_20250711_MOE_LOCNS as v
+--oak_20160831_master.dbo.v_sys_moe_locations as v
+--inner join oak_20160831_master.dbo.v_sys_agency_ypdt as y
+--on v.loc_id=y.loc_id
+inner join oak_20160831_master.dbo.d_location_summary as yc
+on v.loc_id=yc.loc_id
 inner join oak_20160831_master.dbo.d_interval as dint
 on v.loc_id=dint.loc_id
 left outer join
@@ -39,9 +47,9 @@ group by
 int_id
 ) as d2
 on dint.int_id=d2.int_id
-inner join moe_20240326.dbo.tblpipe as moetp
+inner join moe_20250711.dbo.tblpipe as moetp
 on v.moe_bore_hole_id=moetp.bore_hole_id
-inner join moe_20240326.dbo.tblpump_test as moept
+inner join moe_20250711.dbo.tblpump_test as moept
 on moetp.pipe_id=moept.pipe_id
 where 
 d2.int_id is null
@@ -49,7 +57,7 @@ and moept.static_lev is not null
 group by
 dint.int_id,v.moe_bore_hole_id
 
-select count(*) as rcount from moe_20240326.dbo.ORMGP_20240326_upd_DIT2_628
+select count(*) as rcount from moe_20250711.dbo.ORMGP_20250711_upd_DIT2_628
 
 -- now we'll generate the DIT2 compatible table; run this first
 -- to see if we're missing bh_gnd_elev values
@@ -61,6 +69,7 @@ select count(*) as rcount from moe_20240326.dbo.ORMGP_20240326_upd_DIT2_628
 -- v20220328 127 rows
 -- v20230324 585 rows
 -- v20240326 1718
+-- v20250711 3548
 
 select 
 dbore.LOC_ID
@@ -84,22 +93,22 @@ as float
 ,cast(moept.LEVELS_UOM as varchar(50)) as [RD_UNIT_OUOM]
 ,cast(1 as int) as [REC_STATUS_CODE]
 ,cast(null as varchar(255)) as RD_COMMENT
-,cast(526 as int) as DATA_ID
+,cast(528 as int) as DATA_ID
 ,cast(null as int) as SYS_RECORD_ID
 ,ROW_NUMBER() over (order by dint.INT_ID) as rkey
-into moe_20240326.dbo.O_D_INTERVAL_TEMPORAL_2_628
+into moe_20250711.dbo.O_D_INTERVAL_TEMPORAL_2_628
 from 
-moe_20240326.dbo.ormgp_20240326_upd_dit2_628 as d2
-inner join moe_20240326.dbo.tblpipe as moetp
+moe_20250711.dbo.ormgp_20250711_upd_dit2_628 as d2
+inner join moe_20250711.dbo.tblpipe as moetp
 on d2.moe_bore_hole_id=moetp.bore_hole_id
-inner join moe_20240326.dbo.tblpump_test as moept
+inner join moe_20250711.dbo.tblpump_test as moept
 on moetp.pipe_id=moept.pipe_id
 inner join oak_20160831_master.dbo.d_interval as dint
 on d2.int_id=dint.int_id
 inner join oak_20160831_master.dbo.d_borehole as dbore
 on dint.loc_id=dbore.loc_id
 
-select count(*) as rcount from moe_20240326.dbo.O_D_INTERVAL_TEMPORAL_2_628
+select count(*) as rcount from moe_20250711.dbo.O_D_INTERVAL_TEMPORAL_2_628
 
 -- look for those rows where a NULL RD_VALUE occurs; this is
 -- likely a result from a NULL BH_GND_ELEV in D_BOREHOLE;
@@ -110,21 +119,23 @@ select count(*) as rcount from moe_20240326.dbo.O_D_INTERVAL_TEMPORAL_2_628
 -- v20220328 0 rows
 -- v20230324 0 rows
 -- v20240326 0 rows
+-- v20250711 265 rows; all had invalid coordinates or QA 118
 
---create view V_MOE_20240326_UPD_ELEVS2 as
+--create view V_MOE_20250711_UPD_ELEVS2 as
 select
 d2.loc_id
 ,dloc.loc_coord_easting as x
 ,dloc.loc_coord_northing as y
---,dbore.bh_gnd_elev
+,dbore.bh_gnd_elev
 from 
-moe_20240326.dbo.o_d_interval_temporal_2_628 as d2
+moe_20250711.dbo.o_d_interval_temporal_2_628 as d2
 inner join oak_20160831_master.dbo.d_location as dloc
 on d2.loc_id=dloc.loc_id
 inner join oak_20160831_master.dbo.d_borehole as dbore
 on d2.loc_id=dbore.loc_id
 where 
 d2.rd_value is null
+--and dloc.loc_coord_easting is not null
 
 --***** 20240326 the following was previously disabled; it appears to only be used when
 --***** a null bh_gnd_elev is present in d_borehole
@@ -140,16 +151,16 @@ d2.rd_value is null
 --,bh_dem_gnd_elev= m.value
 --from 
 --oak_20160831_master.dbo.d_borehole as dbore
---inner join temphold.dbo.moe_20240326_upd_elevs2 as m
+--inner join temphold.dbo.moe_20250711_upd_elevs2 as m
 --on dbore.loc_id=m.loc_id
 
 -- populate the SYS_RECORD_IDs
 
-update moe_20240326.dbo.o_d_interval_temporal_2_628
+update moe_20250711.dbo.o_d_interval_temporal_2_628
 set
 sys_record_id= t2.sri
 from 
-moe_20240326.dbo.o_d_interval_temporal_2_628 as d
+moe_20250711.dbo.o_d_interval_temporal_2_628 as d
 inner join
 (
 select
@@ -207,9 +218,60 @@ select
 [REC_STATUS_CODE], 
 [RD_COMMENT], 
 [DATA_ID],
-cast( '20240328n' as varchar(255) ) as SYS_TEMP1,
-cast( 20240328 as int ) as SYS_TEMP2, 
+cast( '20250714n' as varchar(255) ) as SYS_TEMP1,
+cast( 20250714 as int ) as SYS_TEMP2, 
 [SYS_RECORD_ID]
 from 
-moe_20240326.dbo.o_d_interval_temporal_2_628 
+moe_20250711.dbo.o_d_interval_temporal_2_628 
 
+
+
+--***** 20250711
+
+-- various checks re: non-valid x,y coordinates
+
+select * from oak_20160831_master.dbo.v_sys_loc_coords where loc_id= 1383477
+
+select * from oak_20160831_master.dbo.d_location_spatial_hist where loc_id= 1401492
+
+select * from oak_20160831_master.dbo.d_location where loc_id= 1927008735
+
+select * from oak_20160831_master.dbo.v_sys_loc_coords where loc_id= 1401492
+
+select
+*
+from 
+oak_20160831_master.dbo.v_sys_loc_coords 
+where
+loc_id in 
+(
+1351176
+,1352114
+,1357709
+,1363658
+,1375951
+,1376221
+,1401512
+,1436387
+,1364539
+,1375860
+,1382794
+,1383063
+,1401492
+,1401540
+,1404697
+,1351213
+,1364495
+,1376137
+,1401474
+,1401951
+,1403835
+,1351624
+,1352116
+,1376037
+,1382892
+,1401391
+,1401522
+,1401889
+,1404790
+)
