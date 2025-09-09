@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.1.1"
 author: "ormgpmd"
-date:   "20250528"
+date:   "20250909"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -132,15 +132,23 @@ Refer also to D_LOC_ALIAS (which performs a similar function for locations).
 Attributes for a particular interval that do not fit easily into the variety
 of fields available within the interval based data tables (i.e. the D_INT\*
 tables) can be stored here.  Specific types are assigned through the ATTR_CODE
-field (which links to the R_ATTR_CODE table).  This includes, for example,
-*Soil Blow Count* or *Soil Recovery* values that were formerly found in
-D_INTERVAL_SOIL in previous version of the ORMGP database.  Numeric attributes
-can be stored in either the VALI field for integers or VALF field for real
-numbers.  Ranges can be specified using the matching fields available, i.e.
-VALI2 and VALF2.  Both default and text attributes can be stored in VAL_DEF
-(and VAL_DEF2); note that this can include date-formatted information.  Note
-that the *flowing* attribute (originally found in D_INTERVAL_MONITOR) is now
-located here.
+field (which links to the R_ATTR_CODE table).  
+
+The depth information associated with intervals (for certain interval types)
+is found here.  This replaces the use of specific tables such as
+D_INTERVAL_MONITOR and D_INTERVAL_SOIL from previous versions of the ORMGP
+database.  In general, the top and bottom depths of the particular interval
+are recorded.  The INT_TYPE_CODE (from D_INT) will specify whether the depths
+have been reported or if they've been assumed (or calculated) based upon
+alternate information.  For example, where only casing information has been
+included, the bottom of the screen is specified as one foot below the bottom
+casing depth specified.  Refer to R_INT_TYPE_CODE for further details.
+
+Numeric attributes can be stored in either the VALI field for integers or VALF
+field for real numbers.  Ranges can be specified using the matching fields
+available, i.e.  VALI2 and VALF2.  Both default and text attributes can be
+stored in VAL_DEF (and VAL_DEF2); note that this can include date-formatted
+information.
 
 Where data (e.g. temperature and conductivity) is collected for a particular
 interval (e.g. a screen) for a series of depths, these depth values can be
@@ -151,6 +159,36 @@ grouped based upon their DATA_ID (or through the D_GRP_OTH table).
 
 Refer also to D_LOC_ATTR (whcih performs a similar function for locations).
 
+##### D_INT_ATTR - Screened Intervals
+
+Certain information is captured along with the depths associated with a
+screen.  These include:
+
+* VALI - Flowing; a non-null tag indicates that this is a flowing screen
+* VAL_DEF - Screen Material
+* VAL_DEF2 - Observed Screened Material; at the time of installation, this is
+  the geologic material in which the screen was placed
+
+These would have formerly been found in D_INTERVAL_MONITOR in the previous
+versions of the ORMGP database.  Additional attributes of the screen would
+then be found in the D_INT_ATTR_RD table (linked by IATTR_ID).  This includes,
+for example, screen diameter and screen slot size.
+
+##### D_INT_ATTR - Soil Intervals
+
+Most soil intervals have limited data associated with them, usually available
+upon the borehole log only.  As such, this commonly found information is 
+directly stored within the D_INT_ATTR fields rather than in the D_INT_ATTR_RD
+table.  These include:
+
+* VALI - Soil Blow Count (the number of blows required for six inch travel)
+* VALF - Soil Recovery (a percentage)
+* VALF2 - Soil Moisture (a percentage)
+
+These would have formerly been found in D_INTERVAL_SOIL in the previous
+version of the ORMGP database.  Additional, complete, lab information would be
+located within the D_INT_TEMPORAL_1A/1B tables.
+
 #### D_INT_ATTR_RD 
 
 Similar in format to the various temporal tables (e.g. D_INT_TEMPORAL_2), this
@@ -160,18 +198,6 @@ particular INT_ID).  In this manner, point measurements (i.e. associated with
 a depth) can be assocated with an interval (that would also have a depth; an
 example of this would be temperature readings at various depths within a
 screened well).
-
-#### D_INT_DEPTH 
-
-The depth information associated with intervals (for certain interval types)
-is found here.  This replaces D_INTERVAL_MONITOR and D_INTERVAL_SOIL from
-previous versions of the ORMGP database.  In general, the top and bottom
-depths of the particular interval are recorded along with its diameter (as
-appropriate).  The INT_TYPE_CODE (from D_INT) will specify whether the depths
-have been reported or if they've been assumed (or calculated) based upon
-alternate information.  For example, where only casing information has been
-included, the bottom of the screen is specified as one foot below the bottom
-casing depth specified.  Refer to R_INT_TYPE_CODE for further details.
 
 #### D_INT_FORM_ASSIGN 
 
@@ -293,10 +319,11 @@ The actual value of the offset is located in the D_LOC_SPATIAL_HIST
 (DLSH) table.  This ties the offset value closely to the coordinates and
 ground elevation of the particular location.  As such, each record in this
 this table (i.e. D_INT_OFFSET) now references a record in DLSH.  Here, though,
-the valid start and end date for the particular offset (and
-elevation/coordinate combination) are stored.  This allows the offset value to
-change with that change (and its affected time period) captured through the
-use of these two tables (i.e. this one and DLSH).
+the valid start and end date for the particular offset are stored.  This links
+an offset to a particular elevation and coordinate combination.  As any of
+these three values can be modified (in DLSH; creating a new record in that
+table), the particular interval offset can still reference the original offset
+and associated information before the modification of these values.
 
 A change in the offset can result from damage to the monitoring pipe or from a
 more accurate survey of the reference point.  If no offset is specified for a
@@ -635,7 +662,7 @@ approximate the bottom depth stored in D_LOC_BOREHOLE.
 
 In general, four material types can be assigned for each geological layer
 (MAT1_CODE through MAT4_CODE; e.g. sand, silt, gravel, till, etc...).  In
-addition, particular characterstics can be specified separately, including:
+addition, particular characteristics can be specified separately, including:
 
 * MATD_CODE - the layer's consistency (e.g. compact, very stiff, firm)
 * MATM_CODE - the layer's moisture level (e.g. dry, moist)
@@ -998,4 +1025,4 @@ number of records for each location type, each interval type and each reading
 group code type.  Additional records, capturing the current status of the
 database, are usually added on a monthly basis.
 
-*Last Modified: 2025-05-28*
+*Last Modified: 2025-09-09*
