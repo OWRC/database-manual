@@ -1,7 +1,7 @@
 ---
 title:  "Appendix A"
 author: "ormgpmd"
-date:   "20250618"
+date:   "20250910"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -252,7 +252,7 @@ it was done as well as whether it intersects bedrock.
 A borehole location might also have a screen, i.e. that part of the well where
 water is collected from the surrounding geologic formation (usually an
 aquifer).  This information is stored in other tables including D_INT (which
-includes the interval name and type), D_INT_DEPTH (containing the top and
+includes the interval name and type), D_INT_ATTR (containing the top and
 bottom depth of the screen), etc...  The information from each table is
 linked through the use of keys.  For example, primary key fields are those where
 each row in a table can be distinguished between based upon the unique value
@@ -705,4 +705,4 @@ the field as opposed to being analyzed in the laboratory.  The
 D_INT_TEMPORAL_1\* tables are more commonly used for the latter type of
 information.
 
-*Last Modified: 2025-06-18*
+*Last Modified: 2025-09-10*

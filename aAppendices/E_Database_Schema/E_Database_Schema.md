@@ -1,7 +1,7 @@
 ---
 title:  "Appendix E"
 author: "ormgpmd"
-date:   "20250522"
+date:   "20250910"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -429,9 +429,8 @@ then populate INT_NAME_ALIAS_ID with the converted value.
 
 ***D_INT_ATTR***
 
-This replaces D_INTERVAL_ATTRIBUTE.  Additional data from D_INTERVAL_SOIL will
-also be copied here.  Note that SYS_TEMP1 has a datetime that is being
-captured in ATTR_DATE.
+This replaces D_INTERVAL_ATTRIBUTE.  datetime that is being captured 
+in ATTR_DATE.
 
 * ATT_ID is copied to SYS_TEMP2 (for linking purposes)
 * ATTR_DEPTH_TOP_OUOM is copied to TOP_OUOM
@@ -439,20 +438,30 @@ captured in ATTR_DATE.
 * ATTR_DEPTH_UNIT_OUOM is copied to TB_UNIT_OUOM
 * ATT_DESCRIPTION is copied to COMMENT
 
-The BLOW_COUNT field from D_INTERVAL_SOIL is also copied.
+This table also replaces D_INTERVAL_MONITOR and D_INTERVAL_SOIL.
 
-* SYS_RECORD_ID is copied to SYS_TEMP2 (for linking purposes)
+These fields are copied from D_INTERVAL_MONITOR.
+
+* MON_ID is copied to SYS_TEMP2
+* MON_TOP_DEPTH_M is copied to TOPD
+* MON_BOT_DEPTH_M is copied to BOTD
+* MON_TOP_OUOM is copied to TOP_OUOM
+* MON_BOT_OUOM is copied to BOT_OUOM
+* MON_SCREEN_MATERIAL
+* MON_FLOWING is copied to VALI
+* OBS_SCREENED_MAT is copied to VAL_DEF
+
+These fields are copied from D_INTERVAL_SOIL.
+
+* SYS_RECORD_ID is copied to SYS_TEMP2
+* SOIL_TOP_M is copied to TOPD
+* SOIL_BOT_M is copied to BOTD
+* SOIL_TOP_OUOM is copied to TOP_OUOM
+* SOIL_BOT_OUOM is copied to BOT_OUOM
+* SOIL_UNIT_OUOM is copied to UNIT_OUOM
 * SOIL_BLOW_COUNT is copied to VALI
-
-The MOISTURE field from D_INTERVAL_SOIL is also copied.
-
-* SYS_RECORD_ID is copied to SYS_TEMP2
-* SOIL_MOISTURE is copied to VALF
-
-The RECOVERY field from D_INTERVAL_SOIL is also copied.
-
-* SYS_RECORD_ID is copied to SYS_TEMP2
 * SOIL_RECOVERY is copied to VALF
+* SOIL_MOISTURE is copied to VALF2
 
 ***D_INT_ATTR_RD***
 
@@ -464,31 +473,16 @@ This replaces D_INTERVAL_ATTRIBUTE_VALUES.
 * ATT_VALUE_OUOM is copied to RD_VALUE_OUOM
 * ATT_UNIT_OUOM is copied to RD_UNIT_OUOM
 
-***D_INT_DEPTH***
+Additional fields (with the appropriate number of records) will be added from
+D_INTERVAL_MONITOR for screened intervals.  
 
-This replaces D_INTERVAL_MONITOR and D_INTERVAL_SOIL.
+* MON_SCREEN_SLOT is copied to RD_VALUE
+* MON_DIAMETER is copied to RD_VALUE
+* MON_DIAMETER_OUOM is copied to RD_VALUE_OUOM
+* MON_DIAMETER_UNIT_OUOM is copied to RD_UNIT_OUOM
 
-These fields are copied from D_INTERVAL_MONITOR.
-
-* MON_ID is copied to SYS_TEMP2
-* MON_TOP_DEPTH_M is copied to TOPD
-* MON_BOT_DEPTH_M is copied to BOTD
-* MON_TOP_OUOM is copied to TOP_OUOM
-* MON_BOT_OUOM is copied to BOT_OUOM
-* MON_SCREEN_MATERIAL is copied to SCR_MAT
-* MON_SCREEN_SLOT is copied to SCR_SLOT
-* MON_DIAMETER is copied to DIAM
-* MON_DIAMETER_OUOM is copied to DIAM_OUOM
-* MON_DIAMETER_UNIT_OUOM is copied to DIAM_UNIT_OUOM
-
-These fields are copied from D_INTERVAL_SOIL.
-
-* SYS_RECORD_ID is copied to SYS_TEMP2
-* SOIL_TOP_M is copied to TOPD
-* SOIL_BOT_M is copied to BOTD
-* SOIL_TOP_OUOM is copied to TOP_OUOM
-* SOIL_BOT_OUOM is copied to BOT_OUOM
-* SOIL_UNIT_OUOM is copied to UNIT_OUOM
+Note that the appropriate additional fields will be updated for each new
+record.
 
 ***D_INT_FORM_ASSIGN***
 
@@ -1022,7 +1016,7 @@ Dropped.
 
 ***D_INTERVAL_MONITOR***
 
-Moved to D_INT_DEPTH.
+Moved to D_INT_ATTR (and D_INT_ATTR_RD).
 
 ***D_INTERVAL_PROPERTY***
 
@@ -1038,7 +1032,7 @@ Moved to D_INT_OFFSET.
 
 ***D_INTERVAL_SOIL***
 
-Moved to D_INT_DEPTH.
+Moved to D_INT_ATTR.
 
 ***D_INTERVAL_SUMMARY***
 
@@ -1985,4 +1979,4 @@ Moved to W_GEN_SCREEN.
 
 Moved to W_GEN_GEOL_LAYER.
 
-*Last Modified: 2025-05-22*
+*Last Modified: 2025-09-10*
