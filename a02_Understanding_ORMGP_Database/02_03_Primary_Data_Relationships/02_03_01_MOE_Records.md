@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.3.1"
 author: "ormgpmd"
-date:   "20250529"
+date:   "20250910"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -230,8 +230,13 @@ Water levels are tied to intervals in the form of screened intervals.
 
 The D_INT table links to D_LOC through the LOC_ID field.
 
-##### D_INT_DEPTH
+##### D_INT_ATTR
 
+The D_INT_ATTR table replaces the use of D_INTERVAL_MONITOR from the previous
+versions of the ORMGP database.
+
+* ATTR_CODE - 40
+    + R_ATTR_CODE - *Interval - Screen or Soil Depths [40]*
 * TOPD - 47.244
 * BOTD - 64.6176
     + The depth fields are converted from TOP_OUOM and BOT_OUOM converted to
@@ -240,14 +245,38 @@ The D_INT table links to D_LOC through the LOC_ID field.
 * BOT_OUOM - 212
 * UNIT_OUOM - fbgs
     + This applies to TOP_OUOM and BOT_OUOM
-* SCR_SLOT - 20
-* DIAM - 25.4
-    + This is calculated from DIAM_OUOM converted to centimetres
-* DIAM_OUOM - 10
-* DIAM_UNIT_OUOM - inch
-    + This applies to the DIAM_OUOM value
 
-The D_INT_DEPTH table is linked to D_INT through the INT_ID field.
+The D_INT_ATT table is linked to D_INT through the INT_ID field.  Additional
+attributes associated with the screen would be found in the D_INT_ATTR_RD
+table, namely the screen slot and the screen diameter.
+
+##### D_INT_ATTR_RD
+
+The screen slot would be captured by:
+
+* RD_NAME_CODE - 71434
+    + R_RD_NAME_CODE - *Screen Details - Slot Size [71434]* 
+* RD_VALUE - 20
+* RD_NAME_OUOM - Screen Details - Slot Size
+* RD_VALUE_OUOM - 20
+
+Note thatno units are specified for this value.
+
+The screen diameter would be captured (in a separate record) by:
+
+* RD_NAME_CODE - 71435
+    + R_RD_NAME_CODE - *Screen Details - Diameter [71435]* 
+* RD_VALUE - 25.4
+* UNIT_CODE - 35
+    + R_UNIT_CODE - *cm [35]*
+    + This applies to the RD_VALUE value
+* RD_NAME_OUOM - Screen Details - Diameter
+* RD_VALUE_OUOM - 10
+* RD_UNIT_OUOM - inch
+    + This applies to the value in RD_VALUE_OUOM
+
+The D_INT_ATTR_RD table is linked to D_INT_ATTR through the
+IATTR_ID field.
 
 ##### D_INT_TEMPORAL_2
 
@@ -338,4 +367,4 @@ starting hour is imposed.
 ![Figure 2.3.1.4 Example MOE Water Well Record - 1995](f02_03_01_04_1995.jpg)
 *Figure 2.3.1.4 Example MOE Water Well Record - 1995*
 
-*Last Modified: 2025-05-29*
+*Last Modified: 2025-09-10*

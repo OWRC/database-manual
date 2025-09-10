@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.3.2"
 author: "ormgpmd"
-date:   "20250603"
+date:   "20250910"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -166,16 +166,8 @@ interval.  The example here is the sixth soil (split spoon) sample.
 
 ##### D_INT_ATTR
 
-* ATTR_CODE - 7
-    + R_ATTR_CODE - *Soil - Blow Count [7]*
-* VALI - 100
-    + A blow count should be a whole (integer) number; it is generally
-    considered to be the number of blows to drive the split spoon six inches
-* VAL_DEF - 100
-* COMMENT - 100 blows for 15cm penetration
-
-##### D_INT_DEPTH
-
+* ATTR_CODE - 40
+    + R_ATTR_CODE - *Interval - Screen or Soil Depths [40]*
 * TOPD - 4.65
 * BOTD - 4.8
 * TOP_OUOM - 4.65
@@ -183,6 +175,11 @@ interval.  The example here is the sixth soil (split spoon) sample.
     + Not that the top and bottom depths are estimated from the borehole
     record
 * UNIT_OUOM - mbgs
+* VALI - 100
+    + A blow count should be a whole (integer) number; it is generally
+    considered to be the number of blows to drive the split spoon six inches
+* VAL_DEF - 100
+* COMMENT - 100 blows for 15cm penetration
 
 The D_INT table contains the keys LOC_ID and INT_ID; only the latter is a
 primary key.  This table allows a single location to be linked to multiple
@@ -190,6 +187,19 @@ primary key.  This table allows a single location to be linked to multiple
 through the INT_ID field.  Note that there is grain size data associated with
 this particular sample.  The means to capture this information is found in *F
 - Lab Analysis*, following.
+
+Note that for these type of intervals, the various VAL\* fields have been
+adopted to hold particular data related to the particular soil interval.
+These include:
+
+* VALF - <Recovery as a percent>
+* VALF2 - <Moisture as a percentage>
+
+In most cases, these soil samples will have limited data associated with them
+(e.g. blow count, recovery  and moisture).  Any additional information would
+then be found in D_INT_TEMPORAL_1A/1B (if a complete laboratory record is
+available or multiple records over time have been recorded) or D_INT_ATTR_RD
+(again, if limited information is available).
 
 #### D - Water Levels
 
@@ -244,19 +254,19 @@ Information or data produced or determined in a laboratory is generally found
 in the D_INT_TEMPORAL_1A/1B tables.  However, in many cases, the information
 concerning the laboratory analysis is not available.  When this occurs,
 pseudo-lab records can be created or the D_INT_ATTR table can be used in its
-stead.  This is similar to *C - Soil Intervals (Blow Count)*, as described
+stead.  Refer to *C - Soil Intervals (Blow Count)*, as described
 previously.  There is usually a water content measurement for each soil sample
 taken.  The example here is the sixth soil (split spoon) sample and it is
 evaluated for both storage methodologies.
 
 ##### D_INT_ATTR
 
-* ATTR_CODE - 9
-    + R_ATTR_CODE - *Soil - Moisture [9]*
-* VALF - 17
+The same record, as described in D_INT_ATTR, is used.  In this case, the
+moisture percentage is stored in VALF2.
+
+* VALF2 - 17
     + A soil moisture reading should be stored as a floating point number
     (expressed as a percentage)
-* VAL_DEF - 17
 
 The D_INT_ATTR table is linked through INT_ID to D_INT.
 
@@ -295,11 +305,6 @@ borehole record, only two grain size analyses were performed.  The example
 here is the sixth soil (split spoon) sample and it is evaluated for both
 storage methodologies.
 
-##### D_INT_ATTR
-
-* ATTR_CODE - 23
-    + R_ATTR_CODE - *Soil - Grainsize [23]*
-
 ##### D_INT_ATTR_RD
 
 Four grain size percentages are available here.  Namely: gravel (0%); sand
@@ -320,7 +325,7 @@ table is linked to D_INT_ATTR through IATTR_ID.
 
 Alternatively, if we are using the temporal tables, the setup would consist of
 the following.  Note that this dataset could piggy-back on top of that
-describe in *E - Water Content*.  
+described in *E - Water Content*.  
 
 ##### D_INT_TEMPORAL_1A
 
@@ -343,4 +348,4 @@ As described in D_INT_ATTR_RD, previously, only the example of sand is provided
 * RD_VALUE_OUOM - 25
 * RD_UNIT_OUOM - %
 
-*Last Modified: 2025-06-03*
+*Last Modified: 2025-09-10*

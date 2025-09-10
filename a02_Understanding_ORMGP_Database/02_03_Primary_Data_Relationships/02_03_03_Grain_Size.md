@@ -1,7 +1,7 @@
 ---
 title:  "Section 2.3.3"
 author: "ormgpmd"
-date:   "20250603"
+date:   "20250910"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -75,10 +75,15 @@ needs to be created.  The affected tables would be:
 
 This table would be linked to D_LOC through the LOC_ID field.
 
-##### D_INT_DEPTH
+##### D_INT_ATTR
+
+This table replaces the use of D_INTERVAL_MONITOR from previous versions of
+the ORMGP database.
 
 * INT_ID - 363068
     + This is copied from the D_INT table
+* ATTR_CODE - 40
+    + R_ATTR_CODE - *Interval - Screen or Soil Depths [40]*
 * TOPD - 7.37616
 * BOTD - 7.52856
     + Note that these are calculated from the TOP_OUOM and BOT_OUOM fields
@@ -90,29 +95,18 @@ This table would be linked to D_LOC through the LOC_ID field.
     ground elevation listed on the borehole record
 * UNIT_OUOM - fbgs
 
-Note that this table is linked to D_INT through the INT_ID field.
+This table is linked to D_INT through the INT_ID field.
 
 #### Grain Size Data
 
 Grain size data can be found in either the temporal or attribute tables tied
-to a particular interval.  The former is generally used when there is 
+to a particular interval.  The former is generally used when there is
 information available concerning the laboratory and the type of analysis that
 was carried out.  The temporal tables should be used if multiple sets of
 records (over time) are to be linked to an interval.  If information
 concerning the laboratory is absent or there will likely only be a single
 record associated with the interval, the attribute tables can be used.  Both
 examples are presented.
-
-##### D_INT_ATTR
-
-* INT_ID - 363068
-* IATTR_ID
-    + This field is the primary key of the D_INT_ATTR table; the value here is
-    automatically generated when a record is added
-* ATTR_CODE - 23
-    + R_ATTR_CODE - *Soil - Grainsize [23]*
-
-The D_INT_ATTR table is linked through INT_ID to D_INT.
 
 ##### D_INT_ATTR_RD
 
@@ -177,4 +171,4 @@ for the example.
 
 The SAM_ID field links D_INT_TEMPORAL_1B and D_INT_TEMPORAL_1A.
 
-*Last Modified: 2026-06-03*
+*Last Modified: 2026-09-10*
