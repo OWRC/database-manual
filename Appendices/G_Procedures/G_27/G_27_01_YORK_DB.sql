@@ -22,6 +22,7 @@
 --** Updated:      20230717 (20231016)
 --** Updated:      20240909 (20240721)
 --** Last Updated: 20250502 (20250425)
+--** Last Updated: 20260422 (20260319)
 
 -- D_INTERVAL_TEMPORAL_1A
 
@@ -55,7 +56,7 @@ t.int_id as ypdt_int_id
 ,dit1a.data_id
 ,row_number() over (order by dit1a.sam_id) as rkey
 from 
-yorkdb_20250425.dbo.d_interval_temporal_1a as dit1a
+yorkdb_20260319.dbo.d_interval_temporal_1a as dit1a
 inner join 
 -- this is the york-to-ypdt int_id conversion
 (
@@ -114,13 +115,8 @@ from
 select
 distinct( dit1b.rd_name_ouom ) as rd_name_ouom
 from 
-yorkdb_20250425.dbo.d_interval_temporal_1b as dit1b
-inner join yorkdb_20250425.dbo.v_tr_dit1a as vselect
-distinct( dit1b.rd_name_ouom ) as rd_name_ouom
-from 
-yorkdb_20250425.dbo.d_interval_temporal_1b as dit1b
-inner join yorkdb_20250425.dbo.v_tr_dit1a as v
-on dit1b.sam_id=v.sam_id
+yorkdb_20260319.dbo.d_interval_temporal_1b as dit1b
+inner join yorkdb_20260319.dbo.v_tr_dit1a as v
 on dit1b.sam_id=v.sam_id
 ) as t
 left outer join oak_20160831_master.dbo.r_rd_name_code as rrnc
@@ -132,13 +128,15 @@ on t.rd_name_ouom like rrna.reading_name_alias
 select
 *
 from 
-yorkdb_20250425.dbo.v_tr_rd_name_code
+yorkdb_20260319.dbo.v_tr_rd_name_code
 
 -- D_INTERVAL_TEMPORAL_1B; UNIT_CODE
 
 -- Note that, similarly to RD_NAME_CODEs, the UNIT_CODEs should
 -- also be examined.  These should also be incorporated (or 
 -- modified) as necessary.
+
+drop view v_tr_unit_code
 
 create view v_tr_unit_code as
 select
@@ -151,6 +149,15 @@ case
 when t.rd_unit_ouom = 'pH' then 32
 when t.rd_unit_ouom = 'mV' then 106
 when t.rd_unit_ouom = '/100mL' then 207
+when t.rd_unit_ouom = 'per50mL' then 208
+when t.rd_unit_ouom = 'per100mL' then 80
+when t.rd_unit_ouom = 'per mil' then 82
+when t.rd_unit_ouom = 'CFU/1mL' then 82
+when t.rd_unit_ouom = 'N/A' then 15
+when t.rd_unit_ouom = 'me/L' then 53
+when t.rd_unit_ouom = 'µg/L' then 161
+when t.rd_unit_ouom = 'umho/cm' then 99
+when t.rd_unit_ouom = 'units' then 32
 else -9999
 end
 end as ypdt_unit_code
@@ -160,7 +167,16 @@ else
 case
 when t.rd_unit_ouom = 'pH' then 'pH Units'
 when t.rd_unit_ouom = 'mV' then 'millivolts'
-when t.rd_unit_ouom = '/100mL' then 'per100mL'
+when t.rd_unit_ouom = '/100mL' then 'CFU/100mL'
+when t.rd_unit_ouom = 'per50mL' then 'CFU/50mL'
+when t.rd_unit_ouom = 'per100mL' then 'CFU/100mL'
+when t.rd_unit_ouom = 'per mil' then 'CFU/mL'
+when t.rd_unit_ouom = 'CFU/1mL' then 'CFU/mL'
+when t.rd_unit_ouom = 'N/A' then 'unitless'
+when t.rd_unit_ouom = 'me/L' then 'meq/L'
+when t.rd_unit_ouom = 'µg/L' then 'ug/L'
+when t.rd_unit_ouom = 'umho/cm' then 'uS/cm'
+when t.rd_unit_ouom = 'units' then 'pH Units'
 else '-9999'
 end
 end as ypdt_unit_description 
@@ -170,8 +186,8 @@ select
 rd_unit_ouom
 ,count(*) as rcount
 from 
-yorkdb_20250425.dbo.d_interval_temporal_1b as d1b
-inner join yorkdb_20250425.dbo.v_tr_dit1a as v
+yorkdb_20260319.dbo.d_interval_temporal_1b as d1b
+inner join yorkdb_20260319.dbo.v_tr_dit1a as v
 on d1b.sam_id=v.sam_id
 group by 
 rd_unit_ouom
@@ -183,7 +199,7 @@ on t.rd_unit_ouom = ruc.unit_description
 select
 *
 from 
-yorkdb_20250425.dbo.v_tr_unit_code
+yorkdb_20260319.dbo.v_tr_unit_code
 
 -- D_INTERVAL_TEMPORAL_1B
 
@@ -211,20 +227,20 @@ d1b.sam_id
 ,d1b.sys_time_stamp
 ,row_number() over (order by d1b.sys_record_id) as rkey
 from 
-yorkdb_20250425.dbo.d_interval_temporal_1b as d1b
+yorkdb_20260319.dbo.d_interval_temporal_1b as d1b
 inner join
 (
 select
 *
 from 
-yorkdb_20250425.dbo.v_tr_dit1a
+yorkdb_20260319.dbo.v_tr_dit1a
 where 
 ypdt_sam_id is null
 ) as v
 on d1b.sam_id=v.sam_id 
-inner join yorkdb_20250425.dbo.v_tr_rd_name_code as vrnc
+inner join yorkdb_20260319.dbo.v_tr_rd_name_code as vrnc
 on d1b.rd_name_ouom=vrnc.rd_name_ouom
-inner join yorkdb_20250425.dbo.v_tr_unit_code as vuc
+inner join yorkdb_20260319.dbo.v_tr_unit_code as vuc
 on d1b.rd_unit_ouom=vuc.rd_unit_ouom
 
 -- This is the old version; it seems to take quite a long
@@ -284,17 +300,18 @@ sam_data_file,
 sys_time_stamp,
 data_id,
 rkey
-into yorkdb_20250425.dbo.dit1a
+into yorkdb_20260319.dbo.dit1a
 FROM 
-yorkdb_20250425.dbo.v_tr_dit1a
+yorkdb_20260319.dbo.v_tr_dit1a
 where 
 ypdt_sam_id is null
 
 -- v20230717 5057 records
 -- v20240909 4697 records
 -- v20250502 3508 records
+-- v20260422 4993 recordsd
 
-select count(*) as rcount from yorkdb_20250425.dbo.dit1a
+select count(*) as rcount from yorkdb_20260319.dbo.dit1a
 
 SELECT
 sam_id,
@@ -315,15 +332,16 @@ sys_record_id,
 ypdt_sys_record_id,
 sys_time_stamp,
 rkey
-into yorkdb_20250425.dbo.dit1b
+into yorkdb_20260319.dbo.dit1b
 FROM 
-yorkdb_20250425.dbo.v_tr_dit1b
+yorkdb_20260319.dbo.v_tr_dit1b
 
 -- v20230717 19892 records
 -- v20240909 19358 records
 -- v20250502 10667 records
+-- v20260422 24743 records
 
-select count(*) as rcount from yorkdb_20250425.dbo.dit1b
+select count(*) as rcount from yorkdb_20260319.dbo.dit1b
 
 
 --***** The dit1a and dit1b tables should now be copied to temphold (or equivalent) in order to
@@ -332,12 +350,12 @@ select count(*) as rcount from yorkdb_20250425.dbo.dit1b
 
 -- Make sure to add a DATA_ID to D_DATA_SOURCE for the chemistry info
 
-select * from oak_20160831_master.dbo.d_data_source where data_id>= 240003500
+select * from oak_20160831_master.dbo.d_data_source where data_id>= 240003500 order by data_id
 
 insert into oak_20160831_master.dbo.d_data_source
 ( data_id, data_type, data_description, data_filename, data_added_date )
 values 
-( 240003512,'Chemistry','Updated York Data - Chemistry; York DB 20250425','SiteFX_Full_backup_20250425.bak', '2025-05-08' )
+( 240003519,'Chemistry','Updated York Data - Chemistry; York DB 20260422','SiteFX_Fullbkp_19032026.bak', '2026-04-22' )
 
 
 -- generate the identifiers necessary for incorporation in the master db
@@ -345,33 +363,41 @@ values
 -- v20230717 5057 records
 -- v20240909 4697 records
 -- v20250425 3508 records
-select * from yorkdb_20250425_subset.dbo.dit1a
+-- v20260422 4993 records
+
+select count(*) as rcount from yorkdb_20260422_subset.dbo.dit1a
 
 -- v20230717 max rkey 286986 
 -- v20240909 max rkey 461614
 -- v20250425 max rkey 367692
-select max(rkey) from yorkdb_20250425_subset.dbo.dit1a
+-- v20260422 max rkey 511548
+
+select max(rkey) from yorkdb_20260422_subset.dbo.dit1a
 
 -- v20230717 19892 records
 -- v20240909 19358 records
 -- v20250425 10667 records
-select * from yorkdb_20250425_subset.dbo.dit1b
+-- 20260422  24743 records
+
+select count(*) as rcount from yorkdb_20260422_subset.dbo.dit1b
 
 -- v20230717 max rkey 19892 
 -- v20240909 max rkey 19358
 -- v20250425 max rkey 10667
-select max(rkey) from yorkdb_20250425_subset.dbo.dit1b
+-- v20260422 max rkey 24743
+
+select max(rkey) from yorkdb_20260422_subset.dbo.dit1b
 
 -- update the TOP count
 select
 y.sam_id
 ,y.ypdt_sam_id
 ,t2.sam_id_new
-update yorkdb_20250425_subset.dbo.dit1a
+update yorkdb_20260422_subset.dbo.dit1a
 set
 ypdt_sam_id= t2.sam_id_new
 from 
-yorkdb_20250425_subset.dbo.dit1a as y
+yorkdb_20260422_subset.dbo.dit1a as y
 inner join 
 (
 select
@@ -411,20 +437,20 @@ ypdt_int_id as int_id
 ,sam_sample_date_ouom
 ,sam_comment
 ,sys_time_stamp
-,240003512 as data_id
-,'20250508a' as sys_temp1
-,20250508 as sys_temp2
+,240003519 as data_id
+,'20260422a' as sys_temp1
+,20260422 as sys_temp2
 from 
-yorkdb_20250425_subset.dbo.dit1a
+yorkdb_20260422_subset.dbo.dit1a
 
 -- add the new sam_id to dit1b and create the new sys_record_id
 
-update yorkdb_20250425_subset.dbo.dit1b
+update yorkdb_20260422_subset.dbo.dit1b
 set
 ypdt_sam_id= d1a.ypdt_sam_id
 from 
-yorkdb_20250425_subset.dbo.dit1b as d1b
-inner join yorkdb_20250425_subset.dbo.dit1a as d1a
+yorkdb_20260422_subset.dbo.dit1b as d1b
+inner join yorkdb_20260422_subset.dbo.dit1a as d1a
 on d1b.sam_id=d1a.sam_id
 
 -- update the TOP count
@@ -432,11 +458,11 @@ select
 y.sys_record_id
 ,y.ypdt_sys_record_id
 ,t2.sri_new
-update yorkdb_20250425_subset.dbo.dit1b
+update yorkdb_20260422_subset.dbo.dit1b
 set
 ypdt_sys_record_id= t2.sri_new
 from 
-yorkdb_20250425_subset.dbo.dit1b as y
+yorkdb_20260422_subset.dbo.dit1b as y
 inner join 
 (
 select
@@ -445,7 +471,7 @@ t.sri_new
 from 
 (
 select
-top 25000
+top 30000
 new_id as sri_new
 from 
 oak_20160831_master.dbo.v_sys_random_id_001
@@ -477,11 +503,10 @@ ypdt_sam_id as sam_id
 ,ypdt_unit_description as rd_unit_ouom
 ,rd_comment
 ,sys_time_stamp
-,'20250508a' as sys_temp1
-,20250508 as sys_temp2
+,'20260422a' as sys_temp1
+,20260422 as sys_temp2
 from 
-yorkdb_20250425_subset.dbo.dit1b
-
+yorkdb_20260422_subset.dbo.dit1b
 
 
 
@@ -503,10 +528,12 @@ yorkdb_20250425_subset.dbo.dit1b
 
 --** Be sure to review the rd_name_codes that exist to make sure new ones haven't been incorporated
 
-select * from yorkdb_20250425.dbo.r_rd_name_code 
-where rd_name_code in ( select distinct( rd_name_code ) as rd_name_code from yorkdb_20250425.dbo.d_interval_temporal_2 )
+select * from yorkdb_20260319.dbo.r_rd_name_code 
+where rd_name_code in ( select distinct( rd_name_code ) as rd_name_code from yorkdb_20260319.dbo.d_interval_temporal_2 )
 
 -- D_INTERVAL_TEMPORAL_2
+
+drop view v_tr_dit2
 
 create view v_tr_dit2 as
 select
@@ -544,10 +571,11 @@ end as unit_code
 ,d.rd_name_ouom
 ,d.rd_value_ouom
 ,d.rd_unit_ouom
+,d.rec_status_code
 ,d.sys_record_id
 ,cast(null as integer) as ypdt_sys_record_id
 from 
-yorkdb_20250425.dbo.d_interval_temporal_2 as d
+yorkdb_20260319.dbo.d_interval_temporal_2 as d
 inner join 
 (
 select
@@ -560,8 +588,11 @@ where dia.int_alias_type_code=1
 on d.int_id=t.york_int_id
 where 
 d.rd_name_code in (163,369,699,700,701,702,703,706,707)
+and ( d.rec_status_code is null or d.rec_status_code < 100 )
 
 -- D_INTERVAL_TEMPORAL_EXT
+
+drop view v_tr_ditext
 
 create view v_tr_ditext as
 select
@@ -599,10 +630,11 @@ end as unit_code
 ,d.rd_name_ouom
 ,d.rd_value_ouom
 ,d.rd_unit_ouom
+,d.rec_status_code
 ,d.sys_record_id
 ,cast(null as integer) as ypdt_sys_record_id
 from 
-yorkdb_20250425.dbo.d_interval_temporal_ext as d
+yorkdb_20260319.dbo.d_interval_temporal_ext as d
 inner join 
 (
 select
@@ -615,8 +647,11 @@ where dia.int_alias_type_code=1
 on d.int_id=t.york_int_id
 where 
 d.rd_name_code in (163,369,699,700,701,702,703,706,707)
+and ( d.rec_status_code is null or d.rec_status_code < 100 )
 
 -- D_INTERVAL_TEMPORAL_YORK
+
+drop view v_tr_dityork
 
 create view v_tr_dityork as
 select
@@ -654,10 +689,11 @@ end as unit_code
 ,d.rd_name_ouom
 ,d.rd_value_ouom
 ,d.rd_unit_ouom
+,d.rec_status_code
 ,d.sys_record_id
 ,cast(null as integer) as ypdt_sys_record_id
 from 
-yorkdb_20250425.dbo.d_interval_temporal_york as d
+yorkdb_20260319.dbo.d_interval_temporal_york as d
 inner join 
 (
 select
@@ -670,8 +706,11 @@ where dia.int_alias_type_code=1
 on d.int_id=t.york_int_id
 where 
 d.rd_name_code in (163,369,699,700,701,702,703,706,707)
+and ( d.rec_status_code is null or d.rec_status_code < 100 )
 
 -- D_INTVL_TEMP2
+
+drop view v_tr_ditvl2
 
 create view v_tr_ditvl2 as
 select
@@ -709,10 +748,11 @@ end as unit_code
 ,d.rd_name_ouom
 ,d.rd_value_ouom
 ,d.rd_unit_ouom
+,d.rec_status_code
 ,d.sys_record_id
 ,cast(null as integer) as ypdt_sys_record_id
 from 
-yorkdb_20250425.dbo.d_intvl_temp2 as d
+yorkdb_20260319.dbo.d_intvl_temp2 as d
 inner join 
 (
 select
@@ -725,6 +765,7 @@ where dia.int_alias_type_code=1
 on d.int_id=t.york_int_id
 where 
 d.rd_name_code in (163,369,699,700,701,702,703,706,707)
+and ( d.rec_status_code is null or d.rec_status_code < 100 )
 
 -- D_INTERVAL_TEMPORAL_2 - Extract
 
@@ -745,11 +786,12 @@ v.ypdt_int_id
 ,v.rd_name_ouom
 ,v.rd_value_ouom
 ,v.rd_unit_ouom
+,v.rec_status_code
 ,cast( null as int ) as rkey
 --,row_number() over (order by v.sys_record_id) as rkey
-into yorkdb_20250425.dbo.dit2
+into yorkdb_20260319.dbo.dit2
 from 
-yorkdb_20250425.dbo.v_tr_dit2 as v
+yorkdb_20260319.dbo.v_tr_dit2 as v
 left outer join oak_20160831_master.dbo.d_interval_temporal_2 as d
 on v.ypdt_int_id=d.int_id and v.rd_date=d.rd_date and v.rd_name_code=d.rd_name_code
 where 
@@ -761,8 +803,9 @@ and ( d.sys_record_id is null or (d.sys_record_id is not null and not( v.rd_valu
 -- v20230717 15321950 records
 -- v20240909 12604855 records
 -- v20250425 11147680 records
+-- v20260422 13958208 records
 
-select count(*) as rcount from yorkdb_20250425.dbo.dit2
+select count(*) as rcount from yorkdb_20260319.dbo.dit2
 
 -- get the current count
 
@@ -770,18 +813,19 @@ select count(*) as rcount from yorkdb_20250425.dbo.dit2
 -- v20231017 15321950 max rkey
 -- v20240909 12604855 max rkey
 -- v20250425 no rkey is being generated (to see if the 'order by' is slowing the query)
+-- v20260422 ???
 
 select
 max(rkey) 
 from 
-yorkdb_20250425.dbo.dit2
+yorkdb_20260319.dbo.dit2
 
 -- D_INTERVAL_TEMPORAL_EXT - Extract
 
 -- Note that this adds to the export DIT2 table; update
 -- the rkey value (i.e. addition)
 
-insert into yorkdb_20250425.dbo.dit2
+insert into yorkdb_20260319.dbo.dit2
 (
 ypdt_int_id
 ,york_int_id
@@ -797,6 +841,7 @@ ypdt_int_id
 ,rd_name_ouom
 ,rd_value_ouom
 ,rd_unit_ouom
+,rec_status_code
 ,rkey
 )
 select
@@ -814,10 +859,11 @@ v.ypdt_int_id
 ,v.rd_name_ouom
 ,v.rd_value_ouom
 ,v.rd_unit_ouom
+,v.rec_status_code
 ,cast( null as int ) as rkey
 --,( row_number() over (order by v.sys_record_id) ) + 12604855 as rkey
 from 
-yorkdb_20250425.dbo.v_tr_ditext as v
+yorkdb_20260319.dbo.v_tr_ditext as v
 left outer join oak_20160831_master.dbo.d_interval_temporal_2 as d
 on v.ypdt_int_id=d.int_id and v.rd_date=d.rd_date and v.rd_name_code=d.rd_name_code 
 where 
@@ -828,20 +874,21 @@ and ( d.sys_record_id is null or (d.sys_record_id is not null and not( v.rd_valu
 -- v20231017 15329011 max rkey
 -- v20240909 12614921 max rkey
 -- v20250425 11148439 records (not using max())
+-- v20260422 13958929 records
 
-select count(*) as rcount from yorkdb_20250425.dbo.dit2
+select count(*) as rcount from yorkdb_20260319.dbo.dit2
 
 select
 max(rkey) 
 from 
-yorkdb_20250425.dbo.dit2
+yorkdb_20260319.dbo.dit2
 
 -- D_INTERVAL_TEMPORAL_YORK - Extract
 
 -- Note that this adds to the DIT2 export table; update
 -- the rkey value (i.e. addition)
 
-insert into yorkdb_20250425.dbo.dit2
+insert into yorkdb_20260319.dbo.dit2
 (
 ypdt_int_id
 ,york_int_id
@@ -857,6 +904,7 @@ ypdt_int_id
 ,rd_name_ouom
 ,rd_value_ouom
 ,rd_unit_ouom
+,rec_status_code
 ,rkey
 )
 select
@@ -874,10 +922,11 @@ v.ypdt_int_id
 ,v.rd_name_ouom
 ,v.rd_value_ouom
 ,v.rd_unit_ouom
+,v.rec_status_code
 ,cast( null as int ) as rkey
 --,( row_number() over (order by v.sys_record_id) ) + 12614921 as rkey
 from 
-yorkdb_20250425.dbo.v_tr_dityork as v
+yorkdb_20260319.dbo.v_tr_dityork as v
 left outer join oak_20160831_master.dbo.d_interval_temporal_2 as d
 on v.ypdt_int_id=d.int_id and v.rd_date=d.rd_date and v.rd_name_code=d.rd_name_code 
 where 
@@ -888,20 +937,21 @@ and ( d.sys_record_id is null or (d.sys_record_id is not null and not( v.rd_valu
 -- v20231017 16165079 max rkey
 -- v20240909 13603925 max rkey
 -- v20250425 12205771 records (not using max())
+-- v20260422 14637436 records
 
-select count(*) as rcount from yorkdb_20250425.dbo.dit2
+select count(*) as rcount from yorkdb_20260319.dbo.dit2
 
 select
 max(rkey) 
 from 
-yorkdb_20250425.dbo.dit2
+yorkdb_20260319.dbo.dit2
 
 -- D_INTVL_TEMP2 - Extract
 
 -- Note that this adds to the DIT2 export table; update
 -- the rkey value (i.e. addition)
 
-insert into yorkdb_20250425.dbo.dit2
+insert into yorkdb_20260319.dbo.dit2
 (
 ypdt_int_id
 ,york_int_id
@@ -917,6 +967,7 @@ ypdt_int_id
 ,rd_name_ouom
 ,rd_value_ouom
 ,rd_unit_ouom
+,rec_status_code
 ,rkey
 )
 select
@@ -934,10 +985,11 @@ v.ypdt_int_id
 ,v.rd_name_ouom
 ,v.rd_value_ouom
 ,v.rd_unit_ouom
+,v.rec_status_code
 ,cast( null as int ) as rkey
 --,( row_number() over (order by v.sys_record_id) ) + 13603925 as rkey
 from 
-yorkdb_20250425.dbo.v_tr_ditvl2 as v
+yorkdb_20260319.dbo.v_tr_ditvl2 as v
 left outer join oak_20160831_master.dbo.d_interval_temporal_2 as d
 on v.ypdt_int_id=d.int_id and v.rd_date=d.rd_date and v.rd_name_code=d.rd_name_code 
 where 
@@ -948,13 +1000,14 @@ and ( d.sys_record_id is null or (d.sys_record_id is not null and not( v.rd_valu
 -- v20231017 16165090 rkey max
 -- v20240909 13603936 rkey max
 -- v20250425 12205782 records (not using max())
+-- v20260422 14637447 records
 
-select count(*) as rcount from yorkdb_20250425.dbo.dit2
+select count(*) as rcount from yorkdb_20260319.dbo.dit2
 
 select
 max(rkey) 
 from 
-yorkdb_20250425.dbo.dit2
+yorkdb_20260319.dbo.dit2
 
 -- v20210503 14568355 rows total
 -- v20231017 16165090 records total
@@ -964,7 +1017,7 @@ yorkdb_20250425.dbo.dit2
 select 
 count(*) 
 from 
-yorkdb_20250425.dbo.dit2
+yorkdb_20260319.dbo.dit2
 
 
 -- v20210503 1861164 rows updated
@@ -975,7 +1028,7 @@ yorkdb_20250425.dbo.dit2
 select 
 count(*) 
 from 
-yorkdb_20250425.dbo.dit2
+yorkdb_20260319.dbo.dit2
 where 
 ormgp_cur_sys_record_id is not null
 
@@ -988,7 +1041,7 @@ ormgp_cur_sys_record_id is not null
 select 
 count(*) 
 from 
-yorkdb_20250425.dbo.dit2
+yorkdb_20260319.dbo.dit2
 where 
 ormgp_cur_sys_record_id is null
 
@@ -996,35 +1049,47 @@ ormgp_cur_sys_record_id is null
 
 -- Make sure to add a DATA_ID for each of the updated and new data
 
-select * from oak_20160831_master.dbo.d_data_source where data_id>= 240003500
+select * from oak_20160831_master.dbo.d_data_source where data_id>= 240003500 order by data_id
 
 -- v20240909
 -- v20250425
+-- v20260422
 
 insert into oak_20160831_master.dbo.d_data_source
 ( data_id,data_type,data_description,data_filename, data_added_date )
 values 
-( 240003513,'Water Levels and Other','Updated York Data - Various Temporal 2 (new); York DB 20250425','SiteFX_Full_backup_20250425.bak', '2025-05-08' )
+( 240003522,'Water Levels and Other','Updated York Data - Various Temporal 2 (new); York DB 20260422','SiteFX_Full_backup_20260319.bak', '2026-04-22' )
 
 insert into oak_20160831_master.dbo.d_data_source
 ( data_id,data_type,data_description,data_filename, data_added_date )
 values 
-( 240003514,'Water Levels and Other','Updated York Data - Various Temporal 2 (replacement); York DB 20250425','SiteFX_Full_backup_20250425.bak', '2025-05-08' )
+( 240003523,'Water Levels and Other','Updated York Data - Various Temporal 2 (replacement); York DB 20260422','SiteFX_Full_backup_20260319.bak', '2026-04-22' )
 
-select * from yorkdb_20250425_subset.dbo.dit2
+select * from yorkdb_20260319_subset.dbo.dit2
+
+-- Check how many records are to be updated
+
+-- v20260422 1859068 records
+
+select
+count(*) as rcount
+from 
+yorkdb_20260422_subset.dbo.dit2
+where
+ormgp_cur_sys_record_id is not null
 
 -- Those records with a non-null ormgp_cur_sys_record_id will use an update
 -- query; note the DATA_ID and the removal of the _ouom field values
 
 update oak_20160831_master.dbo.d_interval_temporal_2
 set
-data_id= 240003514
+data_id= 240003523
 ,rd_value= d.rd_value
 ,rd_value_ouom=null
 ,rd_unit_ouom=null
 from 
 oak_20160831_master.dbo.d_interval_temporal_2 as d2
-inner join yorkdb_20250425_subset.dbo.dit2 as d
+inner join yorkdb_20260422_subset.dbo.dit2 as d
 on d2.sys_record_id=d.ormgp_cur_sys_record_id
 
 
@@ -1060,7 +1125,7 @@ min(rkey) as rkey_min
 ,max(rkey) as rkey_max
 ,count(*) as total_records
 from 
-yorkdb_20250425_subset.dbo.dit2
+yorkdb_20260319_subset.dbo.dit2
 where
 ormgp_add_sys_record_id is null
 and ormgp_cur_sys_record_id is null
@@ -1069,7 +1134,7 @@ select
 max(rkey) as rkey_max
 ,count(*) as rcount
 from 
-yorkdb_20250425_subset.dbo.dit2
+yorkdb_20260319_subset.dbo.dit2
 where
 ormgp_add_sys_record_id is not null
 and ormgp_cur_sys_record_id is null
@@ -1080,13 +1145,15 @@ and ormgp_cur_sys_record_id is null
 --where
 --ormgp_add_sys_record_id is not null
 
--- the following is run repeadedly, adding the previous max rkey to capture the next set to be imported
+-- the following is run repeatedly, adding the previous max rkey to capture the next set to be imported
 
-update yorkdb_20250425_subset.dbo.dit2
+--** 20260422 changed view to populate up to 15000000 records
+
+update yorkdb_20260422_subset.dbo.dit2b
 set
 ormgp_add_sys_record_id= t2.sri
 from 
-yorkdb_20250425_subset.dbo.dit2 as d
+yorkdb_20260422_subset.dbo.dit2b as d
 inner join
 (
 select
@@ -1104,7 +1171,8 @@ new_id not in
 ( select sys_record_id from d_interval_temporal_2 )
 ) as t
 ) as t2
-on d.rkey= ( t2.rkey + 10301301 )
+on d.id= t2.rkey
+--on d.rkey= ( t2.rkey + 10301301 )
 where
 d.ormgp_cur_sys_record_id is null
 and d.ormgp_add_sys_record_id is null
@@ -1142,11 +1210,11 @@ d.unit_code,
 d.rd_value as rd_value_ouom,
 rrnc.rd_name_description as rd_name_ouom,
 ruc.unit_description as rd_unit_ouom,
-240003513 as data_id,
-'20250508g' as sys_temp1,
-20250508 as sys_temp2
+240003522 as data_id,
+'20260422d' as sys_temp1,
+20260422 as sys_temp2
 FROM 
-yorkdb_20250425_subset.dbo.dit2 as d
+yorkdb_20260422_subset.dbo.dit2b as d
 inner join oak_20160831_master.dbo.r_rd_name_code as rrnc
 on d.rd_name_code=rrnc.rd_name_code
 left outer join oak_20160831_master.dbo.r_unit_code as ruc
@@ -1160,7 +1228,7 @@ and ormgp_add_sys_record_id is not null
 
 -- set ormgp_cur_sys_record_id to -9999 for those records that have been inserted
 
-update yorkdb_20250425_subset.dbo.dit2
+update yorkdb_20260319_subset.dbo.dit2
 set
 ormgp_cur_sys_record_id= -9999
 where
@@ -1170,7 +1238,7 @@ and ormgp_cur_sys_record_id is null
 select
 *
 from 
-yorkdb_20250425_subset.dbo.dit2
+yorkdb_20260319_subset.dbo.dit2
 where
 ormgp_cur_sys_record_id= -9999
 
