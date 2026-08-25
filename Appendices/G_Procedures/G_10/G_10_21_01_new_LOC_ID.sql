@@ -4,7 +4,7 @@
 --***** create a new series of LOC_IDs and BH_IDs we'll use to update 
 --***** some of the FM_ tables before importing into the master database
 
---***** Note that the MOE_20250711 database needs to compare directly against
+--***** Note that the MOE_20260813 database needs to compare directly against
 --***** the master database
 
 -- make sure that the DATA_ID has been included in the master database
@@ -30,22 +30,20 @@
 -- v20230324 525
 -- v20240326 526
 -- v20250711 528
+-- v20260813 529
 
 select
 *
 from 
 [OAK_20160831_MASTER].[dbo].[D_DATA_SOURCE]
 where
-data_id= 528
+data_id= 529
 
 -- create the master LOC_ID
 
 -- how many loc_ids are there
 
-select
-COUNT(*)
-from 
-MOE_20250711.[dbo].[M_D_LOCATION]
+
 
 -- 2016.05.31 28188 locations
 -- 2017.09.05 17185 locations
@@ -57,12 +55,15 @@ MOE_20250711.[dbo].[M_D_LOCATION]
 -- v20230324 18826 locations
 -- v20240326 23131 locations
 -- v20250711 18379 locations
+-- v20260813 129172 locations
 
 -- how many in YC_????????_BH_ID and in M_D_BOREHOLE
 
-select count(*) FROM MOE_20250711.[dbo].[YC_20250711_BH_ID]
+select COUNT(*) from MOE_20260813.[dbo].[M_D_LOCATION]
 
-select count(*) FROM MOE_20250711.[dbo].[M_D_BOREHOLE]
+--select count(*) FROM MOE_20260813.[dbo].[YC_20260813_BH_ID]
+
+select count(*) FROM MOE_20260813.[dbo].[M_D_BOREHOLE]
 
 -- 2016.05.31 28188 in both
 -- 2017.09.05 17185 in both
@@ -74,6 +75,7 @@ select count(*) FROM MOE_20250711.[dbo].[M_D_BOREHOLE]
 -- v20230324 18826 in both
 -- v20240326 23131 in both
 -- v20250711 18379 in both
+-- v20260813 129172 in both
 
  -- use YC_????????_BH_ID to assemble the LOC_ID/BH_ID transformations
 
@@ -90,12 +92,12 @@ dloc.BORE_HOLE_ID
 ,dloc.BH_ID
 ,ROW_NUMBER() over (order by BORE_HOLE_ID) as rnum
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as dloc
+MOE_20260813.dbo.YC_20260813_BH_ID as dloc
 ) as t1
 inner join
 (
 select
-top 30000
+top 200000
 v.NEW_ID
 ,ROW_NUMBER() over (order by NEW_ID) as rnum
 from 
@@ -117,7 +119,7 @@ t1.BORE_HOLE_ID
 ,t1.BH_ID
 ,cast(null as int) as new_BH_ID
 ,ROW_NUMBER() over (order by t1.BORE_HOLE_ID) as rnum
-into MOE_20250711.dbo.YC_20250711_new_LOC_ID_BH_ID
+into MOE_20260813.dbo.YC_20260813_new_LOC_ID_BH_ID
 from 
 (
 select
@@ -125,12 +127,12 @@ dloc.BORE_HOLE_ID
 ,dloc.BH_ID
 ,ROW_NUMBER() over (order by BORE_HOLE_ID) as rnum
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as dloc
+MOE_20260813.dbo.YC_20260813_BH_ID as dloc
 ) as t1
 inner join
 (
 select
-top 30000
+top 200000
 v.NEW_ID
 ,ROW_NUMBER() over (order by NEW_ID) as rnum
 from 
@@ -145,7 +147,7 @@ select LOC_ID from OAK_20160831_MASTER.dbo.D_LOCATION
 on
 t1.rnum=t2.rnum
 
-drop table moe_20250711.dbo.yc_20250711_new_loc_id_bh_id
+drop table moe_20260813.dbo.yc_20260813_new_loc_id_bh_id
 
 
 --***** 20230510 Populate new BH_ID after this (commented out) section
@@ -170,7 +172,7 @@ y.BORE_HOLE_ID
 ,t2.new_BH_ID
 ,y.rnum
 from 
-MOE_20250711.dbo.YC_20250711_new_LOC_ID_BH_ID as y
+MOE_20260813.dbo.YC_20260813_new_LOC_ID_BH_ID as y
 inner join
 (
 select
@@ -179,7 +181,7 @@ t1.new_BH_ID
 from 
 (
 select 
-top 30000
+top 200000
 v.NEW_ID as new_BH_ID
 from 
 OAK_20160831_MASTER.dbo.V_SYS_RANDOM_ID_BULK_001 as v
@@ -194,11 +196,11 @@ select BH_ID from OAK_20160831_MASTER.dbo.D_BOREHOLE
 on y.rnum=t2.rnum
 
 
-update MOE_20250711.dbo.YC_20250711_new_LOC_ID_BH_ID
+update MOE_20260813.dbo.YC_20260813_new_LOC_ID_BH_ID
 set
 new_BH_ID=t2.new_BH_ID
 from 
-MOE_20250711.dbo.YC_20250711_new_LOC_ID_BH_ID as y
+MOE_20260813.dbo.YC_20260813_new_LOC_ID_BH_ID as y
 inner join
 (
 select
@@ -207,7 +209,7 @@ t1.new_BH_ID
 from 
 (
 select 
-top 30000
+top 200000
 v.NEW_ID as new_BH_ID
 from 
 OAK_20160831_MASTER.dbo.V_SYS_RANDOM_ID_BULK_001 as v
@@ -226,50 +228,3 @@ on y.rnum=t2.rnum
 
 
 
---***** The following were moved from above as there were no changes
---***** necessary for the 20160531 import
-
--- there should be an equivalent number of records in FM_D_BOREHOLE;
--- if there isn't check why and correct
-
---select
---COUNT(*) 
---from 
---[MOE_201304].dbo.FM_D_BOREHOLE
-
--- there isn't; check and correct
-
---select
---*
---from 
---[MOE_201304].[dbo].[FM_D_BOREHOLE]
---where 
---LOC_ID 
---not in
---(
---select LOC_ID from [MOE_201304].dbo.FM_D_LOCATION
---)
-
---select
---*
---from 
---[MOE_201304].[dbo].[FM_D_BOREHOLE] as dbore
---inner join 
---(
---select
---loc_id 
---,COUNT(*) as rcount
---from 
---[MOE_201304].[dbo].[FM_D_BOREHOLE]
---group by
---LOC_ID 
---) as t1
---on
---dbore.LOC_ID=t1.LOC_ID
---where
---t1.rcount>1
-
---delete from [MOE_201304].[dbo].[FM_D_BOREHOLE]
---where
---LOC_ID=240686121
---and BH_DIAMETER_OUOM is not null

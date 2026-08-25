@@ -12,11 +12,12 @@
 
 -- v20240326 10584 rows
 -- v20250711 12345 rows
+-- v20260813 713346 rows
 
 select
 COUNT(*)
 from 
-MOE_20250711.[dbo].YC_20250711_PUMP_STEP
+MOE_20260813.[dbo].YC_20260813_PUMP_STEP
 where
 testtype is not null
 
@@ -33,13 +34,14 @@ testtype is not null
 -- v20230324 707 rows
 -- v20240326 633 rows
 -- v20250711 602 rows
+-- v20260813 70451 rows
 
 -- how many records in M_D_INTERVAL_TEMPORAL_2
 
 select 
 count(*) 
 from 
-MOE_20250711.[dbo].[M_D_INTERVAL_TEMPORAL_2]
+MOE_20260813.[dbo].[M_D_INTERVAL_TEMPORAL_2]
 
 -- add this number to the ROW_NUMBER() to make an rkey
 
@@ -53,6 +55,7 @@ MOE_20250711.[dbo].[M_D_INTERVAL_TEMPORAL_2]
 -- v20230324 707 rows
 -- v20240326 633 rows
 -- v20250711 602 rows
+-- v20260813 70451 rows
 
 -- this is the base script; this should return the same number of rows
 -- as YC_????????_PUMP_STEP
@@ -66,6 +69,7 @@ MOE_20250711.[dbo].[M_D_INTERVAL_TEMPORAL_2]
 -- v20230324 
 -- v20240326 10584 rows
 -- v20250711 12345 rows
+-- v20260813 713346 rows
 
 --***** v20210119 Updated to include D_LOCATION_SPATIAL_HIST
 --***** v20230324 disable SRTM elevations
@@ -94,12 +98,12 @@ else cast('Pumping - Recovery' as varchar(255))
 end as [RD_COMMENT]
 ,dps.DATA_ID as [DATA_ID]
 --***** add the number to the following row
-,602 + ROW_NUMBER() over (order by dps.PUMP_END) as SYS_RECORD_ID
+,70451 + ROW_NUMBER() over (order by dps.PUMP_END) as SYS_RECORD_ID
 from 
-MOE_20250711.[dbo].YC_20250711_PUMP_STEP as dps
-inner join MOE_20250711.dbo.M_D_PUMPTEST as dp
+MOE_20260813.[dbo].YC_20260813_PUMP_STEP as dps
+inner join MOE_20260813.dbo.M_D_PUMPTEST as dp
 on dps.PUMP_TEST_ID=dp.PUMP_TEST_ID
-inner join MOE_20250711.dbo.M_D_INTERVAL as dint
+inner join MOE_20260813.dbo.M_D_INTERVAL as dint
 on dp.INT_ID=dint.INT_ID
 inner join 
 (
@@ -107,7 +111,7 @@ select
 dlsh.LOC_ID
 ,LOC_ELEV
 from 
-MOE_20250711.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
+MOE_20260813.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
 where
 --***** 20250711 SRTM manually edited; include
 dlsh.LOC_ELEV_CODE in (3,5)
@@ -117,7 +121,7 @@ dlsh.LOC_ELEV_CODE in (3,5)
 --dlsh.LOC_ID
 --,LOC_ELEV
 --from 
---MOE_20250711.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
+--MOE_20260813.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
 --where
 --dlsh.LOC_ELEV_CODE=5
 ) as delev
@@ -131,7 +135,7 @@ dp.INT_ID,RD_DATE
 
 -- insert into the d_int_temp_2 table
 
-insert into MOE_20250711.dbo.M_D_INTERVAL_TEMPORAL_2
+insert into MOE_20260813.dbo.M_D_INTERVAL_TEMPORAL_2
 (
 INT_ID
 ,RD_TYPE_CODE
@@ -170,12 +174,12 @@ else cast('Pumping - Recovery' as varchar(255))
 end as [RD_COMMENT]
 ,dps.DATA_ID as [DATA_ID]
 --***** add the number to the following row
-,633 + ROW_NUMBER() over (order by dps.PUMP_END) as SYS_RECORD_ID
+,70451 + ROW_NUMBER() over (order by dps.PUMP_END) as SYS_RECORD_ID
 from 
-MOE_20250711.[dbo].YC_20250711_PUMP_STEP as dps
-inner join MOE_20250711.dbo.M_D_PUMPTEST as dp
+MOE_20260813.[dbo].YC_20260813_PUMP_STEP as dps
+inner join MOE_20260813.dbo.M_D_PUMPTEST as dp
 on dps.PUMP_TEST_ID=dp.PUMP_TEST_ID
-inner join MOE_20250711.dbo.M_D_INTERVAL as dint
+inner join MOE_20260813.dbo.M_D_INTERVAL as dint
 on dp.INT_ID=dint.INT_ID
 inner join 
 (
@@ -183,7 +187,7 @@ select
 dlsh.LOC_ID
 ,LOC_ELEV
 from 
-MOE_20250711.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
+MOE_20260813.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
 where
 --***** 20250711 SRTM added manually; include both
 dlsh.LOC_ELEV_CODE in (3,5)
@@ -193,7 +197,7 @@ dlsh.LOC_ELEV_CODE in (3,5)
 --dlsh.LOC_ID
 --,LOC_ELEV
 --from 
---MOE_20250711.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
+--MOE_20260813.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
 --where
 --dlsh.LOC_ELEV_CODE=5
 ) as delev

@@ -12,7 +12,7 @@
 --select
 --COUNT(*) 
 --from 
---MOE_20250711.dbo.YC_20250711_DINTMON as ycdim
+--MOE_20260813.dbo.YC_20260813_DINTMON as ycdim
 --where
 --ycdim.tmp_INT_TYPE_CODE=21
 
@@ -28,12 +28,13 @@
 -- v20230324 0 rows
 -- v20240326 0 rows
 -- v20250711 0 rows
+-- v20260813 220 rows
 
 select
 COUNT(*) 
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
-inner join MOE_20250711.dbo.TblBore_Hole as moebh
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
+inner join MOE_20260813.dbo.TblBore_Hole as moebh
 on ycb.BORE_HOLE_ID=moebh.BORE_HOLE_ID
 where 
 moebh.OPEN_HOLE='Y'
@@ -41,8 +42,8 @@ moebh.OPEN_HOLE='Y'
 select
 ycb.*
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
-inner join MOE_20250711.dbo.TblBore_Hole as moebh
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
+inner join MOE_20260813.dbo.TblBore_Hole as moebh
 on ycb.BORE_HOLE_ID=moebh.BORE_HOLE_ID
 where 
 moebh.OPEN_HOLE='Y'
@@ -58,6 +59,7 @@ moebh.OPEN_HOLE='Y'
 -- v20230324 0 rows
 -- v20240326 0 rows
 -- v20250711 0 rows
+-- v20260813 0 rows
 
 select 
 ycb.BORE_HOLE_ID as tmp_LOC_ID
@@ -67,17 +69,17 @@ ycb.BORE_HOLE_ID as tmp_LOC_ID
 ,'m' as MON_UNIT_OUOM
 ,'open hole; no valid casing' as MON_COMMENT
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
-inner join MOE_20250711.dbo.TblBore_Hole as moebh
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
+inner join MOE_20260813.dbo.TblBore_Hole as moebh
 on ycb.BORE_HOLE_ID=moebh.BORE_HOLE_ID
-inner join MOE_20250711.dbo.M_D_BOREHOLE_CONSTRUCTION as ycbc
+inner join MOE_20260813.dbo.M_D_BOREHOLE_CONSTRUCTION as ycbc
 on ycb.BORE_HOLE_ID=ycbc.BH_ID
 where 
 moebh.OPEN_HOLE='Y'
 and ycb.BORE_HOLE_ID
 not in
 (
-select tmp_LOC_ID from MOE_20250711.dbo.YC_20250711_DINTMON
+select tmp_LOC_ID from MOE_20260813.dbo.YC_20260813_DINTMON
 )
 
 -- there is no 'open hole' records without casing
@@ -121,7 +123,7 @@ select tmp_LOC_ID from MOE_20250711.dbo.YC_20250711_DINTMON
 select
 *
 from 
-MOE_20250711.dbo.YC_20250711_DINTMON as y
+MOE_20260813.dbo.YC_20260813_DINTMON as y
 where 
 tmp_int_type_code= 21
 

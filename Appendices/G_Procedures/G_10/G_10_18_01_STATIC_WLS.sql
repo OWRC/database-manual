@@ -17,6 +17,7 @@
 -- v20230324 707 without; 707 with; match
 -- v20240326 633 without; 633 with; match
 -- v20250711 602 without; 602 with; match
+-- v20260813 71569 without; 71569 with; match
 
 SELECT 
 moept.[PIPE_ID]
@@ -25,22 +26,22 @@ moept.[PIPE_ID]
 ,[WELL_ID]
 ,[Static_lev]
 ,[LEVELS_UOM]
-FROM MOE_20250711.[dbo].[TblPump_Test] as moept
+FROM MOE_20260813.[dbo].[TblPump_Test] as moept
 inner join
 (
 select
 moetp.PIPE_ID
 ,ycb.BORE_HOLE_ID as LOC_ID
 from 
-MOE_20250711.dbo.[YC_20250711_BH_ID] as ycb
-inner join MOE_20250711.dbo.TblPipe as moetp
+MOE_20260813.dbo.[YC_20260813_BH_ID] as ycb
+inner join MOE_20260813.dbo.TblPipe as moetp
 on ycb.BORE_HOLE_ID=moetp.Bore_Hole_ID
 ) as t1
 on
 moept.PIPE_ID=t1.PIPE_ID
 --***** disable/enable the following
-inner join MOE_20250711.dbo.M_D_INTERVAL as dim
-on t1.LOC_ID=dim.LOC_ID
+--inner join MOE_20260813.dbo.M_D_INTERVAL as dim
+--on t1.LOC_ID=dim.LOC_ID
 --*****
 where
 moept.Static_lev is not null 
@@ -89,8 +90,8 @@ moept.Static_lev is not null
 ----,COUNT(*) as rcount
 ----*****
 --from 
---MOE_20250711.dbo.YC_20250711_BH_ID as ycb
---inner join MOE_20250711.dbo.TblPipe as moetp
+--MOE_20260813.dbo.YC_20260813_BH_ID as ycb
+--inner join MOE_20260813.dbo.TblPipe as moetp
 --on ycb.BORE_HOLE_ID=moetp.Bore_Hole_ID
 ----***** enable/disable the following
 ----group by
@@ -228,6 +229,7 @@ moept.Static_lev is not null
 -- v20210119 
 -- v20240326 633 rows
 -- v20250711 602 rows
+-- v20260813 71569 rows
 
 select 
 dint.INT_ID
@@ -247,19 +249,19 @@ as float
 ,cast(moept.LEVELS_UOM as varchar(50)) as [RD_UNIT_OUOM]
 ,cast(1 as int) as [REC_STATUS_CODE]
 ,cast(null as varchar(255)) as RD_COMMENT
-,cast(528 as int) as DATA_ID
+,cast(529 as int) as DATA_ID
 ,ROW_NUMBER() over (order by dint.INT_ID) as SYS_RECORD_ID
 from 
-MOE_20250711.dbo.TblPipe as moetp
-inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.TblPipe as moetp
+inner join MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 on moetp.Bore_Hole_ID=ycb.BORE_HOLE_ID
-inner join MOE_20250711.dbo.TblPump_Test as moept
+inner join MOE_20260813.dbo.TblPump_Test as moept
 on moetp.PIPE_ID=moept.PIPE_ID
-inner join MOE_20250711.dbo.M_D_LOCATION as dloc
+inner join MOE_20260813.dbo.M_D_LOCATION as dloc
 on ycb.BORE_HOLE_ID=dloc.LOC_ID
-inner join MOE_20250711.dbo.M_D_INTERVAL as dint
+inner join MOE_20260813.dbo.M_D_INTERVAL as dint
 on dloc.LOC_ID=dint.LOC_ID
-inner join MOE_20250711.dbo.M_D_BOREHOLE as delev
+inner join MOE_20260813.dbo.M_D_BOREHOLE as delev
 on dloc.loc_id=delev.loc_id
 where 
 moept.Static_lev is not null 
@@ -285,20 +287,20 @@ as float
 ,cast(moept.LEVELS_UOM as varchar(50)) as [RD_UNIT_OUOM]
 ,cast(1 as int) as [REC_STATUS_CODE]
 ,cast(null as varchar(255)) as RD_COMMENT
-,cast(528 as int) as DATA_ID
+,cast(529 as int) as DATA_ID
 ,ROW_NUMBER() over (order by dint.INT_ID) as SYS_RECORD_ID
-into MOE_20250711.dbo.M_D_INTERVAL_TEMPORAL_2
+into MOE_20260813.dbo.M_D_INTERVAL_TEMPORAL_2
 from 
-MOE_20250711.dbo.TblPipe as moetp
-inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.TblPipe as moetp
+inner join MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 on moetp.Bore_Hole_ID=ycb.BORE_HOLE_ID
-inner join MOE_20250711.dbo.TblPump_Test as moept
+inner join MOE_20260813.dbo.TblPump_Test as moept
 on moetp.PIPE_ID=moept.PIPE_ID
-inner join MOE_20250711.dbo.M_D_LOCATION as dloc
+inner join MOE_20260813.dbo.M_D_LOCATION as dloc
 on ycb.BORE_HOLE_ID=dloc.LOC_ID
-inner join MOE_20250711.dbo.M_D_INTERVAL as dint
+inner join MOE_20260813.dbo.M_D_INTERVAL as dint
 on dloc.LOC_ID=dint.LOC_ID
-inner join MOE_20250711.dbo.M_D_BOREHOLE as delev
+inner join MOE_20260813.dbo.M_D_BOREHOLE as delev
 on dloc.loc_id=delev.loc_id
 where 
 moept.Static_lev is not null 
@@ -319,11 +321,12 @@ and delev.bh_gnd_elev is not null
 -- v20230324 0 rows
 -- v20240326 0 rows
 -- v20250711 0 rows
+-- v20260813 2202 rows by int_id; 2192 rows by int_id,rd_date,rd_value
 
 select
 *
 from 
-MOE_20250711.dbo.m_d_interval_temporal_2 as dit2
+MOE_20260813.dbo.m_d_interval_temporal_2 as dit2
 where
 dit2.int_id
 in
@@ -336,30 +339,120 @@ select
 dit2.int_id
 ,COUNT(*) as rcount
 from 
-MOE_20250711.dbo.m_d_interval_temporal_2 as dit2
+MOE_20260813.dbo.m_d_interval_temporal_2 as dit2
+group by 
+--dit2.int_id
+dit2.int_id,rd_date,rd_value
+) as t1
+where 
+t1.rcount>1
+)
+order by
+int_id
+
+-- remove the extraneous rows grouped by int_id,rd_date,rd_value
+
+select
+d.*
+,t2.mn_sys_record_id
+from 
+MOE_20260813.dbo.m_d_interval_temporal_2 as d
+inner join 
+(
+select
+t.*
+from 
+(
+select
+int_id
+,rd_date
+,rd_value
+,min( sys_record_id ) as mn_sys_record_id
+,COUNT(*) as rcount
+from 
+MOE_20260813.dbo.m_d_interval_temporal_2 as dit2
+group by 
+int_id,rd_date,rd_value
+) as t
+where 
+t.rcount > 1
+) as t2
+on d.int_id=t2.int_id and d.rd_date=t2.rd_date and d.rd_value=t2.rd_value
+where
+d.sys_record_id <> t2.mn_sys_record_id
+
+
+delete from MOE_20260813.dbo.m_d_interval_temporal_2 where sys_record_id in 
+(
+select
+d.sys_record_id
+from 
+MOE_20260813.dbo.m_d_interval_temporal_2 as d
+inner join 
+(
+select
+t.*
+from 
+(
+select
+int_id
+,rd_date
+,rd_value
+,min( sys_record_id ) as mn_sys_record_id
+,COUNT(*) as rcount
+from 
+MOE_20260813.dbo.m_d_interval_temporal_2 as dit2
+group by 
+int_id,rd_date,rd_value
+) as t
+where 
+t.rcount > 1
+) as t2
+on d.int_id=t2.int_id and d.rd_date=t2.rd_date and d.rd_value=t2.rd_value
+where
+d.sys_record_id <> t2.mn_sys_record_id
+)
+
+
+-- recheck grouping by int_id
+
+-- v20260813 22 rows
+
+select
+*
+from 
+MOE_20260813.dbo.m_d_interval_temporal_2 as dit2
+where
+dit2.int_id
+in
+(
+select
+t1.int_id
+from 
+(
+select
+dit2.int_id
+,COUNT(*) as rcount
+from 
+MOE_20260813.dbo.m_d_interval_temporal_2 as dit2
 group by 
 dit2.int_id
 ) as t1
 where 
 t1.rcount>1
 )
+order by
+int_id,sys_record_id
 
--- remove the extraneous rows
+-- v20260813 manually delete these (as necessary)
 
---***** v20210119
+delete from MOE_20260813.dbo.m_d_interval_temporal_2 where sys_record_id in 
+(
+60677, 60680, 60683, 60686, 60692, 60695, 60734, 60777, 60781, 60783, 60786
+)
 
-delete from MOE_20250711.dbo.m_d_interval_temporal_2
-where 
-sys_record_id in ( 1548 )
 
---***** v20200721 
 
---delete from MOE_20250711.dbo.m_d_interval_temporal_2
---where 
---sys_record_id in ( 858, 913, 1723, 1774 )
 
---***** v201304
---delete from [MOE_201304].dbo.fm_d_interval_temporal_2 
---where 
---sys_record_id in (240289481,240289888,240290594)
+
 

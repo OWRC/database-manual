@@ -11,6 +11,7 @@
 -- v20230324 not examined as only z17/18 locations were examined
 -- v20240326 not examined as only z17/18 locations were examined
 -- v20250711 not examined as only z17/18 locations were examined
+-- v20260813 not examined as only z17/18 locations were examined
 
 select
 b.well_id

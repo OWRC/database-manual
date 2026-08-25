@@ -15,14 +15,15 @@
 -- v20230324 13273 rows
 -- v20240326 15934 rows
 -- v20250711 12798 rows
+-- v20260813 27719 rows
 
 select
 COUNT(*) as [To_Assign_LOC_IDs]
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ybc
+MOE_20260813.dbo.YC_20260813_BH_ID as ybc
 where 
 ybc.BORE_HOLE_ID not in
-( select distinct(tmp_LOC_ID) from MOE_20250711.dbo.YC_20250711_DINTMON )
+( select distinct(tmp_LOC_ID) from MOE_20260813.dbo.YC_20260813_DINTMON )
 
 -- overburden 1ft/0.3m screen above bottom of hole
 
@@ -34,6 +35,7 @@ ybc.BORE_HOLE_ID not in
 -- v20230324 879 rows
 -- v20240326 1234 rows
 -- v20250711 1097 rows
+-- v20260813 19823 rows
 
 select 
 ycb.BORE_HOLE_ID as tmp_LOC_ID
@@ -43,10 +45,10 @@ ycb.BORE_HOLE_ID as tmp_LOC_ID
 ,'m' as MON_UNIT_OUOM
 ,'overburden; assumed screen 0.3m above bottom' as MON_COMMENT
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 where 
 ycb.BORE_HOLE_ID not in
-( select tmp_LOC_ID from MOE_20250711.dbo.YC_20250711_DINTMON )
+( select tmp_LOC_ID from MOE_20260813.dbo.YC_20260813_DINTMON )
 and ycb.MAX_DEPTH_M is not null
 
 -- how many do not have a valid maximum depth
@@ -59,14 +61,15 @@ and ycb.MAX_DEPTH_M is not null
 -- v20230324 12394 rows
 -- v20240326 14700 rows
 -- v20250711 11701 rows
+-- v20260813 7896 rows
 
 select 
 COUNT(*) as Invalid_Max_Depth
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 where 
 ycb.BORE_HOLE_ID not in
-( select tmp_LOC_ID from MOE_20250711.dbo.YC_20250711_DINTMON )
+( select tmp_LOC_ID from MOE_20260813.dbo.YC_20260813_DINTMON )
 and ycb.MAX_DEPTH_M is null
 
 -- notice that if the number returned here is less than the total remaining,
@@ -82,6 +85,7 @@ and ycb.MAX_DEPTH_M is null
 -- v20230324 12394 rows is less than the total remaining of 13273
 -- v20240326 14700 rows is less than the total remaining of 15934
 -- v20250711 11701
+-- v20260813 7896                                           27719
 
 -- 2016.05.31 4171 locations don't have a bottom depth; 8981+4171=13152; this accounts for all locations
 -- 2017.09.05 4024 rows do not have a bottom depth; 3017+4024=7041; this accounts for all locations
@@ -93,11 +97,12 @@ and ycb.MAX_DEPTH_M is null
 -- v20230324 12394                                 12394+879=13273; this accounts for all locations
 -- v20240326 14700                                 14700+1234=15934; this accounts for all locations
 -- v20250711 11701                                 11701+1097=12798; 
+-- v20260813 7896                                  19823 + 7896 = 27719; this accounts for all locations
 
 -- if there is a problem - i.e. the numbers don't match - we'll need to fix it;
 -- otherwise apply the results
 
-insert into MOE_20250711.dbo.YC_20250711_DINTMON
+insert into MOE_20260813.dbo.YC_20260813_DINTMON
 (tmp_LOC_ID,tmp_INT_TYPE_CODE,MON_TOP_OUOM,MON_BOT_OUOM,MON_UNIT_OUOM,MON_COMMENT)
 select 
 ycb.BORE_HOLE_ID as tmp_LOC_ID
@@ -107,10 +112,10 @@ ycb.BORE_HOLE_ID as tmp_LOC_ID
 ,'m' as MON_UNIT_OUOM
 ,'overburden; assumed screen 0.3m above bottom' as MON_COMMENT
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 where 
 ycb.BORE_HOLE_ID not in
-( select tmp_LOC_ID from MOE_20250711.dbo.YC_20250711_DINTMON )
+( select tmp_LOC_ID from MOE_20260813.dbo.YC_20260813_DINTMON )
 and ycb.MAX_DEPTH_M is not null
 
 -- Checks
@@ -118,7 +123,7 @@ and ycb.MAX_DEPTH_M is not null
 select
 *
 from 
-MOE_20250711.dbo.YC_20250711_DINTMON as y
+MOE_20260813.dbo.YC_20260813_DINTMON as y
 where 
 tmp_int_type_code= 19
 

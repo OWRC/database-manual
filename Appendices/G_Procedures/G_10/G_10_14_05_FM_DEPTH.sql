@@ -11,13 +11,14 @@
 -- v20230324 4831 rows
 -- v20240326 6382 rows
 -- v20250711 4788 rows
+-- v20260813 105345 rows
 
 select 
 BORE_HOLE_ID
 ,max(FORMATION_END_DEPTH) as [FM_MAX_DEPTH]
 ,FORMATION_END_DEPTH_UOM as [FM_MAX_DEPTH_UNITS]
 from 
-MOE_20250711.[dbo].[TblFormation]
+MOE_20260813.[dbo].[TblFormation]
 where 
 BORE_HOLE_ID 
 in
@@ -25,7 +26,7 @@ in
 select 
 BORE_HOLE_ID 
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 )
 and 
 FORMATION_END_DEPTH is not null
@@ -43,6 +44,7 @@ BORE_HOLE_ID,FORMATION_END_DEPTH_UOM
 -- v20230324 0 rows
 -- v20240327 0 rows
 -- v20250711 0 rows
+-- v20260813 2 rows
 
 select
 t2.BORE_HOLE_ID
@@ -59,7 +61,7 @@ BORE_HOLE_ID
 ,max(FORMATION_END_DEPTH) as [FM_MAX_DEPTH]
 ,FORMATION_END_DEPTH_UOM as [FM_MAX_DEPTH_UNITS]
 from 
-MOE_20250711.[dbo].[TblFormation]
+MOE_20260813.[dbo].[TblFormation]
 where 
 BORE_HOLE_ID 
 in
@@ -67,7 +69,7 @@ in
 select 
 BORE_HOLE_ID 
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 )
 and FORMATION_END_DEPTH is not null
 group by
@@ -84,19 +86,23 @@ t2.rcount>1
 -- v20170905 1 BORE_HOLE_ID with varying units in TblFormation
 -- v20190509 0 rows returned
 -- v20200721 1 row
+-- v20260813 17 rows
 
 select
 *
 from 
-MOE_20250711.dbo.TblFormation
+MOE_20260813.dbo.TblFormation
 where 
-bore_hole_id= 1007362933
+bore_hole_id in ( 1010573869, 1009104284 )
+order by
+bore_hole_id,formation_top_depth desc
 
-update MOE_20250711.dbo.TblFormation
+update MOE_20260813.dbo.TblFormation
 set
 formation_end_depth_uom='ft'
 where
-formation_id= 1007799730
+bore_hole_id in ( 1010573869, 1009104284 )
+and ( formation_end_depth_uom is null or formation_end_depth_uom = 'm' )
 
 -- v20170905 9402 rows
 -- v20180530 10760 rows
@@ -107,13 +113,14 @@ formation_id= 1007799730
 -- v20230324 4831 rows
 -- v20240326 6382 rows
 -- v20250711 4788 rows
+-- v20260813 105343 rows
 
-update MOE_20250711.dbo.YC_20250711_BH_ID 
+update MOE_20260813.dbo.YC_20260813_BH_ID 
 set
 fm_max_depth=fm_depth.FM_MAX_DEPTH
 ,fm_max_depth_units=fm_depth.FM_MAX_DEPTH_UNITS
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 inner join
 (
 select 
@@ -121,7 +128,7 @@ BORE_HOLE_ID
 ,max(FORMATION_END_DEPTH) as [FM_MAX_DEPTH]
 ,FORMATION_END_DEPTH_UOM as [FM_MAX_DEPTH_UNITS]
 from 
-MOE_20250711.[dbo].[TblFormation]
+MOE_20260813.[dbo].[TblFormation]
 where 
 BORE_HOLE_ID 
 in
@@ -129,7 +136,7 @@ in
 select 
 BORE_HOLE_ID 
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 )
 and FORMATION_END_DEPTH is not null
 group by

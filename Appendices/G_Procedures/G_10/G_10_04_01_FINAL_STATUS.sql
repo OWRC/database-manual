@@ -49,7 +49,7 @@ select
  end 
  as [BH_STATUS_CODE]
 from 
-MOE_20250711.dbo.TblWWR as wwr
+MOE_20260813.dbo.TblWWR as wwr
 group by
 FINAL_STA
 order by 
@@ -101,9 +101,9 @@ select
  end 
  as [BH_STATUS_CODE]
 into
-MOE_20250711.dbo.YC_20250711_FINAL_STATUS
+MOE_20260813.dbo.YC_20260813_FINAL_STATUS
 from 
-MOE_20250711.dbo.TblWWR as wwr
+MOE_20260813.dbo.TblWWR as wwr
 group by
 FINAL_STA
 order by 
@@ -119,8 +119,9 @@ FINAL_STA
 -- v20230324 62706 rows
 -- v20240326 70265 rows
 -- v20250711 82564 rows
+-- v20260813 43982 rows
 
-update MOE_20250711.dbo.[TblWWR]
+update MOE_20260813.dbo.[TblWWR]
 set
 FINAL_STA=0
 where

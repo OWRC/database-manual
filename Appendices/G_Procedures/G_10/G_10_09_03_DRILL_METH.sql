@@ -35,8 +35,8 @@ y.BORE_HOLE_ID
  as BH_DRILL_METHOD_CODE
 ,cast( null as varchar(255) ) as BH_COMMENT
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as y
-inner join MOE_20250711.[dbo].[TblMethod_Construction] as m
+MOE_20260813.dbo.YC_20260813_BH_ID as y
+inner join MOE_20260813.[dbo].[TblMethod_Construction] as m
 on y.BORE_HOLE_ID= m.BORE_HOLE_ID
 
 select
@@ -69,13 +69,13 @@ y.BORE_HOLE_ID
  end 
  as BH_DRILL_METHOD_CODE
 ,cast( null as varchar(255) ) as BH_COMMENT
-into MOE_20250711.dbo.YC_20250711_DRILL_CODE
+into MOE_20260813.dbo.YC_20260813_DRILL_CODE
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as y
-inner join MOE_20250711.[dbo].[TblMethod_Construction] as m
+MOE_20260813.dbo.YC_20260813_BH_ID as y
+inner join MOE_20260813.[dbo].[TblMethod_Construction] as m
 on y.BORE_HOLE_ID= m.BORE_HOLE_ID
 
---drop table YC_20250711_DRILL_CODE
+--drop table YC_20260813_DRILL_CODE
 
 -- v20180530 379 rows
 -- v20180530 7043 rows 
@@ -86,13 +86,14 @@ on y.BORE_HOLE_ID= m.BORE_HOLE_ID
 -- v20230324 5926 rows
 -- v20240326 7955 rows
 -- v20250711 5760 rows
+-- v20260813 124114 rows
 
 select
 count(*) 
 from 
-MOE_20250711.dbo.YC_20250711_DRILL_CODE
+MOE_20260813.dbo.YC_20260813_DRILL_CODE
 
---alter table YC_20250711_DRILL_CODE add BH_COMMENT varchar(255)
+--alter table YC_20260813_DRILL_CODE add BH_COMMENT varchar(255)
 
 
 

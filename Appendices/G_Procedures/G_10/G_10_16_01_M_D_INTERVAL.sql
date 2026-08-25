@@ -14,7 +14,7 @@ select
 from 
 oak_20160831_master.dbo.d_data_source
 where
-data_id= 528
+data_id= 529
 
 --insert into d_data_source
 --( data_id, data_type, data_description, data_comment )
@@ -29,7 +29,8 @@ data_id= 528
 -- 524 v20220328
 -- 525 v20230324
 -- 526 v20240326
--- 528 v20250711 
+-- 528 v20250711
+-- 529 v20260813 
 
 select 
 dim.INT_ID
@@ -43,7 +44,7 @@ else cast('1867-07-01' as datetime)
 end as INT_START_DATE
 ,cast(1 as int) as INT_CONFIDENTIALITY_CODE
 ,cast(1 as int) as INT_ACTIVE
-,cast(528 as int) as [DATA_ID]
+,cast(529 as int) as [DATA_ID]
 from 
 (
 select
@@ -51,13 +52,13 @@ dim.INT_ID
 ,dim.INT_ID as LOC_ID
 ,dim.tmp_INT_TYPE_CODE
 from 
-MOE_20250711.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20260813.dbo.M_D_INTERVAL_MONITOR as dim
 group by
 dim.INT_ID,dim.tmp_INT_TYPE_CODE
 ) as dim
-inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+inner join MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 on dim.LOC_ID=ycb.BORE_HOLE_ID
-inner join MOE_20250711.dbo.M_D_LOCATION as dloc
+inner join MOE_20260813.dbo.M_D_LOCATION as dloc
 on ycb.BORE_HOLE_ID=dloc.LOC_ID
 
 -- 2017.09.05 17185 rows
@@ -68,7 +69,7 @@ on ycb.BORE_HOLE_ID=dloc.LOC_ID
 -- v20220328 15235 rows
 -- v20230324 18826 rows
 -- v20240326 23131 rows
--- v20250711 
+-- v20250711 129172 rows
 
 select 
 dim.INT_ID
@@ -82,8 +83,8 @@ else cast('1867-07-01' as datetime)
 end as INT_START_DATE
 ,cast(1 as int) as INT_CONFIDENTIALITY_CODE
 ,cast(1 as int) as INT_ACTIVE
-,cast(528 as int) as [DATA_ID]
-into MOE_20250711.dbo.M_D_INTERVAL
+,cast(529 as int) as [DATA_ID]
+into MOE_20260813.dbo.M_D_INTERVAL
 from 
 (
 select
@@ -91,13 +92,13 @@ dim.INT_ID
 ,dim.INT_ID as LOC_ID
 ,dim.tmp_INT_TYPE_CODE
 from 
-MOE_20250711.dbo.M_D_INTERVAL_MONITOR as dim
+MOE_20260813.dbo.M_D_INTERVAL_MONITOR as dim
 group by
 dim.INT_ID,dim.tmp_INT_TYPE_CODE
 ) as dim
-inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+inner join MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 on dim.LOC_ID=ycb.BORE_HOLE_ID
-inner join MOE_20250711.dbo.M_D_LOCATION as dloc
+inner join MOE_20260813.dbo.M_D_LOCATION as dloc
 on ycb.BORE_HOLE_ID=dloc.LOC_ID
 
 -- how many locations and intervals
@@ -111,11 +112,17 @@ on ycb.BORE_HOLE_ID=dloc.LOC_ID
 -- v20230324 18826 rows
 -- v20240326 23131 rows
 -- v20250711 18379 rows
+-- v20260813 129172 rows (loc_id) versus 129172 rows (int_id); match
 
 select
 count(*) 
 from
-MOE_20250711.dbo.m_d_location
+MOE_20260813.dbo.m_d_location
+
+select
+count(*) 
+from
+MOE_20260813.dbo.m_d_interval
 
 -- check and make sure that there aren't any duplicate int_ids
 
@@ -128,11 +135,12 @@ MOE_20250711.dbo.m_d_location
 -- v20230324 0 rows
 -- v20240326 0 rows
 -- v20250711 0 rows
+-- v20260813 0 rows
 
 select
 *
 from 
-MOE_20250711.dbo.m_d_interval as dim
+MOE_20260813.dbo.m_d_interval as dim
 where
 dim.int_id
 in
@@ -145,7 +153,7 @@ select
 dim.int_id
 ,COUNT(*) as rcount
 from 
-MOE_20250711.dbo.m_d_interval as dim
+MOE_20260813.dbo.m_d_interval as dim
 group by 
 dim.int_id
 ) as t1
@@ -164,11 +172,12 @@ t1.rcount>1
 -- v20230324 0 rows
 -- v20240326 0 rows
 -- v20250711 0 rows
+-- v20260813 0 rows
 
 select
 b.*
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as b
+MOE_20260813.dbo.YC_20260813_BH_ID as b
 where 
 BORE_HOLE_ID 
 not in
@@ -176,88 +185,12 @@ not in
 select
 INT_ID
 from 
-MOE_20250711.dbo.M_D_INTERVAL_MONITOR
+MOE_20260813.dbo.M_D_INTERVAL_MONITOR
 group by
 INT_ID
 )
 
--- get the information for any INT_IDs returned
 
---***** 20160531
-
-SELECT 
-[TMP_LOC_ID]
-,[tmp_INT_TYPE_CODE]
-,[MON_SCREEN_SLOT]
-,[MON_SCREEN_MATERIAL]
-,[MON_DIAMETER_OUOM]
-,[MON_DIAMETER_UNIT_OUOM]
-,[MON_TOP_OUOM]
-,[MON_BOT_OUOM]
-,[MON_UNIT_OUOM]
-,[MON_COMMENT]
-FROM [MOE_20160531].[dbo].[YC_20160531_DINTMON]
-where 
-tmp_loc_id=1005161993
-
--- what is the maximum SYS_RECORD_ID
-
-select
-max(SYS_RECORD_ID) as max_SRI
-from 
-MOE_20160531.dbo.M_D_INTERVAL_MONITOR 
-
--- 28575
-
--- introduce these values to M_D_INTERVAL_MONITOR
-
---insert into MOE_20160531.dbo.M_D_INTERVAL_MONITOR 
---(
---[INT_ID]
---,[tmp_INT_TYPE_CODE]
---,[MON_SCREEN_SLOT]
---,[MON_SCREEN_MATERIAL]
---,[MON_DIAMETER_OUOM]
---,[MON_DIAMETER_UNIT_OUOM]
---,[MON_TOP_OUOM]
---,[MON_BOT_OUOM]
---,[MON_UNIT_OUOM]
---,[SYS_RECORD_ID]
---)
---values
---(1005161993,18,25,1,5.5,'inch',68,71.6,'ft',28576)
-
---insert into MOE_20160531.dbo.M_D_INTERVAL_MONITOR 
---(
---[INT_ID]
---,[tmp_INT_TYPE_CODE]
---,[MON_SCREEN_SLOT]
---,[MON_SCREEN_MATERIAL]
---,[MON_DIAMETER_OUOM]
---,[MON_DIAMETER_UNIT_OUOM]
---,[MON_TOP_OUOM]
---,[MON_BOT_OUOM]
---,[MON_UNIT_OUOM]
---,[SYS_RECORD_ID]
---)
---values
---(1005161993,18,30,1,5.5,'inch',71.6,75,'ft',28577)
-
---insert into MOE_20160531.dbo.M_D_INTERVAL_MONITOR 
---(
---[INT_ID]
---,[tmp_INT_TYPE_CODE]
---,[MON_SCREEN_SLOT]
---,[MON_SCREEN_MATERIAL]
---,[MON_DIAMETER_OUOM]
---,[MON_DIAMETER_UNIT_OUOM]
---,[MON_TOP_OUOM]
---,[MON_BOT_OUOM]
---,[MON_UNIT_OUOM]
---,[SYS_RECORD_ID]
---)
---values
---(1005161993,18,14,1,5.5,'inch',75,78,'ft',28578)
 
 
 

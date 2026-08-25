@@ -6,10 +6,7 @@
 
 -- how many intervals are we dealing with
 
-select
-COUNT(*)
-from 
-MOE_20250711.dbo.M_D_INTERVAL
+select COUNT(*) from MOE_20260813.dbo.M_D_INTERVAL
 
 -- 2016.05.31 28188 records
 -- 2017.09.05 17185 records
@@ -21,6 +18,7 @@ MOE_20250711.dbo.M_D_INTERVAL
 -- v20230324 18826 rows
 -- v20240326 23131 rows
 -- v20250711 18379 rows
+-- v20260813 129172 rows
 
 -- randomize these
 
@@ -34,12 +32,12 @@ select
 dint.INT_ID
 ,ROW_NUMBER() over (order by INT_ID) as rnum
 from 
-MOE_20250711.dbo.M_D_INTERVAL as dint
+MOE_20260813.dbo.M_D_INTERVAL as dint
 ) as t1
 inner join
 (
 select
-top 30000
+top 200000
 v.NEW_ID
 ,ROW_NUMBER() over (order by NEW_ID) as rnum
 from 
@@ -59,19 +57,19 @@ select
 t1.INT_ID
 ,t2.NEW_ID as [new_INT_ID]
 ,ROW_NUMBER() over (order by t1.INT_ID) as rnum
-into MOE_20250711.dbo.YC_20250711_new_INT_ID
+into MOE_20260813.dbo.YC_20260813_new_INT_ID
 from 
 (
 select
 dint.INT_ID
 ,ROW_NUMBER() over (order by INT_ID) as rnum
 from 
-MOE_20250711.dbo.M_D_INTERVAL as dint
+MOE_20260813.dbo.M_D_INTERVAL as dint
 ) as t1
 inner join
 (
 select
-top 30000
+top 200000
 v.NEW_ID
 ,ROW_NUMBER() over (order by NEW_ID) as rnum
 from 
@@ -92,10 +90,7 @@ t1.rnum=t2.rnum
 
 -- how many records are there
 
-select
-COUNT(*)
-from 
-MOE_20250711.dbo.M_D_PUMPTEST
+select COUNT(*) from MOE_20260813.dbo.M_D_PUMPTEST
 
 -- 2016.05.31 6268
 -- 2017.09.05 3150
@@ -107,6 +102,7 @@ MOE_20250711.dbo.M_D_PUMPTEST
 -- v20230324 306 rows
 -- v20240326 420 rows
 -- v20250711 488 rows
+-- v20260813 66946 rows
 
 -- randomize these
 
@@ -120,12 +116,12 @@ select
 dpump.PUMP_TEST_ID
 ,ROW_NUMBER() over (order by PUMP_TEST_ID) as rnum
 from 
-MOE_20250711.dbo.M_D_PUMPTEST as dpump
+MOE_20260813.dbo.M_D_PUMPTEST as dpump
 ) as t1
 inner join
 (
 select
-top 4000
+top 100000
 v.NEW_ID
 ,ROW_NUMBER() over (order by NEW_ID) as rnum
 from 
@@ -145,19 +141,19 @@ select
 t1.PUMP_TEST_ID
 ,t2.NEW_ID as [new_PUMP_TEST_ID]
 ,ROW_NUMBER() over (order by t1.PUMP_TEST_ID) as rnum
-into MOE_20250711.dbo.YC_20250711_new_PUMP_TEST_ID
+into MOE_20260813.dbo.YC_20260813_new_PUMP_TEST_ID
 from 
 (
 select
 dpump.PUMP_TEST_ID
 ,ROW_NUMBER() over (order by PUMP_TEST_ID) as rnum
 from 
-MOE_20250711.dbo.M_D_PUMPTEST as dpump
+MOE_20260813.dbo.M_D_PUMPTEST as dpump
 ) as t1
 inner join
 (
 select
-top 4000
+top 100000
 v.NEW_ID
 ,ROW_NUMBER() over (order by NEW_ID) as rnum
 from 
@@ -172,81 +168,6 @@ select PUMP_TEST_ID from OAK_20160831_MASTER.dbo.D_PUMPTEST
 on
 t1.rnum=t2.rnum
 
---***** 20200804
---***** The following have been disabled as the functionality have been replaced by
---***** D_LOCATION_SPATIAL and D_LOCATION_SPATIAL_HIST
 
---***** Do the same for M_D_LOCATION_ELEV_HIST, i.e. LOC_ELEV_ID
 
--- find the number of records
 
--- 2016.05.31 56382
--- 2017.09.05 51521
--- 2018.05.30 46640
--- v20190509 26980 rows 
-
---select
---COUNT(*)
---from 
---MOE_20250711.dbo.M_D_LOCATION_ELEV_HIST
-
--- make the look-up table
-
---select
---dhist.LOC_ELEV_ID
---,t2.LOC_ELEV_ID as LOC_ELEV_ID_t2
---,t2.new_LOC_ELEV_ID
---from 
---MOE_20250711.dbo.M_D_LOCATION_ELEV_HIST as dhist
---inner join 
---(
---select
---ROW_NUMBER() over (order by t1.new_LOC_ELEV_ID) as LOC_ELEV_ID
---,t1.new_LOC_ELEV_ID
---from 
---(
---select
---top 50000
---v.NEW_ID as new_LOC_ELEV_ID
---from 
---OAK_20160831_MASTER.dbo.V_SYS_RANDOM_ID_001 as v
---where 
---v.NEW_ID 
---not in 
---(
---select LOC_ELEV_ID from OAK_20160831_MASTER.dbo.D_LOCATION_ELEV_HIST
---)
---) as t1
---) as t2
---on dhist.LOC_ELEV_ID=t2.LOC_ELEV_ID
---
---
---
---select
---dhist.LOC_ELEV_ID
---,t2.LOC_ELEV_ID as LOC_ELEV_ID_t2
---,t2.new_LOC_ELEV_ID
---into MOE_20250711.dbo.YC_20250711_new_LOC_ELEV_ID
---from 
---MOE_20250711.dbo.M_D_LOCATION_ELEV_HIST as dhist
---inner join 
---(
---select
---ROW_NUMBER() over (order by t1.new_LOC_ELEV_ID) as LOC_ELEV_ID
---,t1.new_LOC_ELEV_ID
---from 
---(
---select
---top 50000
---v.NEW_ID as new_LOC_ELEV_ID
---from 
---OAK_20160831_MASTER.dbo.V_SYS_RANDOM_ID_001 as v
---where 
---v.NEW_ID 
---not in 
---(
---select LOC_ELEV_ID from OAK_20160831_MASTER.dbo.D_LOCATION_ELEV_HIST
---)
---) as t1
---) as t2
---on dhist.LOC_ELEV_ID=t2.LOC_ELEV_ID

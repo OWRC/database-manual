@@ -11,8 +11,9 @@
 -- v20230324 143706 rows
 -- v20240326 153211 rows
 -- v20250711 167109 rows
+-- v20260813 139620 rows
 
-update MOE_20250711.dbo.TblWWR
+update MOE_20260813.dbo.TblWWR
 set
 USE_1ST=0
 where
@@ -23,8 +24,9 @@ USE_1ST is null
 -- v20230324 543675 rows
 -- v20240326 579850 rows
 -- v20250711 608704 rows
+-- v20260813 649676 rows
 
-update MOE_20250711.dbo.TblWWR
+update MOE_20260813.dbo.TblWWR
 set
 USE_2ND=0
 where
@@ -44,7 +46,7 @@ select
  end
  as [MOE_USE]
 from 
-MOE_20250711.dbo.TblWWR as wwr
+MOE_20260813.dbo.TblWWR as wwr
 group by
 USE_1ST
 order by 
@@ -65,15 +67,16 @@ select
  end
  as [MOE_USE]
 into 
-MOE_20250711.dbo.YC_20250711_MOE_USE
+MOE_20260813.dbo.YC_20260813_MOE_USE
 from 
-MOE_20250711.dbo.TblWWR as wwr
+MOE_20260813.dbo.TblWWR as wwr
 group by
 USE_1ST
 order by 
 USE_1ST
 
 -- no new codes for USE_2ND; do not need to add to the MOE_USE table
+-- v20260813 no new codes
 
 select
  wwr.USE_2ND
@@ -89,7 +92,7 @@ select
  end
  as [MOE_USE]
 from 
-MOE_20250711.dbo.TblWWR as wwr
+MOE_20260813.dbo.TblWWR as wwr
 group by
 USE_2ND
 order by 

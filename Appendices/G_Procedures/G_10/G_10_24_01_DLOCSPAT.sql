@@ -17,6 +17,8 @@
 
 -- Remember, SPAT_ID is an identity field
 
+-- UPDATE SYS_TEMP FIELDS
+
 select
 LOC_ID
 ,LOC_COORD_HIST_CODE
@@ -39,10 +41,10 @@ LOC_ID
 ,QA_ELEV_CODE
 ,LOC_ELEV_DATA_ID
 ,cast(LOC_ELEV_COMMENT as varchar(255)) as LOC_ELEV_COMMENT
-,'20250711c' as SYS_TEMP1
-,20250711 as SYS_TEMP2
+,'20260825aa' as SYS_TEMP1
+,20260825 as SYS_TEMP2
 from 
-MOE_20250711.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
+MOE_20260813.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
 
 insert into oak_20160831_master.dbo.d_location_spatial_hist
 (
@@ -92,10 +94,10 @@ LOC_ID
 ,QA_ELEV_CODE
 ,LOC_ELEV_DATA_ID
 ,cast(LOC_ELEV_COMMENT as varchar(255)) as LOC_ELEV_COMMENT
-,'20250711c' as SYS_TEMP1
-,20250711 as SYS_TEMP2
+,'20260825aa' as SYS_TEMP1
+,20260825 as SYS_TEMP2
 from 
-MOE_20250711.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
+MOE_20260813.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
 
 
 -- D_LOCATION_SPATIAL
@@ -110,7 +112,7 @@ MOE_20250711.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
 --,'20220328a' as SYS_TEMP1
 --,20220328 as SYS_TEMP2
 --from 
---moe_20250711.dbo.m_d_location_spatial_hist as delev
+--moe_20260813.dbo.m_d_location_spatial_hist as delev
 --inner join oak_20160831_master.dbo.d_location_spatial_hist as dlsh
 --on delev.loc_elev_id=dlsh.sys_temp2
 --where 
@@ -124,19 +126,20 @@ MOE_20250711.dbo.M_D_LOCATION_SPATIAL_HIST as dlsh
 select 
 dlsh.LOC_ID
 ,dlsh.SPAT_ID
-,528 as DATA_ID
-,'20250711c' as SYS_TEMP1
-,20250711 as SYS_TEMP2
+,dlsh.SYS_TEMP1
+,dlsh.SYS_TEMP2
 from
 (
 select
 d1.LOC_ID
 ,d1.SPAT_ID
+,d1.SYS_TEMP1
+,d1.SYS_TEMP2
 from 
 oak_20160831_master.dbo.D_LOCATION_SPATIAL_HIST as d1
 where
 d1.LOC_ELEV_CODE=3
-and d1.loc_coord_data_id= 528
+and d1.loc_coord_data_id= 529
 ---- Only load the SRTM elev if no MNR elev
 --union
 --select
@@ -153,26 +156,26 @@ insert into OAK_20160831_MASTER.dbo.D_LOCATION_SPATIAL
 (
 LOC_ID
 ,SPAT_ID
-,DATA_ID
 ,SYS_TEMP1
 ,SYS_TEMP2
 )
 select 
 dlsh.LOC_ID
 ,dlsh.SPAT_ID
-,528 as DATA_ID
-,'20250711c' as SYS_TEMP1
-,20250711 as SYS_TEMP2
+,dlsh.SYS_TEMP1
+,dlsh.SYS_TEMP2
 from
 (
 select
 d1.LOC_ID
 ,d1.SPAT_ID
+,d1.SYS_TEMP1
+,d1.SYS_TEMP2
 from 
 oak_20160831_master.dbo.D_LOCATION_SPATIAL_HIST as d1
 where
 d1.LOC_ELEV_CODE=3
-and d1.loc_coord_data_id= 528
+and d1.loc_coord_data_id= 529
 ---- Only load the SRTM elev if no MNR elev
 --union
 --select

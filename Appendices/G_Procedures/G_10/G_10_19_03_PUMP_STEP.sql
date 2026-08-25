@@ -22,11 +22,12 @@
 -- v20230324 0 rows
 -- v20240326 0 rows
 -- v20250711 0 rows
+-- v20260813 0 rows
 
 select
 *
 from
-MOE_20250711.dbo.M_D_PUMPTEST
+MOE_20260813.dbo.M_D_PUMPTEST
 where
 PUMPTEST_DATE is null
 
@@ -57,6 +58,7 @@ PUMPTEST_DATE is null
 -- v20230324 3614 rows
 -- v20240326 4915 rows
 -- v20250711 5712 rows
+-- v20260813 348214 rows
 
 select
 curr.Pump_Test_id
@@ -66,7 +68,7 @@ curr.Pump_Test_id
 ,cast(moept.RATE_UOM as varchar(50)) as PUMP_RATE_UNITS_OUOM
 ,dateadd(minute,curr.TestDuration,dpump.PUMPTEST_DATE) as [PUMP_START]
 ,dateadd(minute,prev.TestDuration,dpump.PUMPTEST_DATE) as [PUMP_END]
-,cast(528 as int) as DATA_ID
+,cast(529 as int) as DATA_ID
 ,null as [SYS_RECORD_ID]
 ,null as [rnum]
 ,prev.TestType as [testtype]
@@ -79,7 +81,7 @@ from
 	,moeptd.TestDuration
 	,ROW_NUMBER() over (order by moeptd.Pump_Test_id,moeptd.TestDuration) as rnum
 	from 
-	MOE_20250711.dbo.TblPump_Test_Detail as moeptd
+	MOE_20260813.dbo.TblPump_Test_Detail as moeptd
 	where 
 	moeptd.TestType='D'
 ) as [curr]
@@ -93,21 +95,21 @@ inner join
 	,moeptd.TESTLEVEL_UOM
 	,ROW_NUMBER() over (order by moeptd.Pump_Test_id,moeptd.TestDuration) as rnum
 	from 
-	MOE_20250711.dbo.TblPump_Test_Detail as moeptd
+	MOE_20260813.dbo.TblPump_Test_Detail as moeptd
 	where 
 	moeptd.TestType='D'
 ) as [prev]
 on
 curr.Pump_Test_id=prev.Pump_Test_id and curr.rnum=(prev.rnum-1)
-inner join MOE_20250711.dbo.TblPump_Test as moept
+inner join MOE_20260813.dbo.TblPump_Test as moept
 on curr.Pump_Test_id=moept.PUMP_TEST_ID
-inner join MOE_20250711.dbo.M_D_PUMPTEST as dpump
+inner join MOE_20260813.dbo.M_D_PUMPTEST as dpump
 on curr.Pump_Test_id=dpump.pump_test_id
-inner join MOE_20250711.dbo.TblPipe as moep
+inner join MOE_20260813.dbo.TblPipe as moep
 on moept.PIPE_ID=moep.PIPE_ID
-inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+inner join MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 on moep.Bore_Hole_ID=ycb.BORE_HOLE_ID
-inner join MOE_20250711.dbo.M_D_LOCATION as dloc
+inner join MOE_20260813.dbo.M_D_LOCATION as dloc
 on ycb.BORE_HOLE_ID=dloc.LOC_ID
 order by 
 curr.Pump_Test_id,PUMP_START
@@ -121,13 +123,13 @@ curr.Pump_Test_id
 ,cast(moept.RATE_UOM as varchar(50)) as PUMP_RATE_UNITS_OUOM
 ,dateadd(minute,curr.TestDuration,dpump.PUMPTEST_DATE) as [PUMP_START]
 ,dateadd(minute,prev.TestDuration,dpump.PUMPTEST_DATE) as [PUMP_END]
-,cast(528 as int) as DATA_ID
+,cast(529 as int) as DATA_ID
 ,null as [SYS_RECORD_ID]
 ,null as [rnum]
 ,prev.TestType as [testtype]
 ,prev.TestLevel as [testlevel]
 ,prev.TESTLEVEL_UOM as [testlevel_uom]
-into MOE_20250711.dbo.YC_20250711_PUMP_STEP
+into MOE_20260813.dbo.YC_20260813_PUMP_STEP
 from
 (
 	select
@@ -135,7 +137,7 @@ from
 	,moeptd.TestDuration
 	,ROW_NUMBER() over (order by moeptd.Pump_Test_id,moeptd.TestDuration) as rnum
 	from 
-	MOE_20250711.dbo.TblPump_Test_Detail as moeptd
+	MOE_20260813.dbo.TblPump_Test_Detail as moeptd
 	where 
 	moeptd.TestType='D'
 ) as [curr]
@@ -149,27 +151,27 @@ inner join
 	,moeptd.TESTLEVEL_UOM
 	,ROW_NUMBER() over (order by moeptd.Pump_Test_id,moeptd.TestDuration) as rnum
 	from 
-	MOE_20250711.dbo.TblPump_Test_Detail as moeptd
+	MOE_20260813.dbo.TblPump_Test_Detail as moeptd
 	where 
 	moeptd.TestType='D'
 ) as [prev]
 on
 curr.Pump_Test_id=prev.Pump_Test_id and curr.rnum=(prev.rnum-1)
-inner join MOE_20250711.dbo.TblPump_Test as moept
+inner join MOE_20260813.dbo.TblPump_Test as moept
 on curr.Pump_Test_id=moept.PUMP_TEST_ID
-inner join MOE_20250711.dbo.M_D_PUMPTEST as dpump
+inner join MOE_20260813.dbo.M_D_PUMPTEST as dpump
 on curr.Pump_Test_id=dpump.pump_test_id
-inner join MOE_20250711.dbo.TblPipe as moep
+inner join MOE_20260813.dbo.TblPipe as moep
 on moept.PIPE_ID=moep.PIPE_ID
-inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+inner join MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 on moep.Bore_Hole_ID=ycb.BORE_HOLE_ID
-inner join MOE_20250711.dbo.M_D_LOCATION as dloc
+inner join MOE_20260813.dbo.M_D_LOCATION as dloc
 on ycb.BORE_HOLE_ID=dloc.LOC_ID
 order by 
 curr.Pump_Test_id,PUMP_START
 
 
---drop table YC_20250711_PUMP_STEP
+--drop table YC_20260813_PUMP_STEP
 
 -- create the first step
 
@@ -183,6 +185,7 @@ curr.Pump_Test_id,PUMP_START
 -- v20230324 302 rows
 -- v20240326 415 rows
 -- v20250711 483 rows
+-- v20260813 41020 rows
 
 select
 curr.Pump_Test_id
@@ -192,7 +195,7 @@ curr.Pump_Test_id
 ,cast(moept.RATE_UOM as varchar(50)) as PUMP_RATE_UNITS_OUOM
 ,dateadd(minute,0,dpump.PUMPTEST_DATE) as [PUMP_START]
 ,dateadd(minute,curr.TestDuration,dpump.PUMPTEST_DATE) as [PUMP_END]
-,cast(528 as int) as DATA_ID
+,cast(529 as int) as DATA_ID
 ,cast(null as int) as [SYS_RECORD_ID]
 ,cast(null as int) as [rnum]
 ,moeptd.TestType as [testtype]
@@ -204,23 +207,23 @@ from
     moeptd.Pump_Test_id
     ,min(moeptd.TestDuration) as TestDuration
     from 
-	MOE_20250711.dbo.TblPump_Test_Detail as moeptd
+	MOE_20260813.dbo.TblPump_Test_Detail as moeptd
 	where 
 	moeptd.TestType='D' 
 	group by
 	moeptd.Pump_Test_id
 ) as curr
-inner join MOE_20250711.dbo.TblPump_Test as moept
+inner join MOE_20260813.dbo.TblPump_Test as moept
 on curr.Pump_Test_id=moept.PUMP_TEST_ID
-inner join MOE_20250711.dbo.TblPump_Test_Detail as moeptd
+inner join MOE_20260813.dbo.TblPump_Test_Detail as moeptd
 on curr.Pump_Test_id=moeptd.Pump_Test_id and curr.TestDuration=moeptd.TestDuration
-inner join MOE_20250711.dbo.M_D_PUMPTEST as dpump
+inner join MOE_20260813.dbo.M_D_PUMPTEST as dpump
 on curr.Pump_Test_id=dpump.pump_test_id
-inner join MOE_20250711.dbo.TblPipe as moep
+inner join MOE_20260813.dbo.TblPipe as moep
 on moept.PIPE_ID=moep.PIPE_ID
-inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+inner join MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 on moep.Bore_Hole_ID=ycb.BORE_HOLE_ID
-inner join MOE_20250711.dbo.M_D_LOCATION as dloc
+inner join MOE_20260813.dbo.M_D_LOCATION as dloc
 on ycb.BORE_HOLE_ID=dloc.LOC_ID
 where
 moeptd.TestType='D'
@@ -228,7 +231,7 @@ order by
 curr.Pump_Test_id,PUMP_START
 
 
-insert into MOE_20250711.dbo.YC_20250711_PUMP_STEP
+insert into MOE_20260813.dbo.YC_20260813_PUMP_STEP
 (
 [PUMP_TEST_ID]
 ,[PUMP_RATE]
@@ -252,7 +255,7 @@ curr.Pump_Test_id
 ,cast(moept.RATE_UOM as varchar(50)) as PUMP_RATE_UNITS_OUOM
 ,dateadd(minute,0,dpump.PUMPTEST_DATE) as [PUMP_START]
 ,dateadd(minute,curr.TestDuration,dpump.PUMPTEST_DATE) as [PUMP_END]
-,cast(528 as int) as DATA_ID
+,cast(529 as int) as DATA_ID
 ,cast(null as int) as [SYS_RECORD_ID]
 ,cast(null as int) as [rnum]
 ,moeptd.TestType as [testtype]
@@ -264,23 +267,23 @@ from
     moeptd.Pump_Test_id
     ,min(moeptd.TestDuration) as TestDuration
     from 
-	MOE_20250711.dbo.TblPump_Test_Detail as moeptd
+	MOE_20260813.dbo.TblPump_Test_Detail as moeptd
 	where 
 	moeptd.TestType='D' 
 	group by
 	moeptd.Pump_Test_id
 ) as curr
-inner join MOE_20250711.dbo.TblPump_Test as moept
+inner join MOE_20260813.dbo.TblPump_Test as moept
 on curr.Pump_Test_id=moept.PUMP_TEST_ID
-inner join MOE_20250711.dbo.TblPump_Test_Detail as moeptd
+inner join MOE_20260813.dbo.TblPump_Test_Detail as moeptd
 on curr.Pump_Test_id=moeptd.Pump_Test_id and curr.TestDuration=moeptd.TestDuration
-inner join MOE_20250711.dbo.M_D_PUMPTEST as dpump
+inner join MOE_20260813.dbo.M_D_PUMPTEST as dpump
 on curr.Pump_Test_id=dpump.pump_test_id
-inner join MOE_20250711.dbo.TblPipe as moep
+inner join MOE_20260813.dbo.TblPipe as moep
 on moept.PIPE_ID=moep.PIPE_ID
-inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+inner join MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 on moep.Bore_Hole_ID=ycb.BORE_HOLE_ID
-inner join MOE_20250711.dbo.M_D_LOCATION as dloc
+inner join MOE_20260813.dbo.M_D_LOCATION as dloc
 on ycb.BORE_HOLE_ID=dloc.LOC_ID
 where
 moeptd.TestType='D'

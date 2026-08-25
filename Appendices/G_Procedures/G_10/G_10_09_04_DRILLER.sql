@@ -10,11 +10,13 @@
 -- add the CONTRACTOR_NUM field and copy/convert CONTRACTOR; add MOE_WELL_ID field and copy/convert WELL_ID; 
 -- refer to the end of this script
 
+-- update DATA_ID
+
 select
 t.BH_DRILLER_DESCRIPTION
 ,t.BH_DRILLER_DESCRIPTION_LONG
 ,t.BH_DRILLER_ALT_CODE
-,528 as DATA_ID
+,529 as DATA_ID
 from 
 (
 select
@@ -43,6 +45,7 @@ t.BH_DRILLER_DESCRIPTION,t.BH_DRILLER_DESCRIPTION_LONG,t.BH_DRILLER_ALT_CODE
 -- v20230324 
 -- v20240326 37 rows
 -- v20250711 28 rows
+-- v20260811 0 rows
 
 -- update DATA_ID
 
@@ -52,7 +55,7 @@ select
 t.BH_DRILLER_DESCRIPTION
 ,t.BH_DRILLER_DESCRIPTION_LONG
 ,t.BH_DRILLER_ALT_CODE
-,528 as DATA_ID
+,529 as DATA_ID
 from 
 (
 select
@@ -107,9 +110,10 @@ drop table MOE_20250711.dbo.M_R_BH_DRILLER_CODE
 
 
 
---***** 20250711
+--***** 20250711 and 20260813
 
--- add the CONTRACTOR_NUM field and copy/convert CONTRACTOR; add MOE_WELL_ID field and copy/convert WELL_ID
+-- add the CONTRACTOR_NUM field and copy/convert CONTRACTOR; check that the
+-- MOE_WELL_ID field has been added and that WELL_ID has been copied/converted
 
 select
 *
@@ -121,6 +125,15 @@ alter table TblWWR add CONTRACTOR_NUM int null
 update MOE_20250711.dbo.TblWWR
 set
 contractor_num= cast( contractor as int ) 
+
+-- check that the field has been populated
+select
+top 1000
+*
+from 
+MOE_20250711.dbo.TblWWR
+where 
+contractor_num is not null
 
 
 select

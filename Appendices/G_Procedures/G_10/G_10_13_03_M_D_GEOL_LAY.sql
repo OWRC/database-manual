@@ -15,6 +15,7 @@
 -- v20230324 14014 rows
 -- v20240327 19366 rows
 -- v20250711 16507 rows
+-- v20260813 378787 rows
 
 select
 -- note that we're substituting the BORE_HOLE_ID for LOC_ID
@@ -58,8 +59,8 @@ end as GEOL_MAT3_CODE
 end as GEOL_COMMENT
 ,ROW_NUMBER() over (order by ycb.LOC_ID) as SYS_RECORD_ID
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
-inner join MOE_20250711.dbo.TblFormation as moef
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
+inner join MOE_20260813.dbo.TblFormation as moef
 on ycb.BORE_HOLE_ID=moef.BORE_HOLE_ID
 
 select
@@ -103,11 +104,17 @@ end as GEOL_MAT3_CODE
  else null 
 end as GEOL_COMMENT
 ,ROW_NUMBER() over (order by ycb.LOC_ID) as SYS_RECORD_ID
-into MOE_20250711.dbo.M_D_GEOLOGY_LAYER
+into MOE_20260813.dbo.M_D_GEOLOGY_LAYER
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
-inner join MOE_20250711.dbo.TblFormation as moef
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
+inner join MOE_20260813.dbo.TblFormation as moef
 on ycb.BORE_HOLE_ID=moef.BORE_HOLE_ID
+
+
+select
+count(*) as rcount
+from 
+MOE_20260813.dbo.M_D_GEOLOGY_LAYER
 
 
 

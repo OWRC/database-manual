@@ -14,16 +14,26 @@
 -- v20230324 0 rows for all
 -- v20240326 0 rows
 -- v20250711 0 rows for all
+-- v20260813 8 rows (FM_MAX_DEPTH_UNITS), 0 rows for other two
 
 select 
  ycb.*
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 where 
 ycb.FM_MAX_DEPTH_UNITS is not null 
-and not(ycb.FM_MAX_DEPTH_UNITS in ('ft','m'))
+--and not(ycb.FM_MAX_DEPTH_UNITS in ('ft','m'))
 --and not(ycb.MOE_MAX_DEPTH_UNITS in ('ft','m'))
---and not(ycb.CON_MAX_DEPTH_UNITS in ('ft','m'))
+and not(ycb.CON_MAX_DEPTH_UNITS in ('ft','m'))
+
+-- v20260813
+
+update MOE_20260813.dbo.YC_20260813_BH_ID
+set
+fm_max_depth= fm_max_depth/12
+,fm_max_depth_units= 'ft'
+where
+fm_max_depth_units= 'inch'
 
 -- determine the ultimate, maximum depth
 
@@ -36,6 +46,7 @@ and not(ycb.FM_MAX_DEPTH_UNITS in ('ft','m'))
 -- v20230324 6416 rows
 -- v20240326 8429 rows
 -- v20250711 6678 rows
+-- v20260813 120911 rows
 
 select
 depths.BORE_HOLE_ID
@@ -47,7 +58,7 @@ select
 ycb.BORE_HOLE_ID
 ,ycb.FM_MAX_DEPTH as adepth
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 where ycb.FM_MAX_DEPTH is not null
 )
 union
@@ -56,7 +67,7 @@ select
  ycb.BORE_HOLE_ID
 ,ycb.MOE_MAX_DEPTH as adepth
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 where ycb.MOE_MAX_DEPTH is not null
 )
 union 
@@ -65,7 +76,7 @@ select
  ycb.BORE_HOLE_ID
 ,ycb.CON_MAX_DEPTH as adepth
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 where CON_MAX_DEPTH is not null
 )
 ) as depths
@@ -81,12 +92,13 @@ depths.BORE_HOLE_ID
 -- v20230324 6416 rows
 -- v20240326 8429 rows
 -- v20250711 6678 rows
+-- v20260813 120911 rows
 
-update MOE_20250711.dbo.YC_20250711_BH_ID
+update MOE_20260813.dbo.YC_20260813_BH_ID
 set
 MAX_DEPTH_M=md.MAX_DEPTH_M
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 inner join 
 (
 select
@@ -99,7 +111,7 @@ select
 ycb.BORE_HOLE_ID
 ,ycb.FM_MAX_DEPTH as adepth
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 where ycb.FM_MAX_DEPTH is not null
 )
 union
@@ -108,7 +120,7 @@ select
 ycb.BORE_HOLE_ID
 ,ycb.MOE_MAX_DEPTH as adepth
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 where ycb.MOE_MAX_DEPTH is not null
 )
 union 
@@ -117,7 +129,7 @@ select
 ycb.BORE_HOLE_ID
 ,ycb.CON_MAX_DEPTH as adepth
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 where ycb.CON_MAX_DEPTH is not null
 )
 ) as depths
@@ -138,11 +150,12 @@ on ycb.BORE_HOLE_ID=md.BORE_HOLE_ID
 -- v20230324 12410 rows (before); 
 -- v20240326 14702 rows (before); 14700 (after)
 -- v20250711 11701 rows (before); 11701 (after)
+-- v20260813 8261 rows (before); 7899 (after)
 
 select 
 ycb.BORE_HOLE_ID
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 where
 ycb.MAX_DEPTH_M is null 
 
@@ -159,16 +172,17 @@ ycb.MAX_DEPTH_M is null
 -- v20230324 0 rows
 -- v20240326 0 rows
 -- v20250711 0 rows 
+-- v20260813 0 rows
 
 select
 y.BORE_HOLE_ID
 ,y.MAX_DEPTH_M
 ,t.depth_m
---update MOE_20250711.dbo.YC_20160531_BH_ID
+--update MOE_20260813.dbo.YC_20160531_BH_ID
 --set
 --MAX_DEPTH_M=t.depth_m
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as y
+MOE_20260813.dbo.YC_20260813_BH_ID as y
 inner join
 (
 select
@@ -182,7 +196,7 @@ LOC_ID
  when FEATURE_UNIT_OUOM='ft' then FEATURE_TOP_OUOM*0.3048
  else FEATURE_TOP_OUOM 
  end as [depth]
-FROM MOE_20250711.[dbo].[M_D_GEOLOGY_FEATURE]
+FROM MOE_20260813.[dbo].[M_D_GEOLOGY_FEATURE]
 ) as test
 where
 test.depth is not null
@@ -191,7 +205,7 @@ and test.LOC_ID in
 select 
 ycb.loc_id  
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 where 
 MAX_DEPTH_M is null
 )
@@ -212,6 +226,7 @@ on y.BORE_HOLE_ID=t.LOC_ID
 -- v20230324 0 rows
 -- v20240326 0 rows
 -- v20250711 0 rows
+-- v20260813 69 rows
 
 select
 ycb.BORE_HOLE_ID
@@ -222,10 +237,10 @@ ycb.BORE_HOLE_ID
  else moescr.SCRN_END_DEPTH
  end as [depth_m]
 from 
-MOE_20250711.dbo.TblScreen as moescr
-inner join MOE_20250711.dbo.TblPipe as moepip
+MOE_20260813.dbo.TblScreen as moescr
+inner join MOE_20260813.dbo.TblPipe as moepip
 on moescr.PIPE_ID=moepip.PIPE_ID
-inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+inner join MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 on moepip.Bore_Hole_ID=ycb.BORE_HOLE_ID
 where
 ycb.MAX_DEPTH_M is null
@@ -237,13 +252,14 @@ and moescr.SCRN_END_DEPTH is not null
 -- v20230324 0 rows
 -- v20240326 0 rows
 -- v20250711 0 rows
+-- v20260813 69 rows
 
 select
 y.LOC_ID
 ,y.MAX_DEPTH_M
 ,t.depth_m
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as y
+MOE_20260813.dbo.YC_20260813_BH_ID as y
 inner join
 (
 select
@@ -255,10 +271,10 @@ ycb.BORE_HOLE_ID
  else moescr.SCRN_END_DEPTH
  end as [depth_m]
 from 
-MOE_20250711.dbo.TblScreen as moescr
-inner join MOE_20250711.dbo.TblPipe as moepip
+MOE_20260813.dbo.TblScreen as moescr
+inner join MOE_20260813.dbo.TblPipe as moepip
 on moescr.PIPE_ID=moepip.PIPE_ID
-inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+inner join MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 on moepip.Bore_Hole_ID=ycb.BORE_HOLE_ID
 where
 ycb.MAX_DEPTH_M is null
@@ -268,12 +284,13 @@ on y.BORE_HOLE_ID=t.BORE_HOLE_ID
 
 -- v20240326 0 rows
 -- v20250711 0 rows
+-- v20260813 68 rows
 
-update MOE_20250711.dbo.YC_20250711_BH_ID
+update MOE_20260813.dbo.YC_20260813_BH_ID
 set
 MAX_DEPTH_M=t.depth_m
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as y
+MOE_20260813.dbo.YC_20260813_BH_ID as y
 inner join
 (
 select
@@ -285,10 +302,10 @@ ycb.BORE_HOLE_ID
  else moescr.SCRN_END_DEPTH
  end as [depth_m]
 from 
-MOE_20250711.dbo.TblScreen as moescr
-inner join MOE_20250711.dbo.TblPipe as moepip
+MOE_20260813.dbo.TblScreen as moescr
+inner join MOE_20260813.dbo.TblPipe as moepip
 on moescr.PIPE_ID=moepip.PIPE_ID
-inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycb
+inner join MOE_20260813.dbo.YC_20260813_BH_ID as ycb
 on moepip.Bore_Hole_ID=ycb.BORE_HOLE_ID
 where
 ycb.MAX_DEPTH_M is null
@@ -309,13 +326,14 @@ on y.BORE_HOLE_ID=t.BORE_HOLE_ID
 -- v20230324 0 rows
 -- v20240326 0 rows
 -- v20250711 0 rows
+-- v20260813 125 rows; 188 rows updated
 
 select
 y.LOC_ID
 ,y.MAX_DEPTH_M
 ,t.depth_m
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as y
+MOE_20260813.dbo.YC_20260813_BH_ID as y
 inner join
 (
 select
@@ -325,10 +343,10 @@ ycc.BORE_HOLE_ID
  else moepum.Pump_Set_at 
  end as [depth_m]
 from 
-MOE_20250711.[dbo].[TblPump_Test] as moepum
-inner join MOE_20250711.dbo.TblPipe as moepip
+MOE_20260813.[dbo].[TblPump_Test] as moepum
+inner join MOE_20260813.dbo.TblPipe as moepip
 on moepum.PIPE_ID=moepip.PIPE_ID
-inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycc
+inner join MOE_20260813.dbo.YC_20260813_BH_ID as ycc
 on moepip.Bore_Hole_ID=ycc.BORE_HOLE_ID
 where
 ycc.MAX_DEPTH_M is null
@@ -337,11 +355,11 @@ and moepum.Pump_Set_at is not null
 on y.BORE_HOLE_ID=t.BORE_HOLE_ID
 
 
-update MOE_20250711.dbo.YC_20250711_BH_ID
+update MOE_20260813.dbo.YC_20260813_BH_ID
 set
 MAX_DEPTH_M=t.depth_m
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as y
+MOE_20260813.dbo.YC_20260813_BH_ID as y
 inner join
 (
 select
@@ -351,10 +369,10 @@ ycc.BORE_HOLE_ID
  else moepum.Pump_Set_at 
  end as [depth_m]
 from 
-MOE_20250711.[dbo].[TblPump_Test] as moepum
-inner join MOE_20250711.dbo.TblPipe as moepip
+MOE_20260813.[dbo].[TblPump_Test] as moepum
+inner join MOE_20260813.dbo.TblPipe as moepip
 on moepum.PIPE_ID=moepip.PIPE_ID
-inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycc
+inner join MOE_20260813.dbo.YC_20260813_BH_ID as ycc
 on moepip.Bore_Hole_ID=ycc.BORE_HOLE_ID
 where
 ycc.MAX_DEPTH_M is null
@@ -373,13 +391,14 @@ on y.BORE_HOLE_ID=t.BORE_HOLE_ID
 -- v20230324 16 rows
 -- v20240326 2 rows
 -- v20250711 0 rows
+-- v20260813 188 rows; 176 rows updated
 
 select
 y.LOC_ID
 ,y.MAX_DEPTH_M
 ,t.depth_m
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as y
+MOE_20260813.dbo.YC_20260813_BH_ID as y
 inner join
 (
 select 
@@ -389,10 +408,10 @@ ycc.BORE_HOLE_ID
  else moewat.water_found_depth
  end as depth_m
 from 
-MOE_20250711.dbo.TblWater as moewat
-inner join MOE_20250711.dbo.TblPipe as moepip
+MOE_20260813.dbo.TblWater as moewat
+inner join MOE_20260813.dbo.TblPipe as moepip
 on moewat.PIPE_ID=moepip.PIPE_ID
-inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycc
+inner join MOE_20260813.dbo.YC_20260813_BH_ID as ycc
 on moepip.Bore_Hole_ID=ycc.BORE_HOLE_ID
 where
 ycc.MAX_DEPTH_M is null
@@ -403,11 +422,11 @@ where
 t.depth_m>0
 
 
-update MOE_20250711.dbo.YC_20250711_BH_ID
+update MOE_20260813.dbo.YC_20260813_BH_ID
 set
 MAX_DEPTH_M=t.depth_m
 from 
-MOE_20250711.dbo.YC_20250711_BH_ID as y
+MOE_20260813.dbo.YC_20260813_BH_ID as y
 inner join
 (
 select 
@@ -417,10 +436,10 @@ ycc.BORE_HOLE_ID
  else moewat.water_found_depth
  end as depth_m
 from 
-MOE_20250711.dbo.TblWater as moewat
-inner join MOE_20250711.dbo.TblPipe as moepip
+MOE_20260813.dbo.TblWater as moewat
+inner join MOE_20260813.dbo.TblPipe as moepip
 on moewat.PIPE_ID=moepip.PIPE_ID
-inner join MOE_20250711.dbo.YC_20250711_BH_ID as ycc
+inner join MOE_20260813.dbo.YC_20260813_BH_ID as ycc
 on moepip.Bore_Hole_ID=ycc.BORE_HOLE_ID
 where
 ycc.MAX_DEPTH_M is null

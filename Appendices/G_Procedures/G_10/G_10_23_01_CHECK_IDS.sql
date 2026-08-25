@@ -6,6 +6,8 @@
 --***** 20230324 
 --***** the following queries are no longer run as we're generating IDs just before import
 
+-- v20260813 not run
+
 SELECT 
 mdloc.[LOC_ID]
 FROM 
