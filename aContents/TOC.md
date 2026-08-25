@@ -1,7 +1,7 @@
 ---
 title:  "Cover and Table of Contents"
 author: "ormgpmd"
-date:   "20250619"
+date:   "20260527"
 output: html_document
 knit:   (
             function(input_file, encoding) {
@@ -227,8 +227,8 @@ knit:   (
 
 * **[L - Database Reports](/database-manual/Appendices/L_Database_Reports/L_Database_Reports.html)**
 
-* **[M - ORMGP Analyses, Metadata and Other Links](/database-manual/Appendices/M_ORMGP_Links/M_ORMGP_Links.html)**
-
 -->
 
-*Last modified: 2025-06-19*
+* **[M - ORMGP Analyses, Metadata and Other Links](/database-manual/aAppendices/M_ORMGP_Links/M_ORMGP_Links.html)**
+
+*Last modified: 2026-05-27*
