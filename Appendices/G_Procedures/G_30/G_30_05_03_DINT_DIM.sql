@@ -12,13 +12,7 @@
 -- v20230324 DATA_ID 525
 -- v20240326 DATA_ID 526
 -- v20250711 DATA_ID 528 
-
--- v20200721 2789 rows
--- v20210119 474 rows
--- v20220328 189
--- v20230324 1548
--- v20240326 10019
--- v20250711 5772 
+-- v20260813 DATA_ID 529
 
 select 
 dim.LOC_ID
@@ -35,31 +29,39 @@ dim.LOC_ID
 ,dim.MON_COMMENT
 ,cast(null as int) as MON_FLOWING
 ,cast( null as int ) as MON_ID
-,cast( 528 as int ) as DATA_ID
-,cast( '20250711k' as varchar(255) ) as SYS_TEMP1
-,cast( 20250711 as int ) as SYS_TEMP2
+,cast( 529 as int ) as DATA_ID
+,cast( '20260826gk' as varchar(255) ) as SYS_TEMP1
+,cast( 20260826 as int ) as SYS_TEMP2
 ,row_number() over (order by dim.loc_id) as rkey
-into moe_20250711.dbo.O_D_INTERVAL_MONITOR
+into moe_20260813.dbo.O_D_INTERVAL_MONITOR
 from 
-MOE_20250711.dbo.ORMGP_20250711_upd_DINTMON as dim
-left outer join MOE_20250711.dbo._code_casing_material as moeccm
+MOE_20260813.dbo.ORMGP_20260813_upd_DINTMON as dim
+left outer join MOE_20260813.dbo._code_casing_material as moeccm
 on dim.MON_SCREEN_MATERIAL=moeccm.CODE
+
+
+--drop table moe_20260813.dbo.O_D_INTERVAL_MONITOR
+
+
+-- v20200721 2789 rows
+-- v20210119 474 rows
+-- v20220328 189
+-- v20230324 1548
+-- v20240326 10019
+-- v20250711 5772 
+-- v20260813 25578
+
 
 select
 count(*)
 from 
-moe_20250711.dbo.O_D_INTERVAL_MONITOR
+moe_20260813.dbo.O_D_INTERVAL_MONITOR
 
-drop table moe_20250711.dbo.O_D_INTERVAL_MONITOR
 
 -- assemble the information necessary for the DINT table
 
--- v20200721 2758 rows
--- v20210119 469 rows
--- v20220328 182 rows
--- v20230324 1516
--- v20240326 9898
--- v20250711 5697
+-- update the DATA_ID, SYS_TEMP1 and SYS_TEMP2 fields
+
 
 select
 t.LOC_ID
@@ -78,11 +80,11 @@ end as INT_START_DATE
 when t.int_id is not null then 1
 else null
 end as int) as int_exists
-,cast(528 as int) as [DATA_ID]
-,cast( '20250711l' as varchar(255) ) as SYS_TEMP1
-,cast( 20250711 as int ) as SYS_TEMP2
+,cast(529 as int) as [DATA_ID]
+,cast( '20260826gl' as varchar(255) ) as SYS_TEMP1
+,cast( 20260826 as int ) as SYS_TEMP2
 ,row_number() over (order by t.int_id) as rkey
-into moe_20250711.dbo.O_D_INTERVAL
+into moe_20260813.dbo.O_D_INTERVAL
 from 
 (
 select
@@ -91,22 +93,33 @@ dim.LOC_ID
 ,dim.tmp_INT_ID
 ,dim.tmp_INT_TYPE_CODE
 from 
-moe_20250711.dbo.O_D_INTERVAL_MONITOR as dim
+moe_20260813.dbo.O_D_INTERVAL_MONITOR as dim
 group by
 dim.loc_id,dim.tmp_int_id,dim.int_id,dim.tmp_int_type_code
 ) as t
 --inner join oak_20160831_master.dbo.v_sys_moe_locations as v
-inner join ORMGP_20250711_MOE_LOCNS as v
+inner join ORMGP_20260813_MOE_LOCNS as v
 on t.tmp_int_id=v.moe_bore_hole_id
-inner join moe_20250711.dbo.tblbore_hole as moe
+inner join moe_20260813.dbo.tblbore_hole as moe
 on t.tmp_int_id=moe.bore_hole_id
+
+
+--drop table moe_20260813.dbo.O_D_INTERVAL
+
+
+-- v20200721 2758 rows
+-- v20210119 469 rows
+-- v20220328 182 rows
+-- v20230324 1516
+-- v20240326 9898
+-- v20250711 5697
+-- v20260813 24215 rows
 
 select
 count(*) 
 from 
-moe_20250711.dbo.O_D_INTERVAL
+moe_20260813.dbo.O_D_INTERVAL
 
-drop table moe_20250711.dbo.O_D_INTERVAL
 
 -- check to make sure that duplicate rows have not appeared
 
@@ -114,6 +127,7 @@ drop table moe_20250711.dbo.O_D_INTERVAL
 -- v20220328 0 rows
 -- v20230324 0
 -- v20240326 0
+-- v20260813 0 rows
 
 select
 *
@@ -123,7 +137,7 @@ select
 int_name_alt1
 ,count(*) as rcount
 from 
-moe_20250711.dbo.o_d_interval
+moe_20260813.dbo.o_d_interval
 group by
 int_name_alt1
 ) as t
@@ -137,7 +151,7 @@ t.rcount>1
 select
 *
 from 
-moe_20250711.dbo.o_d_interval
+moe_20260813.dbo.o_d_interval
 where 
 int_name_alt1 in
 (
@@ -146,7 +160,7 @@ int_name_alt1 in
 order by 
 loc_id
 
-delete from moe_20250711.dbo.o_d_interval
+delete from moe_20260813.dbo.o_d_interval
 where 
 rkey in
 ( 107 )
@@ -156,12 +170,12 @@ rkey in
 select
 *
 from 
-moe_20250711.dbo.o_d_interval
+moe_20260813.dbo.o_d_interval
 
 select
 *
 from 
-moe_20250711.dbo.o_d_interval_monitor
+moe_20260813.dbo.o_d_interval_monitor
 
 
 

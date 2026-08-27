@@ -10,12 +10,13 @@
 -- v20230324 1179 rows
 -- v20240326 7949 rows
 -- v20250711 4469 rows
+-- v20260813 22305 rows
 
 select
+--count(*) as rcount
 t.*
 ,t2.rcount_moe
---count(*) as rcount
-into moe_20250711.dbo.ORMGP_20250711_upd_DGL
+into moe_20260813.dbo.ORMGP_20260813_upd_DGL
 from 
 (
 select
@@ -59,7 +60,7 @@ select
 m.bore_hole_id
 ,count(*) as rcount_moe
 from 
-moe_20250711.dbo.tblformation as m
+moe_20260813.dbo.tblformation as m
 where 
 m.mat1 is not null
 and cast(m.mat1 as int)<>0
@@ -75,20 +76,20 @@ on t.moe_bore_hole_id=t2.bore_hole_id
 select
 count(*) 
 from
-moe_20250711.dbo.ORMGP_20250711_upd_DGL
+moe_20260813.dbo.ORMGP_20260813_upd_DGL
 
 
 
 
---***** v20250711
+-- as of 20250711, check against d_location_qc
 
--- check against d_location_qc
+-- v20260813 0 rows
 
 select
 m.*
 ,dlqc.*
 from 
-moe_20250711.dbo.ORMGP_20250711_upd_DGL as m
+moe_20260813.dbo.ORMGP_20260813_upd_DGL as m
 inner join oak_20160831_master.dbo.d_location_qc as dlqc
 on m.loc_id=dlqc.loc_id
 

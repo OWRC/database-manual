@@ -12,6 +12,7 @@
 -- v20230324 DATA_ID 525 
 -- v20240326 DATA_ID 526
 -- v20250711 DATA_ID 528
+-- v20260813 DATA_ID 529 
 
 -- check, first, that a ground elevation has been specified for these 
 -- updated locations
@@ -21,14 +22,15 @@
 -- v20230324 0 rows
 -- v20240326 0 rows
 -- v20250711 0 rows
+-- v20260813 0 rows
 
--- create view V_MOE_20250711_UPD_ELEVS as
+-- create view V_MOE_20260813_UPD_ELEVS as
 select
 dbore.loc_id
 ,dloc.loc_coord_easting as x
 ,dloc.loc_coord_northing as y
 from 
-moe_20250711.dbo.o_d_interval as dint
+moe_20260813.dbo.o_d_interval as dint
 inner join oak_20160831_master.dbo.d_borehole as dbore
 on dint.loc_id=dbore.loc_id
 inner join oak_20160831_master.dbo.d_location as dloc
@@ -39,19 +41,10 @@ where
 ( dire.int_id is null or dire.ref_elev is null )
 and dbore.bh_gnd_elev is null
 
--- we'll create a view from this, yank the ground elevations and 
--- populate the D_BOREHOLE table
-
 -- update DATA_ID, SYS_TEMP1 and SYS_TEMP2
 
 -- create the temporary DIRE table
 
--- v20200721 6 rows
--- v20210119 
--- v20220328 2 rows
--- v20230324 1
--- v20240326 3
--- v20250711 102
 
 select
 dint.INT_ID
@@ -62,17 +55,17 @@ dint.INT_ID
 ,cast('masl' as varchar(50)) as REF_ELEV_UNIT_OUOM
 ,0.75 as REF_STICK_UP
 ,cast('0.75' as varchar(50)) as REF_POINT
-,cast( 528 as int ) as DATA_ID
-,cast( '20250714m' as varchar(255) ) as SYS_TEMP1
-,cast( 20250714 as int ) as SYS_TEMP2
+,cast( 529 as int ) as DATA_ID
+,cast( '20260826gm' as varchar(255) ) as SYS_TEMP1
+,cast( 20260826 as int ) as SYS_TEMP2
 ,case
 when dire.int_id is not null then 1
 else null
 end as int_exists
 ,row_number() over (order by dint.int_id) as rkey
-into moe_20250711.dbo.O_D_INTERVAL_REF_ELEV
+into moe_20260813.dbo.O_D_INTERVAL_REF_ELEV
 from 
-moe_20250711.dbo.o_d_interval as dint
+moe_20260813.dbo.o_d_interval as dint
 inner join oak_20160831_master.dbo.d_borehole as dbore
 on dint.loc_id=dbore.loc_id
 left outer join oak_20160831_master.dbo.d_interval_ref_elev as dire
@@ -81,16 +74,28 @@ where
 dire.int_id is null
 or dire.ref_elev is null
 
-select count(*) as rcount from moe_20250711.dbo.O_D_INTERVAL_REF_ELEV
+
+
+-- v20200721 6 rows
+-- v20210119 
+-- v20220328 2 rows
+-- v20230324 1
+-- v20240326 3
+-- v20250711 102
+-- v20260813 23 rows
+
+
+select count(*) as rcount from moe_20260813.dbo.O_D_INTERVAL_REF_ELEV
+
 
 -- populate the SYS_RECORD_IDs that are null; don't forget to change
 -- the count of rows
 
-update moe_20250711.dbo.o_d_interval_ref_elev
+update moe_20260813.dbo.o_d_interval_ref_elev
 set
 sys_record_id= t2.sri
 from 
-moe_20250711.dbo.o_d_interval_ref_elev as dire
+moe_20260813.dbo.o_d_interval_ref_elev as dire
 inner join
 (
 select
@@ -112,7 +117,7 @@ on dire.rkey=t2.rkey
 where 
 dire.int_exists is null
 
--- now we can update those records that already existed in the ORMDB
+-- we can update those records that already existed in the ORMDB (i.e. int_exists is not null)
 
 -- v20200721 0 rows
 -- v20210119 0 rows
@@ -120,6 +125,9 @@ dire.int_exists is null
 -- v20230324 0 rows
 -- v20240326 0
 -- v20250711 0
+-- v20260813 0 rows
+
+select * from moe_20260813.dbo.o_d_interval_ref_elev
 
 update oak_20160831_master.dbo.d_interval_ref_elev
 set 
@@ -134,7 +142,7 @@ ref_elev_start_date= m.ref_elev_start_date
 ,sys_temp2= m.sys_temp2
 from 
 oak_20160831_master.dbo.d_interval_ref_elev as dire
-inner join moe_20250711.dbo.o_d_interval_ref_elev as m
+inner join moe_20260813.dbo.o_d_interval_ref_elev as m
 on dire.sys_record_id=m.sys_record_id
 where 
 m.int_exists is not null
@@ -147,6 +155,7 @@ m.int_exists is not null
 -- v20230324 1 rows
 -- v20240326 3
 -- v20250711 102
+-- v20260813 23 
 
 insert into oak_20160831_master.dbo.d_interval_ref_elev
 (
@@ -175,7 +184,7 @@ select
 [SYS_TEMP1], 
 [SYS_TEMP2]
 from 
-moe_20250711.dbo.o_d_interval_ref_elev as m
+moe_20260813.dbo.o_d_interval_ref_elev as m
 where 
 m.int_exists is null
 

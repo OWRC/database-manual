@@ -15,14 +15,10 @@
 -- v20230324 DATA_ID 525
 -- v20240326 DATA_ID 526
 -- v20250711 DATA_ID 528
+-- v20260813 DATA_ID 529
 
--- v20190509 3605 rows
--- v20200721 5893 rows
--- v20210119 1315 rows
--- v20220328 374 rows
--- v20230324 4012 rows
--- v20240326 24474 rows
--- v20250711 
+
+
 
 select
 od.LOC_ID
@@ -71,14 +67,14 @@ end as int) as GEOL_MAT3_CODE
  when moef.MAT1 is null and moef.MAT2 is null and moef.MAT3 is not null then 'No mat1 or mat2, assigned mat3 to mat1'
  else null 
 end as varchar(255)) as GEOL_COMMENT
-,cast( 528 as int ) as DATA_ID
-,'20250715g' as SYS_TEMP1
-,20250715 as SYS_TEMP2
+,cast( 529 as int ) as DATA_ID
+,'20260826gg' as SYS_TEMP1
+,20260826 as SYS_TEMP2
 ,row_number() over (order by od.loc_id) as rkey
-into MOE_20250711.dbo.O_D_GEOLOGY_LAYER
+into MOE_20260813.dbo.O_D_GEOLOGY_LAYER
 from 
-MOE_20250711.dbo.ORMGP_20250711_upd_DGL as od
-inner join MOE_20250711.dbo.TblFormation as moef
+MOE_20260813.dbo.ORMGP_20260813_upd_DGL as od
+inner join MOE_20260813.dbo.TblFormation as moef
 on od.moe_bore_hole_id=moef.bore_hole_id
 inner join oak_20160831_master.dbo.d_borehole as dbore
 on od.loc_id=dbore.loc_id
@@ -87,12 +83,19 @@ on od.loc_id=dbore.loc_id
 
 -- what is the count
 
+-- v20190509 3605 rows
+-- v20200721 5893 rows
+-- v20210119 1315 rows
+-- v20220328 374 rows
+-- v20230324 4012 rows
+-- v20240326 24474 rows
 -- v20250711 15191 rows
+-- v20260813 73608 rows
 
 select
 count(*) 
 from 
-MOE_20250711.dbo.O_D_GEOLOGY_LAYER
+MOE_20260813.dbo.O_D_GEOLOGY_LAYER
 
 -- create/update the GEOL_IDs
 
@@ -101,7 +104,7 @@ od.loc_id
 ,od.rkey
 ,t2.geol_id
 from 
-moe_20250711.dbo.o_d_geology_layer as od
+moe_20260813.dbo.o_d_geology_layer as od
 inner join
 (
 select
@@ -110,7 +113,7 @@ t.geol_id
 from 
 (
 select
-top 30000
+top 150000
 v.new_id as geol_id
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -121,11 +124,11 @@ v.new_id not in
 ) as t2
 on od.rkey=t2.rkey
 
-update moe_20250711.dbo.o_d_geology_layer
+update moe_20260813.dbo.o_d_geology_layer
 set
 geol_id=t2.geol_id
 from 
-moe_20250711.dbo.o_d_geology_layer as od
+moe_20260813.dbo.o_d_geology_layer as od
 inner join
 (
 select
@@ -134,7 +137,7 @@ t.geol_id
 from 
 (
 select
-top 30000
+top 150000
 v.new_id as geol_id
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -184,9 +187,44 @@ select
 [SYS_TEMP1], 
 [SYS_TEMP2]
 from 
-moe_20250711.dbo.o_d_geology_layer 
+moe_20260813.dbo.o_d_geology_layer 
 
 
 
+-- v20260813 fixes
+
+
+select
+t.geol_mat1_code
+,r.geol_mat1_code as r_geol_mat1_code
+from 
+(
+select
+geol_mat1_code
+from 
+moe_20260813.dbo.o_d_geology_layer
+group by
+geol_mat1_code 
+) as t
+left outer join oak_20160831_master.dbo.r_geol_mat1_code as r
+on t.geol_mat1_code=r.geol_mat1_code
+
+update moe_20260813.dbo.o_d_geology_layer
+set
+geol_mat1_code= null
+where
+geol_mat1_code= 0
+
+update moe_20260813.dbo.o_d_geology_layer
+set
+geol_mat2_code= null
+where
+geol_mat2_code= 0
+
+update moe_20260813.dbo.o_d_geology_layer
+set
+geol_mat3_code= null
+where
+geol_mat3_code= 0
 
 

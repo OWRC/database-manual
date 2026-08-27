@@ -1,5 +1,7 @@
 
---***** G.30.08.03 D_PUMPTEST and D_PUMPTEST_STEP IDs 
+--***** G.30.08.03 D_PUMPTEST and D_PUMPTEST_STEP IDs
+
+ --***** G.30.09 Calculate all necessary elevations for the MOE updated records
 
 -- we'll create a series of PUMP_TEST_IDs for the two tables
 -- and then add them to the appropriate ORMDB tables
@@ -11,7 +13,7 @@
 select
 count(*) 
 from 
-moe_20250711.dbo.o_d_pumptest
+moe_20260813.dbo.o_d_pumptest
 
 -- v20190509 1667 rows
 -- v20200721 1013 rows
@@ -20,12 +22,13 @@ moe_20250711.dbo.o_d_pumptest
 -- v20230324 539
 -- v20240326 1617
 -- v20250711 2217
+-- v20260813 7309
 
-update moe_20250711.dbo.o_d_pumptest
+update moe_20260813.dbo.o_d_pumptest
 set
 pump_test_id= t2.pump_test_id
 from 
-moe_20250711.dbo.o_d_pumptest as d
+moe_20260813.dbo.o_d_pumptest as d
 inner join 
 (
 select
@@ -34,7 +37,7 @@ t.pump_test_id
 from 
 (
 select
-top 5000
+top 15000
 v.new_id as pump_test_id
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -75,12 +78,24 @@ select
 [PUMPTEST_METHOD_CODE], 
 [PUMPTEST_TYPE_CODE], 
 [WATER_CLARITY_CODE], 
-cast( '20250714q' as varchar(255) ) as SYS_TEMP1,
-cast( 20250714 as int ) as SYS_TEMP2
+cast( '20260826gq' as varchar(255) ) as SYS_TEMP1,
+cast( 20260826 as int ) as SYS_TEMP2
 from 
-moe_20250711.dbo.o_d_pumptest 
+moe_20260813.dbo.o_d_pumptest 
 
 -- update the O_D_PUMPTEST_STEP table with the new PUMP_TEST_ID
+
+
+update moe_20260813.dbo.o_d_pumptest_step
+set
+pump_test_id= dp.pump_test_id
+from 
+moe_20260813.dbo.o_d_pumptest_Step as dps
+inner join moe_20260813.dbo.o_d_pumptest as dp
+on dps.moe_pump_test_id=dp.moe_pump_test_id
+
+
+-- get the number of rows
 
 -- v20190509 1449 rows
 -- v20200721 879 rows
@@ -89,30 +104,22 @@ moe_20250711.dbo.o_d_pumptest
 -- v20230324 502 
 -- v20240326 1555
 -- v20250711 2063
+-- v20260813 5780
 
-update moe_20250711.dbo.o_d_pumptest_step
-set
-pump_test_id= dp.pump_test_id
-from 
-moe_20250711.dbo.o_d_pumptest_Step as dps
-inner join moe_20250711.dbo.o_d_pumptest as dp
-on dps.moe_pump_test_id=dp.moe_pump_test_id
-
--- get the number of rows
 
 select
 count(*) 
 from 
-moe_20250711.dbo.o_d_pumptest_step
+moe_20260813.dbo.o_d_pumptest_step
 
 
 -- populate the SYS_RECORD_ID field
 
-update moe_20250711.dbo.o_d_pumptest_step
+update moe_20260813.dbo.o_d_pumptest_step
 set
 sys_record_id= t2.sri
 from 
-moe_20250711.dbo.o_d_pumptest_step as d
+moe_20260813.dbo.o_d_pumptest_step as d
 inner join
 (
 select
@@ -121,7 +128,7 @@ t.sri
 from 
 (
 select
-top 5000
+top 10000
 v.new_id as sri
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -131,6 +138,7 @@ v.new_id not in
 ) as t
 ) as t2
 on d.rkey=t2.rkey
+
 
 -- insert the information into the D_PUMPTEST_STEP
 
@@ -158,14 +166,133 @@ select
 [PUMP_END], 
 [DATA_ID], 
 [SYS_RECORD_ID], 
-cast( '20250714r' as varchar(255) ) as SYS_TEMP1,
-cast( 20250714 as int ) as SYS_TEMP2
+cast( '20260826gr' as varchar(255) ) as SYS_TEMP1,
+cast( 20260826 as int ) as SYS_TEMP2
 from 
-moe_20250711.dbo.o_d_pumptest_step
+moe_20260813.dbo.o_d_pumptest_step
 
 
 
 
 
+--***** D_GEOLOGY_LAYER
 
+
+select
+d.*
+from 
+oak_20160831_master.dbo.d_geology_layer as d
+inner join moe_20260813.dbo.o_d_geology_layer as md
+on d.geol_id=md.geol_id
+
+
+
+--***** D_GEOLOGY_FEATURE
+
+select
+v.z
+,v.z - case when d.feature_unit_ouom='ft' then d.feature_top_ouom * 0.3048 else d.feature_top_ouom end as new_top_elev
+,v.z - case when d.feature_unit_ouom='ft' then d.feature_bot_ouom * 0.3048 else d.feature_bot_ouom end as new_bot_elev
+,d.*
+from 
+oak_20160831_master.dbo.d_geology_feature as d
+inner join moe_20260813.dbo.o_d_geology_feature as md
+on d.feature_id=md.feature_id
+inner join oak_20160831_master.dbo.v_sys_loc_coords as v
+on d.loc_id=v.loc_id
+where
+( d.feature_top_ouom is not null or d.feature_bot_ouom is not null )
+and d.feature_unit_ouom is not null
+
+
+update oak_20160831_master.dbo.d_geology_feature
+set
+feature_top_elev= v.z - case when d.feature_unit_ouom='ft' then d.feature_top_ouom * 0.3048 else d.feature_top_ouom end
+,feature_bot_elev= v.z - case when d.feature_unit_ouom='ft' then d.feature_bot_ouom * 0.3048 else d.feature_bot_ouom end
+,sys_temp1= d.sys_temp1
+from 
+oak_20160831_master.dbo.d_geology_feature as d
+inner join moe_20260813.dbo.o_d_geology_feature as md
+on d.feature_id=md.feature_id
+inner join oak_20160831_master.dbo.v_sys_loc_coords as v
+on d.loc_id=v.loc_id
+where
+( d.feature_top_ouom is not null or d.feature_bot_ouom is not null )
+and d.feature_unit_ouom is not null
+
+
+
+--***** D_INTERVAL_MONITOR
+
+select
+v.z - case when d.mon_unit_ouom='ft' then d.mon_top_ouom * 0.3048 else d.mon_top_ouom end
+,v.z - case when d.mon_unit_ouom='ft' then d.mon_bot_ouom * 0.3048 else d.mon_bot_ouom end
+,case when d.mon_unit_ouom='ft' then d.mon_top_ouom * 0.3048 else d.mon_top_ouom end
+,case when d.mon_unit_ouom='ft' then d.mon_bot_ouom * 0.3048 else d.mon_bot_ouom end
+,d.*
+from 
+oak_20160831_master.dbo.d_interval_monitor as d
+inner join moe_20260813.dbo.o_d_interval_monitor as md
+on d.mon_id=md.mon_id
+inner join oak_20160831_master.dbo.d_interval as dint
+on d.int_id=dint.int_id
+inner join oak_20160831_master.dbo.v_sys_loc_coords as v
+on dint.loc_id=v.loc_id
+
+
+update oak_20160831_master.dbo.d_interval_monitor
+set
+mon_top_elev= v.z - case when d.mon_unit_ouom='ft' then d.mon_top_ouom * 0.3048 else d.mon_top_ouom end
+,mon_bot_elev= v.z - case when d.mon_unit_ouom='ft' then d.mon_bot_ouom * 0.3048 else d.mon_bot_ouom end
+,mon_top_depth_m= case when d.mon_unit_ouom='ft' then d.mon_top_ouom * 0.3048 else d.mon_top_ouom end
+,mon_bot_depth_m= case when d.mon_unit_ouom='ft' then d.mon_bot_ouom * 0.3048 else d.mon_bot_ouom end
+,sys_temp1= d.sys_temp1
+from 
+oak_20160831_master.dbo.d_interval_monitor as d
+inner join moe_20260813.dbo.o_d_interval_monitor as md
+on d.mon_id=md.mon_id
+inner join oak_20160831_master.dbo.d_interval as dint
+on d.int_id=dint.int_id
+inner join oak_20160831_master.dbo.v_sys_loc_coords as v
+on dint.loc_id=v.loc_id
+
+
+
+--***** D_BOREHOLE_CONSTRUCTION
+
+-- is this pulling multiple records for each actual record (i.e. is it duplicating records)?
+
+select
+v.z - case when d.con_unit_ouom='ft' then d.con_top_ouom * 0.3048 else d.con_top_ouom end
+,v.z - case when d.con_unit_ouom='ft' then d.con_bot_ouom * 0.3048 else d.con_bot_ouom end
+,d.*
+from 
+oak_20160831_master.dbo.d_borehole_construction as d
+inner join moe_20260813.dbo.o_d_borehole_construction as md
+on d.bh_id=md.bh_id
+inner join oak_20160831_master.dbo.d_borehole as dbore
+on d.bh_id=dbore.bh_id
+inner join oak_20160831_master.dbo.v_sys_loc_coords as v
+on dbore.loc_id=v.loc_id
+where
+( d.con_top_ouom is not null or d.con_bot_ouom is not null )
+and d.con_unit_ouom is not null
+
+
+update oak_20160831_master.dbo.d_borehole_construction
+set
+con_top_elev= v.z - case when d.con_unit_ouom='ft' then d.con_top_ouom * 0.3048 else d.con_top_ouom end
+,con_bot_elev= v.z - case when d.con_unit_ouom='ft' then d.con_bot_ouom * 0.3048 else d.con_bot_ouom end
+,sys_temp1= d.sys_temp1
+from 
+oak_20160831_master.dbo.d_borehole_construction as d
+inner join moe_20260813.dbo.o_d_borehole_construction as md
+on d.bh_id=md.bh_id
+inner join oak_20160831_master.dbo.d_borehole as dbore
+on d.bh_id=dbore.bh_id
+inner join oak_20160831_master.dbo.v_sys_loc_coords as v
+on dbore.loc_id=v.loc_id
+where
+( d.con_top_ouom is not null or d.con_bot_ouom is not null )
+and d.con_unit_ouom is not null
 

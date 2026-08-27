@@ -6,23 +6,11 @@
 
 -- get all the affected BORE_HOLE_IDs
 
---***** 20190612 This needs to be updated to only examine those intervals
---***** which are a 'screen' type (for boreholes); the initial run-through of
---***** this process did not do so
-
-drop table ORMGP_20250711_base_DINT
-
--- v20200721 30088 rows
--- v20210119 28339 rows
--- v20220328 35587
--- v20230324 34225
--- v20240326 43328
--- v20250711 53453
 
 select
 t.*
 ,dint.int_id
-into moe_20250711.dbo.ORMGP_20250711_base_DINT
+into moe_20260813.dbo.ORMGP_20260813_base_DINT
 from 
 (
 select
@@ -39,7 +27,7 @@ on dbore.loc_id=dlqa.loc_id
 inner join oak_20160831_master.dbo.d_location_summary as yc
 on dbore.loc_id=yc.loc_id
 --inner join oak_20160831_master.dbo.v_sys_moe_locations as v
-inner join ORMGP_20250711_MOE_LOCNS as v
+inner join ORMGP_20260813_MOE_LOCNS as v
 on dbore.loc_id=v.loc_id
 left outer join oak_20160831_master.dbo.d_interval as dint
 on dbore.loc_id=dint.loc_id
@@ -55,21 +43,27 @@ dbore.loc_id,v.moe_bore_hole_id
 left outer join oak_20160831_master.dbo.d_interval as dint
 on t.loc_id=dint.loc_id
 
+
+--drop table ORMGP_20260813_base_DINT
+
+
+-- v20200721 30088 rows
+-- v20210119 28339 rows
+-- v20220328 35587
+-- v20230324 34225
+-- v20240326 43328
+-- v20250711 53453
+-- v20260813 57889
+
+
 select
 count(*)
 from 
-moe_20250711.dbo.ORMGP_20250711_base_DINT
+moe_20260813.dbo.ORMGP_20260813_base_DINT
 
 
 -- get those that actually have reported screens; this creates the dintmon table
 
--- v20190509 2152 rows
--- v20200721 1697 rows
--- v20210119 445 rows
--- v20220328 92 rows
--- v20230324 925
--- v20240328 7278
--- v20250711 2860
 
 select 
 d.LOC_ID
@@ -84,26 +78,43 @@ d.LOC_ID
 ,moes.SCRN_END_DEPTH as MON_BOT_OUOM
 ,moes.SCRN_DEPTH_UOM as MON_UNIT_OUOM
 ,cast(null as varchar(255)) as MON_COMMENT
-into moe_20250711.dbo.ORMGP_20250711_upd_DINTMON
+into moe_20260813.dbo.ORMGP_20260813_upd_DINTMON
 from 
-moe_20250711.dbo.ORMGP_20250711_base_DINT as d
+moe_20260813.dbo.ORMGP_20260813_base_DINT as d
 inner join 
-MOE_20250711.dbo.TblPipe as moep
+MOE_20260813.dbo.TblPipe as moep
 on d.moe_bore_hole_id=moep.Bore_Hole_ID
 inner join
-MOE_20250711.dbo.TblScreen as moes
+MOE_20260813.dbo.TblScreen as moes
 on moep.PIPE_ID=moes.PIPE_ID
 left outer join
-MOE_20250711.dbo.YC_20250711_MOE_SLOT as moeslot
+MOE_20260813.dbo.YC_20260813_MOE_SLOT as moeslot
 on moes.Slot=moeslot.MOE_SLOT
 where 
 moes.SCRN_TOP_DEPTH is not null 
 or moes.SCRN_END_DEPTH is not null
 
+
+--drop table moe_20260813.dbo.ORMGP_20260813_upd_DINTMON
+
+
+
+-- v20190509 2152 rows
+-- v20200721 1697 rows
+-- v20210119 445 rows
+-- v20220328 92 rows
+-- v20230324 925
+-- v20240328 7278
+-- v20250711 2860
+-- v20260813 18444
+
 select
 count(*) 
 from 
-moe_20250711.dbo.ORMGP_20250711_upd_DINTMON
+moe_20260813.dbo.ORMGP_20260813_upd_DINTMON
 
-drop table moe_20250711.dbo.ORMGP_20250711_upd_DINTMON
+
+
+
+
 

@@ -35,45 +35,37 @@ select
 loc_id
 ,moe_well_id
 ,moe_bore_hole_id 
-into ORMGP_20250711_MOE_LOCNS
+into ORMGP_20260813_MOE_LOCNS
 from 
 oak_20160831_master.dbo.v_sys_moe_locations
 
 create nonclustered index
 lid_x
-on ORMGP_20250711_MOE_LOCNS
+on ORMGP_20260813_MOE_LOCNS
 ( loc_id )
 
 create nonclustered index
 bhid_x
-on ORMGP_20250711_MOE_LOCNS
+on ORMGP_20260813_MOE_LOCNS
 ( moe_bore_hole_id )
 
 create nonclustered index
 well_id_x
-on ORMGP_20250711_MOE_LOCNS
+on ORMGP_20260813_MOE_LOCNS
 ( moe_well_id )
 
--- v20190509 6850 rows
--- v20200721 2699 rows
--- v20210119 307 rows
--- v20220328 146 rows
--- v20230324 1182 rows
--- v20240326 3352 rows
--- v20250711 3168 rows
-
-drop table moe_20250711.dbo.ormgp_20250711_upd_dgf
 
 -- v20210119 Time to Run: 663 seconds
 -- v20240326 Time to Run: 662 seconds
 -- v20250711 Time to Run: a few seconds after the MOE_LOCNS table is created and referenced
+-- v20260813 same as v20250711
 
 
 select
 t.*
 ,t2.rcount_moe
 --count(*) as rcount
-into moe_20250711.dbo.ORMGP_20250711_upd_DGF
+into moe_20260813.dbo.ORMGP_20260813_upd_DGF
 from 
 (
 select
@@ -102,7 +94,7 @@ group by
 loc_id
 ) as dgl
 on dbore.loc_id=dgl.loc_id
-inner join ORMGP_20250711_MOE_LOCNS as v
+inner join ORMGP_20260813_MOE_LOCNS as v
 --inner join oak_20160831_master.dbo.v_sys_moe_locations as v
 on dbore.loc_id=v.loc_id
 where 
@@ -118,20 +110,32 @@ select
 moep.bore_hole_id
 ,count(*) as rcount_moe
 from 
-MOE_20250711.dbo.TblPipe as moep
-inner join MOE_20250711.[dbo].[TblWater] as moew
+MOE_20260813.dbo.TblPipe as moep
+inner join MOE_20260813.[dbo].[TblWater] as moew
 on moep.PIPE_ID=moew.PIPE_ID
 group by
 moep.bore_hole_id
 ) as t2
 on t.moe_bore_hole_id=t2.bore_hole_id
 
--- count
+
+drop table moe_20260813.dbo.ormgp_20260813_upd_dgf
+
+
+-- v20190509 6850 rows
+-- v20200721 2699 rows
+-- v20210119 307 rows
+-- v20220328 146 rows
+-- v20230324 1182 rows
+-- v20240326 3352 rows
+-- v20250711 3168 rows
+-- v20260813 9891 rows
+
 
 select
 count(*) 
 from 
-moe_20250711.dbo.ORMGP_20250711_upd_DGF
+moe_20260813.dbo.ORMGP_20260813_upd_DGF
 
 
 

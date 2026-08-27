@@ -25,7 +25,7 @@ d.int_name
 ,d.int_start_date
 ,dint.int_start_date
 from 
-moe_20250711.dbo.o_d_interval as d
+moe_20260813.dbo.o_d_interval as d
 inner join oak_20160831_master.dbo.d_interval as dint
 on d.int_id=dint.int_id
 where 
@@ -55,7 +55,7 @@ int_name= d.int_name
 ,sys_temp2= d.sys_temp2
 from 
 oak_20160831_master.dbo.d_interval as dint
-inner join moe_20250711.dbo.o_d_interval as d
+inner join moe_20260813.dbo.o_d_interval as d
 on dint.int_id=d.int_id
 where 
 d.int_exists=1
@@ -74,12 +74,16 @@ or
 -- v20230324 max rkey 1516
 -- v20240326 max rkey 9898
 -- v20250711 max rkey 5697 
+-- v20260813 max rkey 24215
 
 -- note that this is the highest number
 select
 max(rkey) as max_rkey
 from 
-moe_20250711.dbo.o_d_interval as dint
+moe_20260813.dbo.o_d_interval as dint
+
+
+-- how many do not have an interval in the master-db
 
 -- v20200721 6 rows
 -- v20210119 38 rows
@@ -87,28 +91,23 @@ moe_20250711.dbo.o_d_interval as dint
 -- v20230324 1 
 -- v20240326 3
 -- v20250711 102
+-- v20260813 20
 
 select
 count(*) 
 from 
-moe_20250711.dbo.o_d_interval as dint
+moe_20260813.dbo.o_d_interval as dint
 where 
 dint.int_exists is null
 
-select
-*
-from 
-moe_20250711.dbo.o_d_interval as dint
-where 
-dint.int_exists is null
 
 -- create the random INT_IDs, don't forget to change the count as necessary
 
-update moe_20250711.dbo.o_d_interval
+update moe_20260813.dbo.o_d_interval
 set
 int_id= t2.int_id
 from 
-moe_20250711.dbo.o_d_interval as dint
+moe_20260813.dbo.o_d_interval as dint
 inner join
 (
 select
@@ -117,7 +116,7 @@ t.int_id
 from 
 (
 select
-top 10000
+top 40000
 v.new_id as int_id
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -159,9 +158,13 @@ select
 [SYS_TEMP1], 
 [SYS_TEMP2]
 from 
-moe_20250711.dbo.o_d_interval as d
+moe_20260813.dbo.o_d_interval as d
 where
 d.int_exists is null
+
+select * from moe_20260813.dbo.o_d_interval
+
+select * from oak_20160831_master.dbo.d_interval where data_id= 529 and sys_temp1= '20260826gl'
 
 -- now that all the intervals are now in the ORMDB, add the 
 -- records into D_INTERVAL_MONITOR; make sure to add an indexed 
@@ -175,39 +178,45 @@ d.int_exists is null
 -- v20230324 1 
 -- v20240326 3
 -- v20250711 105 
+-- v20260813 20
 
-update moe_20250711.dbo.o_d_interval_monitor
+update moe_20260813.dbo.o_d_interval_monitor
 set
 int_id= dint.int_id
 from 
-moe_20250711.dbo.o_d_interval_monitor as dim
-inner join moe_20250711.dbo.o_d_interval as dint
+moe_20260813.dbo.o_d_interval_monitor as dim
+inner join moe_20260813.dbo.o_d_interval as dint
 on dim.tmp_int_id=dint.tmp_int_id
 where
 dint.int_exists is null
 
+-- this should be null
+
 select
 *
 from 
-moe_20250711.dbo.o_d_interval_monitor
+moe_20260813.dbo.o_d_interval_monitor
 where
 int_id is null
 
 -- v20240326 10019
 -- v20250711 5772
+-- v20260813 25578
 
 select
 count(*) 
 from 
-moe_20250711.dbo.o_d_interval_monitor
+moe_20260813.dbo.o_d_interval_monitor
+
+
 
 -- and add the random MON_IDs; don't forget to change the count
 
-update moe_20250711.dbo.o_d_interval_monitor
+update moe_20260813.dbo.o_d_interval_monitor
 set
 mon_id= t2.mon_id
 from 
-moe_20250711.dbo.o_d_interval_monitor as d
+moe_20260813.dbo.o_d_interval_monitor as d
 inner join
 (
 select
@@ -216,7 +225,7 @@ t.mon_id
 from 
 (
 select
-top 15000
+top 40000
 v.new_id as mon_id
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -227,6 +236,7 @@ v.new_id not in
 ) as t2
 on d.rkey=t2.rkey
 
+
 -- check that these don't already exist in the master db
 
 -- v20210119 474 rows
@@ -234,6 +244,7 @@ on d.rkey=t2.rkey
 -- v20230324 1545
 -- v20240326 10017
 -- v20250711 5770
+-- v20260813 25573; this does not match 25578 above - 5 already present?; examine this after
 
 select
 [INT_ID], 
@@ -251,12 +262,27 @@ select
 [SYS_TEMP1], 
 [SYS_TEMP2]
 from
-moe_20250711.dbo.o_d_interval_monitor as odim
+moe_20260813.dbo.o_d_interval_monitor as odim
 where
 odim.int_id not in
 ( select distinct(int_id) from oak_20160831_master.dbo.d_interval_monitor )
+and odim.int_id in
+( select int_id from oak_20160831_master.dbo.d_interval )
 
--- we can now insert these into D_INTERVAL_MONITOR
+
+-- are there any int_ids that do not exist in D_INTERVAL
+
+-- v20260813 3 rows
+
+select
+d.int_id as m_int_id
+,dim.int_id
+from   
+moe_20260813.dbo.o_d_interval_monitor as d
+left outer join oak_20160831_master.dbo.d_interval as dim
+on d.int_id=dim.int_id
+
+-- we can now insert the new intervals (with valid INT_IDs) into D_INTERVAL_MONITOR
 
 insert into oak_20160831_master.dbo.d_interval_monitor
 (
@@ -291,13 +317,151 @@ select
 [SYS_TEMP1], 
 [SYS_TEMP2]
 from
-moe_20250711.dbo.o_d_interval_monitor as odim
+moe_20260813.dbo.o_d_interval_monitor as odim
 where
 odim.int_id not in
 ( select distinct(int_id) from oak_20160831_master.dbo.d_interval_monitor )
+and odim.int_id in
+( select int_id from oak_20160831_master.dbo.d_interval )
 
 
+-- v20260813 fixes
 
+select * from oak_20160831_master.dbo.d_interval where int_id= 240260914
+
+select * from oak_20160831_master.dbo.d_interval_monitor where int_id= 240260914
+
+select
+*
+from
+moe_20260813.dbo.o_d_interval_monitor
+where
+int_id in 
+(
+240042956
+,240208689
+,240264509
+)
+
+select
+*
+from
+--moe_20260813.dbo.o_d_interval
+oak_20160831_master.dbo.d_interval
+where
+int_id in 
+(
+240042956
+,240208689
+,240264509
+)
+
+insert into oak_20160831_master.dbo.d_interval
+( 
+LOC_ID
+,INT_ID
+,INT_NAME
+,INT_NAME_ALT1
+,INT_TYPE_CODE
+,INT_START_DATE
+,INT_CONFIDENTIALITY_CODE
+,INT_ACTIVE
+,DATA_ID
+,SYS_TEMP1
+,SYS_TEMP2
+)
+select 
+LOC_ID
+,INT_ID
+,INT_NAME
+,INT_NAME_ALT1
+,INT_TYPE_CODE
+,INT_START_DATE
+,INT_CONFIDENTIALITY_CODE
+,INT_ACTIVE
+,DATA_ID
+,SYS_TEMP1
+,SYS_TEMP2
+from 
+moe_20260813.dbo.o_d_interval
+where
+int_id in 
+(
+240042956
+,240208689
+,240264509
+)
+
+update moe_20260813.dbo.o_d_interval
+set
+int_exists= null
+where
+int_id in 
+(
+240042956
+,240208689
+,240264509
+)
+
+
+insert into oak_20160831_master.dbo.d_interval_monitor
+(
+INT_ID
+,MON_SCREEN_SLOT
+,MON_SCREEN_MATERIAL
+,MON_DIAMETER_OUOM
+,MON_DIAMETER_UNIT_OUOM
+,MON_TOP_OUOM
+,MON_BOT_OUOM
+,MON_UNIT_OUOM
+,MON_COMMENT
+,MON_FLOWING
+,MON_ID
+,DATA_ID
+,SYS_TEMP1
+,SYS_TEMP2
+)
+select
+INT_ID
+,MON_SCREEN_SLOT
+,MON_SCREEN_MATERIAL
+,MON_DIAMETER_OUOM
+,MON_DIAMETER_UNIT_OUOM
+,MON_TOP_OUOM
+,MON_BOT_OUOM
+,MON_UNIT_OUOM
+,MON_COMMENT
+,MON_FLOWING
+,MON_ID
+,DATA_ID
+,SYS_TEMP1
+,SYS_TEMP2
+from 
+moe_20260813.dbo.o_d_interval_monitor
+where
+int_id in 
+(
+240042956
+,240208689
+,240264509
+)
+
+
+select
+d.int_id as m_int_id
+,dim.int_id
+from   
+moe_20260813.dbo.o_d_interval_monitor as d
+left outer join oak_20160831_master.dbo.d_interval as dim
+on d.int_id=dim.int_id
+
+select
+d.int_id as m_int_id
+,dim.int_id
+from   
+moe_20260813.dbo.o_d_interval_monitor as d
+left outer join oak_20160831_master.dbo.d_interval_monitor as dim
+on d.int_id=dim.int_id
 
 
 

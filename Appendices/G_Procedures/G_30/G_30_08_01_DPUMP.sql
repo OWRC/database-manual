@@ -1,24 +1,9 @@
 
 --***** G.30.08.01 D_PUMPTEST BORE_HOLE_IDs and INT_IDs
 
--- determine those intervals that do not have a static water
--- level in DIT2
-
 -- note that we're using the complete list of boreholes related
 -- to the MOEDB that are currently present in the ORMDB
 
--- we'll need to update the tags in DIM for any flowing wells that 
--- are tagged in the MOEDB
-
--- update DATA_ID and SYS_TEMP
-
--- v20190509 3178 rows
--- v20200721 27 rows
--- v20210119 66 rows
--- v20220328 0 rows
--- v20230324 
--- v20240326 24
--- v20250711 229 
 
 --update oak_20160831_master.dbo.d_interval_monitor
 --set
@@ -41,9 +26,9 @@
 --on dint.loc_id=v.loc_id
 --inner join oak_20160831_master.dbo.v_sys_agency_ypdt as y
 --on v.loc_id=y.loc_id
---inner join moe_20250711.dbo.tblpipe as moetp
+--inner join moe_20260813.dbo.tblpipe as moetp
 --on v.moe_bore_hole_id=moetp.bore_hole_id
---inner join moe_20250711.dbo.tblpump_test as moept
+--inner join moe_20260813.dbo.tblpump_test as moept
 --on moetp.pipe_id=moept.pipe_id
 --where 
 --moept.FLOWING like 'Y'
@@ -52,35 +37,41 @@
 --( select int_type_code from oak_20160831_master.dbo.v_sys_int_type_code_screen )
 
 
+-- we'll need to update the tags in DIM for any flowing wells that 
+-- are tagged in the MOEDB
+
+-- update DATA_ID and SYS_TEMP
+
+
 select 
 dim.int_id
 ,dim.mon_id
 ,1 as mon_flowing
 ,case
-when dim.data_id is null then 528
+when dim.data_id is null then 529
 else dim.data_id
 end as data_id
 ,case
-when dim.data_id is null then 'MON_FLOWING update from DATA_ID 528'
-else dim.mon_comment + '; MON_FLOWING update from DATA_ID 528'
+when dim.data_id is null then 'MON_FLOWING update from DATA_ID 529'
+else dim.mon_comment + '; MON_FLOWING update from DATA_ID 529'
 end as mon_comment
-,cast( '20250714o' as varchar(255) ) as sys_temp1
-,cast( 20250714 as int ) as sys_temp2
-into ORMGP_20250711_upd_DIM_flowing
+,cast( '20260826go' as varchar(255) ) as sys_temp1
+,cast( 20260826 as int ) as sys_temp2
+into ORMGP_20260813_upd_DIM_flowing
 from 
 oak_20160831_master.dbo.d_interval_monitor as dim
 inner join oak_20160831_master.dbo.d_interval as dint
 on dim.int_id=dint.int_id
 --inner join oak_20160831_master.dbo.v_sys_moe_locations as v
-inner join ORMGP_20250711_MOE_LOCNS as v
+inner join ORMGP_20260813_MOE_LOCNS as v
 on dint.loc_id=v.loc_id
 --inner join oak_20160831_master.dbo.v_sys_agency_ypdt as y
 --on v.loc_id=y.loc_id
 inner join oak_20160831_master.dbo.d_location_summary as yc
 on dint.loc_id=yc.loc_id
-inner join moe_20250711.dbo.tblpipe as moetp
+inner join moe_20260813.dbo.tblpipe as moetp
 on v.moe_bore_hole_id=moetp.bore_hole_id
-inner join moe_20250711.dbo.tblpump_test as moept
+inner join moe_20260813.dbo.tblpump_test as moept
 on moetp.pipe_id=moept.pipe_id
 where 
 yc.ormgp_area is not null
@@ -88,6 +79,23 @@ and moept.FLOWING like 'Y'
 and dim.mon_flowing is null
 and dint.int_type_code in 
 ( select int_type_code from oak_20160831_master.dbo.v_sys_int_type_code_screen )
+
+
+
+-- v20190509 3178 rows
+-- v20200721 27 rows
+-- v20210119 66 rows
+-- v20220328 0 rows
+-- v20230324 
+-- v20240326 24
+-- v20250711 229 
+-- v20260813 495
+
+
+select count(*) as rcount from moe_20260813.dbo.ORMGP_20260813_upd_DIM_flowing
+
+
+-- update flowing tags in DIM 
 
 update oak_20160831_master.dbo.d_interval_monitor
 set
@@ -98,29 +106,22 @@ mon_flowing= upd.mon_flowing
 ,sys_temp2= upd.sys_temp2
 from 
 oak_20160831_master.dbo.d_interval_monitor as dim
-inner join moe_20250711.dbo.ORMGP_20250711_upd_DIM_flowing as upd
+inner join moe_20260813.dbo.ORMGP_20260813_upd_DIM_flowing as upd
 on dim.mon_id=upd.mon_id
 
 
 -- assemble the BORE_HOLE_IDs for which we'll assemble pumping data;
 -- add indexes to the resulting table
 
--- v20190509 1667 rows
--- v20200721 1013 rows
--- v20210119 15 rows
--- v20220328 107 rows
--- v20230324 539
--- v20240326 1617
--- v20250711 2217
 
 select
 dint.int_id
 ,v.moe_well_id
 ,v.moe_bore_hole_id
 ,moept.pipe_id
-into moe_20250711.dbo.ORMGP_20250711_upd_DPUMP
+into moe_20260813.dbo.ORMGP_20260813_upd_DPUMP
 from 
-ORMGP_20250711_MOE_LOCNS as v
+ORMGP_20260813_MOE_LOCNS as v
 --oak_20160831_master.dbo.v_sys_moe_locations as v
 --inner join oak_20160831_master.dbo.v_sys_agency_ypdt as y
 --on v.loc_id=y.loc_id
@@ -138,9 +139,9 @@ group by
 int_id
 ) as d
 on dint.int_id=d.int_id
-inner join moe_20250711.dbo.tblpipe as moetp
+inner join moe_20260813.dbo.tblpipe as moetp
 on v.moe_bore_hole_id=moetp.bore_hole_id
-inner join moe_20250711.dbo.tblpump_test as moept
+inner join moe_20260813.dbo.tblpump_test as moept
 on moetp.pipe_id=moept.pipe_id
 where 
 yc.ormgp_area is not null
@@ -152,22 +153,12 @@ moept.Recom_depth is not null
 or moept.Recom_rate is not null 
 or moept.Flowing_rate is not null 
 or moept.PUMP_TEST_ID in 
-( select PUMP_TEST_ID from moe_20250711.dbo.tblpump_test_detail )
+( select PUMP_TEST_ID from moe_20260813.dbo.tblpump_test_detail )
 )
 -- only include the following if we can't index the fields
 --group by
 --dint.int_id,v.moe_bore_hole_id
 
-select
-count(*)
-from 
-moe_20250711.dbo.ORMGP_20250711_upd_DPUMP
-
--- assemple the D_PUMPTEST compatible table;
--- we're assuming all rates of GPM are IGPM; there are 4.55 litres per imperial gallon
--- change DATA_ID
-
--- update DATA_ID and SYS_TEMP
 
 -- v20190509 1667 rows
 -- v20200721 1013 rows
@@ -176,6 +167,21 @@ moe_20250711.dbo.ORMGP_20250711_upd_DPUMP
 -- v20230324 539
 -- v20240326 1617
 -- v20250711 2217
+-- v20260813 5970
+
+
+select
+count(*)
+from 
+moe_20260813.dbo.ORMGP_20260813_upd_DPUMP
+
+
+-- assemple the D_PUMPTEST compatible table;
+-- we're assuming all rates of GPM are IGPM; there are 4.55 litres per imperial gallon
+-- change DATA_ID
+
+-- update DATA_ID
+
 
 select 
 d.INT_ID
@@ -201,7 +207,7 @@ case
 when moept.RATE_UOM='LPM' then moept.Flowing_rate/4.55
 else moept.Flowing_rate
 end as float) as [FLOWING_RATE_IGPM]
-,cast(526 as int) as [DATA_ID]
+,cast(529 as int) as [DATA_ID]
 ,cast(
 case 
 when moept.PUMPING_TEST_METHOD is null then null 
@@ -220,15 +226,27 @@ when moept.WATER_STATE_AFTER_TEST is null then 0
 else moept.WATER_STATE_AFTER_TEST
 end as int) as [WATER_CLARITY_CODE]
 ,ROW_NUMBER() over (order by dint.INT_ID) as rkey
-into moe_20250711.dbo.O_D_PUMPTEST
+into moe_20260813.dbo.O_D_PUMPTEST
 from 
-moe_20250711.dbo.TblPump_Test as moept
-inner join moe_20250711.dbo.ormgp_20250711_upd_dpump as d
+moe_20260813.dbo.TblPump_Test as moept
+inner join moe_20260813.dbo.ormgp_20260813_upd_dpump as d
 on moept.pipe_id=d.pipe_id
 inner join oak_20160831_master.dbo.d_interval as dint
 on d.int_id=dint.int_id
 
-select count(*) as rcount from moe_20250711.dbo.O_D_PUMPTEST
+
+-- v20190509 1667 rows
+-- v20200721 1013 rows
+-- v20210119 15 rows
+-- v20220328 107 rows
+-- v20230324 539
+-- v20240326 1617
+-- v20250711 2217
+-- v20260813 7309
+
+select count(*) as rcount from moe_20260813.dbo.O_D_PUMPTEST
+
+
 
 -- null FLOWING_RATE_IGPM when no MON_FLOWING and REC_PUMP_RATE_IGPM=FLOWING_RATE_IGPM
 
@@ -243,7 +261,7 @@ select count(*) as rcount from moe_20250711.dbo.O_D_PUMPTEST
 select
 d.moe_pump_test_id
 from 
-moe_20250711.dbo.o_d_pumptest as d
+moe_20260813.dbo.o_d_pumptest as d
 where
 d.INT_ID
 not in
@@ -257,11 +275,11 @@ dim.MON_FLOWING is not null
 )
 and d.REC_PUMP_RATE_IGPM=d.FLOWING_RATE_IGPM
 
-update moe_20250711.dbo.o_d_pumptest
+update moe_20260813.dbo.o_d_pumptest
 set
 flowing_rate_igpm=null
 from 
-moe_20250711.dbo.o_d_pumptest as d
+moe_20260813.dbo.o_d_pumptest as d
 where
 d.INT_ID
 not in
@@ -284,6 +302,7 @@ and d.REC_PUMP_RATE_IGPM=d.FLOWING_RATE_IGPM
 -- v20230324 2 rows
 -- v20240326 2 
 -- v20250711 4
+-- v20260813 6
 
 select
 dim.MON_ID
@@ -296,7 +315,7 @@ in
 select 
 d.INT_ID 
 from 
-moe_20250711.dbo.o_d_pumptest as d
+moe_20260813.dbo.o_d_pumptest as d
 where
 d.INT_ID
 in 
@@ -324,7 +343,7 @@ in
 select 
 d.INT_ID 
 from 
-moe_20250711.dbo.o_d_pumptest as d
+moe_20260813.dbo.o_d_pumptest as d
 where
 d.INT_ID
 in 
@@ -349,6 +368,7 @@ and d.FLOWING_RATE_IGPM is not null
 -- v20230324 9 rows
 -- v20240326 62
 -- v20250711 74
+-- v20260813 146
 
 select
 dim.MON_ID
@@ -361,7 +381,7 @@ in
 select 
 d.INT_ID 
 from 
-moe_20250711.dbo.o_d_pumptest as d
+moe_20260813.dbo.o_d_pumptest as d
 where
 d.INT_ID
 in 
@@ -388,7 +408,7 @@ in
 select 
 d.INT_ID 
 from 
-moe_20250711.dbo.o_d_pumptest as d
+moe_20260813.dbo.o_d_pumptest as d
 where
 d.INT_ID
 in 
@@ -413,11 +433,12 @@ and d.FLOWING_RATE_IGPM<d.REC_PUMP_RATE_IGPM
 -- v20230324 1 
 -- v20240326 10
 -- v20250711 11
+-- v20260813 34 
 
 select
 dpump.INT_ID
 from 
-moe_20250711.dbo.o_d_pumptest as dpump
+moe_20260813.dbo.o_d_pumptest as dpump
 where
 dpump.INT_ID
 in
@@ -425,7 +446,7 @@ in
 select 
 d.INT_ID 
 from 
-moe_20250711.dbo.o_d_pumptest as d
+moe_20260813.dbo.o_d_pumptest as d
 where
 dpump.INT_ID
 in 
@@ -440,11 +461,11 @@ d2.MON_FLOWING is null
 and dpump.FLOWING_RATE_IGPM>dpump.REC_PUMP_RATE_IGPM
 )
 
-update moe_20250711.dbo.o_d_pumptest
+update moe_20260813.dbo.o_d_pumptest
 set
 flowing_rate_igpm=null
 from 
-moe_20250711.dbo.o_d_pumptest as dpump
+moe_20260813.dbo.o_d_pumptest as dpump
 where
 dpump.INT_ID
 in
@@ -452,7 +473,7 @@ in
 select 
 d.INT_ID 
 from 
-moe_20250711.dbo.o_d_pumptest as d
+moe_20260813.dbo.o_d_pumptest as d
 where
 d.INT_ID
 in 

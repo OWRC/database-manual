@@ -10,22 +10,25 @@
 -- v20230324 91 rows
 -- v20240326 1907 rows
 -- v20250711 511 rows
+-- v20260813 
 
 select
 mf.MAT1 
 from 
-MOE_20250711.dbo.TblFormation as mf
-inner join MOE_20250711.dbo.ORMGP_20250711_upd_DGL as od
+MOE_20260813.dbo.TblFormation as mf
+inner join MOE_20260813.dbo.ORMGP_20260813_upd_DGL as od
 on mf.bore_hole_id=od.moe_bore_hole_id
 where 
 mf.MAT1=27
 
-update MOE_20250711.dbo.TblFormation
+-- as of 20260813, unknown material is no longer present as 0; a null is specified instead
+
+update MOE_20260813.dbo.TblFormation
 set
-MAT1=0
+MAT1= null
 from 
-MOE_20250711.dbo.TblFormation as mf
-inner join MOE_20250711.dbo.ORMGP_20250711_upd_DGL as od
+MOE_20260813.dbo.TblFormation as mf
+inner join MOE_20260813.dbo.ORMGP_20260813_upd_DGL as od
 on mf.bore_hole_id=od.moe_bore_hole_id
 where 
 mf.MAT1=27
@@ -37,22 +40,23 @@ mf.MAT1=27
 -- v20230324 18 rows
 -- v20240326 135 rows
 -- v20250711 78 rows
+-- v20260813 547 rows
 
 select
 mf.MAT2
 from 
-MOE_20250711.dbo.TblFormation as mf
-inner join MOE_20250711.dbo.ORMGP_20250711_upd_DGL as od
+MOE_20260813.dbo.TblFormation as mf
+inner join MOE_20260813.dbo.ORMGP_20260813_upd_DGL as od
 on mf.bore_hole_id=od.moe_bore_hole_id
 where 
 mf.MAT2=27
 
-update MOE_20250711.dbo.TblFormation
+update MOE_20260813.dbo.TblFormation
 set
-MAT2=0
+MAT2=null
 from 
-MOE_20250711.dbo.TblFormation as mf
-inner join MOE_20250711.dbo.ORMGP_20250711_upd_DGL as od
+MOE_20260813.dbo.TblFormation as mf
+inner join MOE_20260813.dbo.ORMGP_20260813_upd_DGL as od
 on mf.bore_hole_id=od.moe_bore_hole_id
 where 
 mf.MAT2=27
@@ -64,22 +68,23 @@ mf.MAT2=27
 -- v20230324 7 rows
 -- v20240326 402 rows
 -- v20250711 219 rows
+-- v20260813 1769 rows
 
 select
 mf.MAT3
 from 
-MOE_20250711.dbo.TblFormation as mf
-inner join MOE_20250711.dbo.ORMGP_20250711_upd_DGL as od
+MOE_20260813.dbo.TblFormation as mf
+inner join MOE_20260813.dbo.ORMGP_20260813_upd_DGL as od
 on mf.bore_hole_id=od.moe_bore_hole_id
 where 
 mf.MAT3=27
 
-update MOE_20250711.dbo.TblFormation
+update MOE_20260813.dbo.TblFormation
 set
-MAT3=0
+MAT3=null
 from 
-MOE_20250711.dbo.TblFormation as mf
-inner join MOE_20250711.dbo.ORMGP_20250711_upd_DGL as od
+MOE_20260813.dbo.TblFormation as mf
+inner join MOE_20260813.dbo.ORMGP_20260813_upd_DGL as od
 on mf.bore_hole_id=od.moe_bore_hole_id
 where 
 mf.MAT3=27

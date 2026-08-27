@@ -10,13 +10,6 @@
 -- assemble the BORE_HOLE_IDs for which we'll pull water level data;
 -- add some indexes to the resulting table
 
--- v20200721 1069 rows
--- v20210119 45 rows
--- v20220328 131 rows
--- v20230324 589
--- v20240326 1722
--- v20250711 3548
-
 --***** 20250711 Note that there would be a disconnect here with regard to any intervals we
 --***** have just pulled in; need to have the whole of the MOE db on the same SQL server
 --***** to avoid this issue
@@ -24,9 +17,9 @@
 select
 dint.int_id
 ,v.moe_bore_hole_id
-into moe_20250711.dbo.ORMGP_20250711_upd_DIT2_628
+into moe_20260813.dbo.ORMGP_20260813_upd_DIT2_628
 from 
-ORMGP_20250711_MOE_LOCNS as v
+ORMGP_20260813_MOE_LOCNS as v
 --oak_20160831_master.dbo.v_sys_moe_locations as v
 --inner join oak_20160831_master.dbo.v_sys_agency_ypdt as y
 --on v.loc_id=y.loc_id
@@ -47,9 +40,9 @@ group by
 int_id
 ) as d2
 on dint.int_id=d2.int_id
-inner join moe_20250711.dbo.tblpipe as moetp
+inner join moe_20260813.dbo.tblpipe as moetp
 on v.moe_bore_hole_id=moetp.bore_hole_id
-inner join moe_20250711.dbo.tblpump_test as moept
+inner join moe_20260813.dbo.tblpump_test as moept
 on moetp.pipe_id=moept.pipe_id
 where 
 d2.int_id is null
@@ -57,19 +50,22 @@ and moept.static_lev is not null
 group by
 dint.int_id,v.moe_bore_hole_id
 
-select count(*) as rcount from moe_20250711.dbo.ORMGP_20250711_upd_DIT2_628
+
+-- v20200721 1069 rows
+-- v20210119 45 rows
+-- v20220328 131 rows
+-- v20230324 589
+-- v20240326 1722
+-- v20250711 3548
+-- v20260813 6461
+
+
+select count(*) as rcount from moe_20260813.dbo.ORMGP_20260813_upd_DIT2_628
 
 -- now we'll generate the DIT2 compatible table; run this first
 -- to see if we're missing bh_gnd_elev values
 
--- update DATA_ID and SYS_TEMP
-
--- v20200721 1065 rows
--- v20210119 41 rows
--- v20220328 127 rows
--- v20230324 585 rows
--- v20240326 1718
--- v20250711 3548
+-- update DATA_ID
 
 select 
 dbore.LOC_ID
@@ -93,22 +89,33 @@ as float
 ,cast(moept.LEVELS_UOM as varchar(50)) as [RD_UNIT_OUOM]
 ,cast(1 as int) as [REC_STATUS_CODE]
 ,cast(null as varchar(255)) as RD_COMMENT
-,cast(528 as int) as DATA_ID
+,cast(529 as int) as DATA_ID
 ,cast(null as int) as SYS_RECORD_ID
 ,ROW_NUMBER() over (order by dint.INT_ID) as rkey
-into moe_20250711.dbo.O_D_INTERVAL_TEMPORAL_2_628
+into moe_20260813.dbo.O_D_INTERVAL_TEMPORAL_2_628
 from 
-moe_20250711.dbo.ormgp_20250711_upd_dit2_628 as d2
-inner join moe_20250711.dbo.tblpipe as moetp
+moe_20260813.dbo.ormgp_20260813_upd_dit2_628 as d2
+inner join moe_20260813.dbo.tblpipe as moetp
 on d2.moe_bore_hole_id=moetp.bore_hole_id
-inner join moe_20250711.dbo.tblpump_test as moept
+inner join moe_20260813.dbo.tblpump_test as moept
 on moetp.pipe_id=moept.pipe_id
 inner join oak_20160831_master.dbo.d_interval as dint
 on d2.int_id=dint.int_id
 inner join oak_20160831_master.dbo.d_borehole as dbore
 on dint.loc_id=dbore.loc_id
 
-select count(*) as rcount from moe_20250711.dbo.O_D_INTERVAL_TEMPORAL_2_628
+
+-- v20200721 1065 rows
+-- v20210119 41 rows
+-- v20220328 127 rows
+-- v20230324 585 rows
+-- v20240326 1718
+-- v20250711 3548
+-- v20260813 7294
+
+
+select count(*) as rcount from moe_20260813.dbo.O_D_INTERVAL_TEMPORAL_2_628
+
 
 -- look for those rows where a NULL RD_VALUE occurs; this is
 -- likely a result from a NULL BH_GND_ELEV in D_BOREHOLE;
@@ -120,15 +127,16 @@ select count(*) as rcount from moe_20250711.dbo.O_D_INTERVAL_TEMPORAL_2_628
 -- v20230324 0 rows
 -- v20240326 0 rows
 -- v20250711 265 rows; all had invalid coordinates or QA 118
+-- v2060813 4 rows; null rd_value_ouom - not loaded
 
---create view V_MOE_20250711_UPD_ELEVS2 as
+--create view V_MOE_20260813_UPD_ELEVS2 as
 select
 d2.loc_id
 ,dloc.loc_coord_easting as x
 ,dloc.loc_coord_northing as y
 ,dbore.bh_gnd_elev
 from 
-moe_20250711.dbo.o_d_interval_temporal_2_628 as d2
+moe_20260813.dbo.o_d_interval_temporal_2_628 as d2
 inner join oak_20160831_master.dbo.d_location as dloc
 on d2.loc_id=dloc.loc_id
 inner join oak_20160831_master.dbo.d_borehole as dbore
@@ -136,6 +144,9 @@ on d2.loc_id=dbore.loc_id
 where 
 d2.rd_value is null
 --and dloc.loc_coord_easting is not null
+
+select * from moe_20260813.dbo.o_d_interval_temporal_2_628 where rd_value_ouom is null
+
 
 --***** 20240326 the following was previously disabled; it appears to only be used when
 --***** a null bh_gnd_elev is present in d_borehole
@@ -151,16 +162,18 @@ d2.rd_value is null
 --,bh_dem_gnd_elev= m.value
 --from 
 --oak_20160831_master.dbo.d_borehole as dbore
---inner join temphold.dbo.moe_20250711_upd_elevs2 as m
+--inner join temphold.dbo.moe_20260813_upd_elevs2 as m
 --on dbore.loc_id=m.loc_id
+
+
 
 -- populate the SYS_RECORD_IDs
 
-update moe_20250711.dbo.o_d_interval_temporal_2_628
+update moe_20260813.dbo.o_d_interval_temporal_2_628
 set
 sys_record_id= t2.sri
 from 
-moe_20250711.dbo.o_d_interval_temporal_2_628 as d
+moe_20260813.dbo.o_d_interval_temporal_2_628 as d
 inner join
 (
 select
@@ -169,7 +182,7 @@ t.sri
 from 
 (
 select
-top 5000
+top 15000
 v.new_id as sri
 from 
 oak_20160831_master.dbo.v_sys_random_id_bulk_001 as v
@@ -180,12 +193,15 @@ v.new_id not in
 ) as t2
 on d.rkey=t2.rkey
 
+
+
 -- incorporate the static WLS in DIT2
 
 -- v20210119 41 rows
 -- v20220328 127 rows
 -- v20230324 585
 -- v20240326 1718
+-- v20260813 7290
 
 insert into oak_20160831_master.dbo.d_interval_temporal_2
 (
@@ -218,15 +234,17 @@ select
 [REC_STATUS_CODE], 
 [RD_COMMENT], 
 [DATA_ID],
-cast( '20250714n' as varchar(255) ) as SYS_TEMP1,
-cast( 20250714 as int ) as SYS_TEMP2, 
+cast( '20260825gn' as varchar(255) ) as SYS_TEMP1,
+cast( 20260826 as int ) as SYS_TEMP2, 
 [SYS_RECORD_ID]
 from 
-moe_20250711.dbo.o_d_interval_temporal_2_628 
+moe_20260813.dbo.o_d_interval_temporal_2_628 
+where
+rd_value_ouom is not null
 
 
 
---***** 20250711
+-- v20250711 fixes
 
 -- various checks re: non-valid x,y coordinates
 
